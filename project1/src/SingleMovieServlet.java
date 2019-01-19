@@ -13,13 +13,14 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
-@WebServlet(name = "MovieServlet", urlPatterns = "/project1/movies")
-public class MovieServlet extends HttpServlet{
+@WebServlet(name = "SingleMovieServlet", urlPatterns = "/project1/single_movie")
+public class SingleMovieServlet extends HttpServlet{
 		
 	
 	
@@ -85,7 +86,7 @@ public class MovieServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json"); // Response mime type
-
+        String id = request.getParameter("id");
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
@@ -94,13 +95,13 @@ public class MovieServlet extends HttpServlet{
             Connection dbcon = dataSource.getConnection();
 
             // Declare our statement
+     
             Statement statement = dbcon.createStatement();
 
             String query = "select id,title, year, director,rating\n" + 
             		"from movies, ratings\n" + 
-            		"where movies.id=ratings.movieId\n" + 
-            		"order by rating desc\n" + 
-            		"limit 20;";
+            		"where movies.id = '"+id+"' and movies.id=ratings.movieId;\n";
+            		
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -113,7 +114,7 @@ public class MovieServlet extends HttpServlet{
                 String year = rs.getString("year");
                 String director = rs.getString("director");
                 String rating = rs.getString("rating");
-                String id = rs.getString("id");
+                String movie_id = rs.getString("id");
                 ArrayList<String> genres=getGenres(dbcon,id);
                 ArrayList<ArrayList<String>> stars=getStars(dbcon,id);
                 
@@ -128,7 +129,7 @@ public class MovieServlet extends HttpServlet{
                 jsonObject.addProperty("rating", rating);
                 jsonObject.add("genres", gen_list);
                 jsonObject.add("stars", star_list);
-                jsonObject.addProperty("id",id);
+                jsonObject.addProperty("movie_id",movie_id);
                 jsonArray.add(jsonObject);
                
             }
