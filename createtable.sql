@@ -59,14 +59,16 @@ CREATE TABLE sales(
 	id INTEGER NOT NULL AUTO_INCREMENT,
     customerId INTEGER NOT NULL,
     movieId VARCHAR(10) NOT NULL,
-    saleDate DATE,
+    saleDate DATE NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY (customerId) REFERENCES customers(id) ON DELETE CASCADE
+    FOREIGN KEY (customerId) REFERENCES customers(id) ON DELETE CASCADE,
+    FOREIGN KEY (movieId) REFERENCES movies(id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE ratings(
 	movieId VARCHAR(10) NOT NULL,
     rating FLOAT NOT NULL,
-    numVotes INTEGER NOT NULL
+    numVotes INTEGER NOT NULL,
+    FOREIGN KEY (movieId) REFERENCES movies(id) ON DELETE CASCADE
 );

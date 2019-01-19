@@ -13,6 +13,21 @@
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
+function getParameterByName(target) {
+    // Get request URL
+    let url = window.location.href;
+    // Encode target parameter name to url encoding
+    target = target.replace(/[\[\]]/g, "\\$&");
+
+    // Ues regular expression to find matched parameter value
+    let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+
+    // Return the decoded parameter value
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 function getGenres(array){
 	let rowHTML = "";
 	rowHTML += "<th>";
@@ -41,7 +56,7 @@ function getStars(array){
 	rowHTML += "</th>";
 	return rowHTML;
 }
-function handleStarResult(resultData) {
+function handleResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
 
     
@@ -59,7 +74,7 @@ function handleStarResult(resultData) {
             // Add a link to single-star.html with id passed with GET url parameter
             '<a href="single_movie.html?id=' + resultData[i]['id'] + '">'
             + resultData[i]["title"] +     // display star_name for the link text
-            '</a>' +
+            '</a>' +'<br>'+resultData[i]['movie_id']
             "</th>";
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
@@ -77,11 +92,13 @@ function handleStarResult(resultData) {
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
+let movieId = getParameterByName('id');
 
-// Makes the HTTP GET request and registers on success callback function handleStarResult
+
+//Makes the HTTP GET request and registers on success callback function handleResult
 jQuery.ajax({
-    dataType: "json", // Setting return data type
-    method: "GET", // Setting request method
-    url: "project1/movies", // Setting request url, which is mapped by StarsServlet in Stars.java
-    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+ dataType: "json",  // Setting return data type
+ method: "GET",// Setting request method
+ url: "project1/single_movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+ success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
