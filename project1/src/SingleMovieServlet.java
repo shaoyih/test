@@ -33,7 +33,7 @@ public class SingleMovieServlet extends HttpServlet{
 		try {
 			statement = dbcon.createStatement();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -48,7 +48,6 @@ public class SingleMovieServlet extends HttpServlet{
 				result.add(res.getString("genres.name"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return result;
@@ -59,7 +58,6 @@ public class SingleMovieServlet extends HttpServlet{
 		try {
 			statement = dbcon.createStatement();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -78,7 +76,7 @@ public class SingleMovieServlet extends HttpServlet{
 				result.add(temp);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
         return result;
@@ -95,7 +93,6 @@ public class SingleMovieServlet extends HttpServlet{
             Connection dbcon = dataSource.getConnection();
 
             // Declare our statement
-     
             Statement statement = dbcon.createStatement();
 
             String query = "select id,title, year, director,rating\n" + 
@@ -108,7 +105,7 @@ public class SingleMovieServlet extends HttpServlet{
 
             JsonArray jsonArray = new JsonArray();
 
-            // Iterate through each row of rs
+
             while (rs.next()) {
                 String title = rs.getString("title");
                 String year = rs.getString("year");
@@ -134,9 +131,9 @@ public class SingleMovieServlet extends HttpServlet{
                
             }
             
-            // write JSON string to output
+
             out.write(jsonArray.toString());
-            // set response status to 200 (OK)
+
             response.setStatus(200);
 
             rs.close();
@@ -144,12 +141,12 @@ public class SingleMovieServlet extends HttpServlet{
             dbcon.close();
         } catch (Exception e) {
         	
-			// write error message JSON object to output
+
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("errorMessage", e.getMessage());
 			out.write(jsonObject.toString());
 
-			// set reponse status to 500 (Internal Server Error)
+
 			response.setStatus(500);
 
         }
