@@ -85,7 +85,8 @@ public class MovieServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json"); // Response mime type
-
+        String genre = request.getParameter("genre");
+        String alpha = request.getParameter("startsWith");
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
@@ -95,12 +96,28 @@ public class MovieServlet extends HttpServlet{
 
             // Declare our statement
             Statement statement = dbcon.createStatement();
-
-            String query = "select id,title, year, director,rating\n" + 
-            		"from movies, ratings\n" + 
-            		"where movies.id=ratings.movieId\n" + 
-            		"order by rating desc\n" + 
-            		"limit 20;";
+            String query=null;
+            if (genre != null) {
+            	System.out.println(genre);
+            	query= "select movies.id,title, year, director,rating\n" + 
+            			"from movies, ratings ,genres_in_movies g,genres\n" + 
+            			"where movies.id=ratings.movieId and  g.movieId=movies.id "
+            			+ "AND g.genreId=genres.Id AND genres.name='"+genre+"'\n" + 
+            			"order by rating desc  \n" + 
+            			"limit 20;";
+            	
+            }
+            else {
+            	query=
+            			"select movies.id,title, year, director,rating\n" + 
+            			"from movies, ratings \n" + 
+            			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%'\n" + 
+            			"order by rating desc  \n" + 
+            			"limit 20";
+            	
+            }
+            
+            
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);

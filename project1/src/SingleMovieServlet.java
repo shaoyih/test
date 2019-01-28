@@ -27,60 +27,7 @@ public class SingleMovieServlet extends HttpServlet{
 	@Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 	
-	public ArrayList<String> getGenres(Connection dbcon, String id){
-		ArrayList<String> result = new ArrayList<String>(); 
-		Statement statement = null;
-		try {
-			statement = dbcon.createStatement();
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
-
-        String query = "select genres.name\n" + 
-        		"from genres_in_movies g, genres\n" + 
-        		"where g.movieId = '"+id+"' and g.genreId=genres.id;\n";
-
-        // Perform the query
-        try {
-			ResultSet res = statement.executeQuery(query);
-			while (res.next()) {
-				result.add(res.getString("genres.name"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        return result;
-	}
-	public ArrayList<ArrayList<String>> getStars(Connection dbcon, String id){
-		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>(); 
-		Statement statement = null;
-		try {
-			statement = dbcon.createStatement();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-        String query = "select stars.name,stars.id\n" + 
-        		"from stars ,stars_in_movies\n" + 
-        		"where stars_in_movies.movieId= '"+id+"'and stars_in_movies.starId=stars.id;\n" + 
-        		"";
-
-        // Perform the query
-        try {
-			ResultSet res = statement.executeQuery(query);
-			while (res.next()) {
-				ArrayList<String> temp= new ArrayList<String>();
-				temp.add(res.getString("stars.name"));
-				temp.add(res.getString("stars.id"));
-				result.add(temp);
-			}
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-        return result;
-	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json"); // Response mime type
@@ -153,6 +100,60 @@ public class SingleMovieServlet extends HttpServlet{
         out.close();
 
     }
+	public ArrayList<String> getGenres(Connection dbcon, String id){
+		ArrayList<String> result = new ArrayList<String>(); 
+		Statement statement = null;
+		try {
+			statement = dbcon.createStatement();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+
+        String query = "select genres.name\n" + 
+        		"from genres_in_movies g, genres\n" + 
+        		"where g.movieId = '"+id+"' and g.genreId=genres.id;\n";
+
+        // Perform the query
+        try {
+			ResultSet res = statement.executeQuery(query);
+			while (res.next()) {
+				result.add(res.getString("genres.name"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return result;
+	}
+	public ArrayList<ArrayList<String>> getStars(Connection dbcon, String id){
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>(); 
+		Statement statement = null;
+		try {
+			statement = dbcon.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+        String query = "select stars.name,stars.id\n" + 
+        		"from stars ,stars_in_movies\n" + 
+        		"where stars_in_movies.movieId= '"+id+"'and stars_in_movies.starId=stars.id;\n" + 
+        		"";
+
+        // Perform the query
+        try {
+			ResultSet res = statement.executeQuery(query);
+			while (res.next()) {
+				ArrayList<String> temp= new ArrayList<String>();
+				temp.add(res.getString("stars.name"));
+				temp.add(res.getString("stars.id"));
+				result.add(temp);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+        return result;
+	}
 	
 	
 } 

@@ -13,6 +13,23 @@
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
+
+function getParameterByName(target) {
+    // Get request URL
+    let url = window.location.href;
+    // Encode target parameter name to url encoding
+    target = target.replace(/[\[\]]/g, "\\$&");
+
+    // Ues regular expression to find matched parameter value
+    let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+
+    // Return the decoded parameter value
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 function getGenres(array){
 	let rowHTML = "";
 	rowHTML += "<th>";
@@ -77,11 +94,24 @@ function handleStarResult(resultData) {
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
-
+let parameter = getParameterByName('startsWith');
+if (parameter){
+	jQuery.ajax({
+	    dataType: "json", // Setting return data type
+	    method: "GET", // Setting request method
+	    url: "project1/movies?startsWith=" + parameter, // Setting request url, which is mapped by StarsServlet in Stars.java
+	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+	});
+	
+}
+else{
+	parameter = getParameterByName('genre');
+	jQuery.ajax({
+	    dataType: "json", // Setting return data type
+	    method: "GET", // Setting request method
+	    url: "project1/movies?genre=" + parameter, // Setting request url, which is mapped by StarsServlet in Stars.java
+	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+	});
+}
+console.log(parameter);
 // Makes the HTTP GET request and registers on success callback function handleStarResult
-jQuery.ajax({
-    dataType: "json", // Setting return data type
-    method: "GET", // Setting request method
-    url: "project1/movies", // Setting request url, which is mapped by StarsServlet in Stars.java
-    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-});
