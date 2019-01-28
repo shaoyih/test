@@ -95,11 +95,13 @@ function handleStarResult(resultData) {
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 let parameter = getParameterByName('startsWith');
+let limit=getParameterByName('limit');
+let offset=getParameterByName('offset');
 if (parameter){
 	jQuery.ajax({
 	    dataType: "json", // Setting return data type
 	    method: "GET", // Setting request method
-	    url: "project1/movies?startsWith=" + parameter, // Setting request url, which is mapped by StarsServlet in Stars.java
+	    url: "project1/movies?startsWith=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
 	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 	});
 	
@@ -109,7 +111,7 @@ else{
 	jQuery.ajax({
 	    dataType: "json", // Setting return data type
 	    method: "GET", // Setting request method
-	    url: "project1/movies?genre=" + parameter, // Setting request url, which is mapped by StarsServlet in Stars.java
+	    url: "project1/movies?genre=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
 	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 	});
 }

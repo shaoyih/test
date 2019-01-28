@@ -26,6 +26,132 @@ public class MovieServlet extends HttpServlet{
 	@Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 	
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        response.setContentType("application/json"); // Response mime type
+        String mode = request.getParameter("by");
+        String result="";
+        //check mode and decide which function to call
+        if (mode.equals("browse")) {
+        	result+=updateByBrowse(request);
+        }
+        else {
+        	result+=updateBySearch(request);
+        }
+        //no matter what mode, we always need to add sorting and pages
+        
+        result+=updateBySort(request);
+        result+=updateByPage(request);
+        
+        // Output stream to STDOUT
+        PrintWriter out = response.getWriter();
+
+        try {
+            // Get a connection from dataSource
+            Connection dbcon = dataSource.getConnection();
+
+            // Declare our statement
+            Statement statement = dbcon.createStatement();
+            
+            
+            
+            
+
+            // Perform the query
+            ResultSet rs = statement.executeQuery(result);
+
+            JsonArray jsonArray = new JsonArray();
+
+            // Iterate through each row of rs
+            while (rs.next()) {
+                String title = rs.getString("title");
+                String year = rs.getString("year");
+                String director = rs.getString("director");
+                String rating = rs.getString("rating");
+                String id = rs.getString("id");
+                ArrayList<String> genres=getGenres(dbcon,id);
+                ArrayList<ArrayList<String>> stars=getStars(dbcon,id);
+                
+                Gson gson = new GsonBuilder().create();
+                JsonArray gen_list = gson.toJsonTree(genres).getAsJsonArray();
+                JsonArray star_list = gson.toJsonTree(stars).getAsJsonArray();
+                // Create a JsonObject based on the data we retrieve from rs
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("title", title);
+                jsonObject.addProperty("year", year);
+                jsonObject.addProperty("director", director);
+                jsonObject.addProperty("rating", rating);
+                jsonObject.add("genres", gen_list);
+                jsonObject.add("stars", star_list);
+                jsonObject.addProperty("id",id);
+                jsonArray.add(jsonObject);
+               
+            }
+            
+            // write JSON string to output
+            out.write(jsonArray.toString());
+            // set response status to 200 (OK)
+            response.setStatus(200);
+
+            rs.close();
+            statement.close();
+            dbcon.close();
+        } catch (Exception e) {
+        	
+			// write error message JSON object to output
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("errorMessage", e.getMessage());
+			out.write(jsonObject.toString());
+
+			// set reponse status to 500 (Internal Server Error)
+			response.setStatus(500);
+
+        }
+        out.close();
+
+    }
+	public String updateByBrowse(HttpServletRequest request) {
+		String query="";
+		String genre = request.getParameter("genre");
+        String alpha = request.getParameter("startsWith");
+        String offset = request.getParameter("offset");
+        String limit = request.getParameter("limit");
+        if (genre != null) {
+        	//browse by genre
+        	System.out.println(genre);
+        	query= "select movies.id,title, year, director,rating\n" + 
+        			"from movies, ratings ,genres_in_movies g,genres\n" + 
+        			"where movies.id=ratings.movieId and  g.movieId=movies.id "
+        			+ "AND g.genreId=genres.Id AND genres.name='"+genre+"'\n" + 
+        			"order by rating desc  \n" + 
+        			"limit 20;";
+        	
+        }
+        else {
+        	//browse by title
+        	query=
+        			"select movies.id,title, year, director,rating\n" + 
+        			"from movies, ratings \n" + 
+        			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%'\n" + 
+        			"order by rating desc  \n" + 
+        			"limit 20";
+        	
+        }
+        
+		return query;
+	}
+	public String updateBySort(HttpServletRequest request) {
+		return "";
+	}
+	public String updateByPage(HttpServletRequest request) {
+		return "";
+	}
+	
+	public String updateBySearch(HttpServletRequest request) {
+		return "";
+	}
+	
 	public ArrayList<String> getGenres(Connection dbcon, String id){
 		ArrayList<String> result = new ArrayList<String>(); 
 		Statement statement = null;
@@ -82,96 +208,6 @@ public class MovieServlet extends HttpServlet{
 		}
         return result;
 	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        response.setContentType("application/json"); // Response mime type
-        String genre = request.getParameter("genre");
-        String alpha = request.getParameter("startsWith");
-        // Output stream to STDOUT
-        PrintWriter out = response.getWriter();
-
-        try {
-            // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
-
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
-            String query=null;
-            if (genre != null) {
-            	System.out.println(genre);
-            	query= "select movies.id,title, year, director,rating\n" + 
-            			"from movies, ratings ,genres_in_movies g,genres\n" + 
-            			"where movies.id=ratings.movieId and  g.movieId=movies.id "
-            			+ "AND g.genreId=genres.Id AND genres.name='"+genre+"'\n" + 
-            			"order by rating desc  \n" + 
-            			"limit 20;";
-            	
-            }
-            else {
-            	query=
-            			"select movies.id,title, year, director,rating\n" + 
-            			"from movies, ratings \n" + 
-            			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%'\n" + 
-            			"order by rating desc  \n" + 
-            			"limit 20";
-            	
-            }
-            
-            
-
-            // Perform the query
-            ResultSet rs = statement.executeQuery(query);
-
-            JsonArray jsonArray = new JsonArray();
-
-            // Iterate through each row of rs
-            while (rs.next()) {
-                String title = rs.getString("title");
-                String year = rs.getString("year");
-                String director = rs.getString("director");
-                String rating = rs.getString("rating");
-                String id = rs.getString("id");
-                ArrayList<String> genres=getGenres(dbcon,id);
-                ArrayList<ArrayList<String>> stars=getStars(dbcon,id);
-                
-                Gson gson = new GsonBuilder().create();
-                JsonArray gen_list = gson.toJsonTree(genres).getAsJsonArray();
-                JsonArray star_list = gson.toJsonTree(stars).getAsJsonArray();
-                // Create a JsonObject based on the data we retrieve from rs
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("title", title);
-                jsonObject.addProperty("year", year);
-                jsonObject.addProperty("director", director);
-                jsonObject.addProperty("rating", rating);
-                jsonObject.add("genres", gen_list);
-                jsonObject.add("stars", star_list);
-                jsonObject.addProperty("id",id);
-                jsonArray.add(jsonObject);
-               
-            }
-            
-            // write JSON string to output
-            out.write(jsonArray.toString());
-            // set response status to 200 (OK)
-            response.setStatus(200);
-
-            rs.close();
-            statement.close();
-            dbcon.close();
-        } catch (Exception e) {
-        	
-			// write error message JSON object to output
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("errorMessage", e.getMessage());
-			out.write(jsonObject.toString());
-
-			// set reponse status to 500 (Internal Server Error)
-			response.setStatus(500);
-
-        }
-        out.close();
-
-    }
 	
 	
 } 
