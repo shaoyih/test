@@ -101,7 +101,7 @@ if (parameter){
 	jQuery.ajax({
 	    dataType: "json", // Setting return data type
 	    method: "GET", // Setting request method
-	    url: "project1/movies?startsWith=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
+	    url: "project1/movies?by=browse&startsWith=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
 	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 	});
 	
@@ -111,7 +111,7 @@ else{
 	jQuery.ajax({
 	    dataType: "json", // Setting return data type
 	    method: "GET", // Setting request method
-	    url: "project1/movies?genre=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
+	    url: "project1/movies?by=browse&genre=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
 	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 	});
 }
