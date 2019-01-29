@@ -97,7 +97,6 @@ function madePagination(total){
 	let limit=getParameterByName('limit');
 	let totalPage=Math.ceil(total/limit);
 	let prev=getPrevHTML(current,totalPage);
-	
 	let next=getNextHTML(current,totalPage);
 	pageTableBodyElement.append(prev);
 	pageTableBodyElement.append(next);

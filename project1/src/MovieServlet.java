@@ -118,16 +118,25 @@ public class MovieServlet extends HttpServlet{
     }
 	public int getTotalPage(Statement statement,String result) {
 		
-		int numberOfRows=0;
-		try {
-			ResultSet rs = statement.executeQuery(result);
-			rs.last();
-			numberOfRows = rs.getRow();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return numberOfRows;
+		//processing the query
+				String query="SELECT COUNT(*) as ct";
+				int index=result.indexOf("from");
+				query=query + result.substring(index);
+				
+				int numberOfRows=0;
+				try {
+					
+					ResultSet rs = statement.executeQuery(query);
+					rs.next();
+					int ct=(int) rs.getLong("ct"); 
+					numberOfRows=ct;
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				return numberOfRows;
 		
 	}
 	public String updateByBrowse(HttpServletRequest request) {
