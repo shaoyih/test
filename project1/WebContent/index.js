@@ -113,8 +113,8 @@ function getPrevHTML(current,baseUrl,totalPage){
 	
 	let offset = (parseInt(current)-1).toString();
 	
-	let limit = getParameterByName("limit");
-	return "<li ><a  href='"+baseUrl+"&limit="+limit+"&page="+offset+"'>Previous</a></li>";
+	var baseUrl = location.href.replace("page="+current, "page="+offset);
+	return "<li ><a  href='"+baseUrl+"'>Previous</a></li>";
 }
 function getNextHTML(current,baseUrl,totalPage){
 	if (current==totalPage.toString()){
@@ -123,15 +123,17 @@ function getNextHTML(current,baseUrl,totalPage){
 	
 	let offset = (parseInt(current)+1).toString();
 	
-	let limit = getParameterByName("limit");
-	return "<li ><a  href='"+baseUrl+"&limit="+limit+"&page="+offset+"'>Next</a></li>";
+	
+	var baseUrl = location.href.replace("page="+current, "page="+offset);
+	console.log(baseUrl);
+	return "<li ><a  href='"+baseUrl+"'>Next</a></li>";
 }
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 
-let baseUrl="";
+
 let mode=getParameterByName("by");
 if (mode=="browse"){
 	let parameter = getParameterByName('startsWith');
@@ -139,7 +141,7 @@ if (mode=="browse"){
 	let offset=getParameterByName('page');
 	
 	if (parameter){
-		baseUrl="index.html?by=browse&startsWith=" + parameter;
+		
 		jQuery.ajax({
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
@@ -150,7 +152,7 @@ if (mode=="browse"){
 	}
 	else{
 		parameter = getParameterByName('genre');
-		baseUrl="index.html?by=browse&genre=" + parameter;
+		
 		jQuery.ajax({
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
