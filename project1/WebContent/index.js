@@ -59,14 +59,14 @@ function getStars(array){
 	rowHTML += "</th>";
 	return rowHTML;
 }
-function handleStarResult(resultData,baseUrl) {
+function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
 
     
     // Find the empty table body by id "star_table_body"
     let starTableBodyElement = jQuery("#movie_table_body");
     let totalPage=resultData[0]["totalPage"];
-    madePagination(totalPage,baseUrl);
+    madePagination(totalPage);
     // Iterate through resultData, no more than 10 entries
     for (let i = 1; i < resultData.length; i++) {
 
@@ -91,14 +91,14 @@ function handleStarResult(resultData,baseUrl) {
         starTableBodyElement.append(rowHTML);
     }
 }
-function madePagination(total,baseUrl){
+function madePagination(total){
 	let current=getParameterByName('page');
 	let pageTableBodyElement = jQuery("#pagination");
 	let limit=getParameterByName('limit');
 	let totalPage=Math.ceil(total/limit);
-	let prev=getPrevHTML(current,baseUrl,totalPage);
+	let prev=getPrevHTML(current,totalPage);
 	
-	let next=getNextHTML(current,baseUrl,totalPage);
+	let next=getNextHTML(current,totalPage);
 	pageTableBodyElement.append(prev);
 	pageTableBodyElement.append(next);
 	
@@ -106,7 +106,7 @@ function madePagination(total,baseUrl){
 	
 	
 }
-function getPrevHTML(current,baseUrl,totalPage){
+function getPrevHTML(current,totalPage){
 	if (current=="1"){
 		return "";
 	}
@@ -116,7 +116,7 @@ function getPrevHTML(current,baseUrl,totalPage){
 	var baseUrl = location.href.replace("page="+current, "page="+offset);
 	return "<li ><a  href='"+baseUrl+"'>Previous</a></li>";
 }
-function getNextHTML(current,baseUrl,totalPage){
+function getNextHTML(current,totalPage){
 	if (current==totalPage.toString()){
 		return "";
 	}
@@ -146,7 +146,7 @@ if (mode=="browse"){
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
 		    url: "project1/movies?by=browse&startsWith=" + parameter+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
-		    success: (resultData) => handleStarResult(resultData,baseUrl) // Setting callback function to handle data returned successfully by the StarsServlet
+		    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 		});
 		
 	}
@@ -157,7 +157,7 @@ if (mode=="browse"){
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
 		    url: "project1/movies?by=browse&genre=" + parameter+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
-		    success: (resultData) => handleStarResult(resultData,baseUrl) // Setting callback function to handle data returned successfully by the StarsServlet
+		    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 		});
 	}
 }
