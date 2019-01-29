@@ -22,7 +22,7 @@ function getGenres(){
 		'Sport','Thriller','War','Western'];
 	rowHTML="";
 	for (let i=0;i<genres.length;i++){
-		rowHTML+="<li><a href='index.html?by=browse&offset=0&limit=10&genre="+genres[i]+"'>"+genres[i]+"</a></li>";
+		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&genre="+genres[i]+"'>"+genres[i]+"</a></li>";
 		
 	}
 	genreSection.append(rowHTML);
@@ -36,7 +36,7 @@ function getAlpha(){
 		'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 	rowHTML="";
 	for (let i=0;i<alphas.length;i++){
-		rowHTML+="<li><a href='index.html?by=browse&offset=0&limit=10&startsWith="+alphas[i]+"'>"+alphas[i]+"</a></li>";
+		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&startsWith="+alphas[i]+"'>"+alphas[i]+"</a></li>";
 		
 	}
 	alphaSection.append(rowHTML);

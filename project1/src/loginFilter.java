@@ -34,6 +34,7 @@ public class loginFilter implements Filter{
 				httpResponse.sendRedirect("login.html");
 			}
 			else {
+				
 				chain.doFilter(request, response);
 			}
 			

@@ -32,17 +32,8 @@ public class MovieServlet extends HttpServlet{
         response.setContentType("application/json"); // Response mime type
         String mode = request.getParameter("by");
         String result="";
+        int total_page=0;
         //check mode and decide which function to call
-        if (mode.equals("browse")) {
-        	result+=updateByBrowse(request);
-        }
-        else {
-        	result+=updateBySearch(request);
-        }
-        //no matter what mode, we always need to add sorting and pages
-        
-        result+=updateBySort(request);
-        result+=updateByPage(request);
         
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -54,6 +45,17 @@ public class MovieServlet extends HttpServlet{
             // Declare our statement
             Statement statement = dbcon.createStatement();
             
+            if (mode.equals("browse")) {
+            	result+=updateByBrowse(request);
+            }
+            else {
+            	result+=updateBySearch(request);
+            }
+            total_page=getTotalPage(statement,result);
+            //no matter what mode, we always need to add sorting and pages
+            
+            result+=updateBySort(request);
+            result+=updateByPage(request);
             
             
             
@@ -62,7 +64,9 @@ public class MovieServlet extends HttpServlet{
             ResultSet rs = statement.executeQuery(result);
 
             JsonArray jsonArray = new JsonArray();
-
+            JsonObject page = new JsonObject();
+            page.addProperty("totalPage", total_page);
+            jsonArray.add(page);
             // Iterate through each row of rs
             while (rs.next()) {
                 String title = rs.getString("title");
@@ -70,6 +74,7 @@ public class MovieServlet extends HttpServlet{
                 String director = rs.getString("director");
                 String rating = rs.getString("rating");
                 String id = rs.getString("id");
+                
                 ArrayList<String> genres=getGenres(dbcon,id);
                 ArrayList<ArrayList<String>> stars=getStars(dbcon,id);
                 
@@ -111,21 +116,32 @@ public class MovieServlet extends HttpServlet{
         out.close();
 
     }
+	public int getTotalPage(Statement statement,String result) {
+		
+		int numberOfRows=0;
+		try {
+			ResultSet rs = statement.executeQuery(result);
+			rs.last();
+			numberOfRows = rs.getRow();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return numberOfRows;
+		
+	}
 	public String updateByBrowse(HttpServletRequest request) {
 		String query="";
 		String genre = request.getParameter("genre");
         String alpha = request.getParameter("startsWith");
-        String offset = request.getParameter("offset");
-        String limit = request.getParameter("limit");
+        
         if (genre != null) {
         	//browse by genre
         	System.out.println(genre);
         	query= "select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings ,genres_in_movies g,genres\n" + 
         			"where movies.id=ratings.movieId and  g.movieId=movies.id "
-        			+ "AND g.genreId=genres.Id AND genres.name='"+genre+"'\n" + 
-        			"order by rating desc  \n" + 
-        			"limit 20;";
+        			+ "AND g.genreId=genres.Id AND genres.name='"+genre+"'\n";
         	
         }
         else {
@@ -133,10 +149,8 @@ public class MovieServlet extends HttpServlet{
         	query=
         			"select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings \n" + 
-        			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%'\n" + 
-        			"order by rating desc  \n" + 
-        			"limit 20";
-        	
+        			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%'\n";
+        			
         }
         
 		return query;
@@ -145,7 +159,10 @@ public class MovieServlet extends HttpServlet{
 		return "";
 	}
 	public String updateByPage(HttpServletRequest request) {
-		return "";
+		String limit = request.getParameter("limit");
+        String page = request.getParameter("page");
+        int offset= (Integer.parseInt(page)-1)*Integer.parseInt(limit);
+		return "LIMIT "+limit+" OFFSET "+Integer.toString(offset)+";";
 	}
 	
 	public String updateBySearch(HttpServletRequest request) {

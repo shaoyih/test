@@ -17,9 +17,10 @@
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
+    
     // Encode target parameter name to url encoding
     target = target.replace(/[\[\]]/g, "\\$&");
-
+    
     // Ues regular expression to find matched parameter value
     let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
@@ -58,15 +59,16 @@ function getStars(array){
 	rowHTML += "</th>";
 	return rowHTML;
 }
-function handleStarResult(resultData) {
+function handleStarResult(resultData,baseUrl) {
     console.log("handleStarResult: populating star table from resultData");
 
     
     // Find the empty table body by id "star_table_body"
     let starTableBodyElement = jQuery("#movie_table_body");
-
+    let totalPage=resultData[0]["totalPage"];
+    madePagination(totalPage,baseUrl);
     // Iterate through resultData, no more than 10 entries
-    for (let i = 0; i < resultData.length; i++) {
+    for (let i = 1; i < resultData.length; i++) {
 
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
@@ -89,31 +91,91 @@ function handleStarResult(resultData) {
         starTableBodyElement.append(rowHTML);
     }
 }
-
+function madePagination(total,baseUrl){
+	let current=getParameterByName('page');
+	let pageTableBodyElement = jQuery("#pagination");
+	let limit=getParameterByName('limit');
+	let totalPage=Math.ceil(total/limit);
+	let prev=getPrevHTML(current,baseUrl,totalPage);
+	
+	let next=getNextHTML(current,baseUrl,totalPage);
+	pageTableBodyElement.append(prev);
+	pageTableBodyElement.append(next);
+	
+	
+	
+	
+}
+function getPrevHTML(current,baseUrl,totalPage){
+	if (current=="1"){
+		return "";
+	}
+	
+	let offset = (parseInt(current)-1).toString();
+	
+	let limit = getParameterByName("limit");
+	return "<li ><a  href='"+baseUrl+"&limit="+limit+"&page="+offset+"'>Previous</a></li>";
+}
+function getNextHTML(current,baseUrl,totalPage){
+	if (current==totalPage.toString()){
+		return "";
+	}
+	
+	let offset = (parseInt(current)+1).toString();
+	
+	let limit = getParameterByName("limit");
+	return "<li ><a  href='"+baseUrl+"&limit="+limit+"&page="+offset+"'>Next</a></li>";
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
-let parameter = getParameterByName('startsWith');
-let limit=getParameterByName('limit');
-let offset=getParameterByName('offset');
-if (parameter){
-	jQuery.ajax({
-	    dataType: "json", // Setting return data type
-	    method: "GET", // Setting request method
-	    url: "project1/movies?by=browse&startsWith=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
-	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-	});
+
+let baseUrl="";
+let mode=getParameterByName("by");
+if (mode=="browse"){
+	let parameter = getParameterByName('startsWith');
+	let limit=getParameterByName('limit');
+	let offset=getParameterByName('page');
 	
+	if (parameter){
+		baseUrl="index.html?by=browse&startsWith=" + parameter;
+		jQuery.ajax({
+		    dataType: "json", // Setting return data type
+		    method: "GET", // Setting request method
+		    url: "project1/movies?by=browse&startsWith=" + parameter+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
+		    success: (resultData) => handleStarResult(resultData,baseUrl) // Setting callback function to handle data returned successfully by the StarsServlet
+		});
+		
+	}
+	else{
+		parameter = getParameterByName('genre');
+		baseUrl="index.html?by=browse&genre=" + parameter;
+		jQuery.ajax({
+		    dataType: "json", // Setting return data type
+		    method: "GET", // Setting request method
+		    url: "project1/movies?by=browse&genre=" + parameter+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
+		    success: (resultData) => handleStarResult(resultData,baseUrl) // Setting callback function to handle data returned successfully by the StarsServlet
+		});
+	}
 }
-else{
-	parameter = getParameterByName('genre');
-	jQuery.ajax({
-	    dataType: "json", // Setting return data type
-	    method: "GET", // Setting request method
-	    url: "project1/movies?by=browse&genre=" + parameter+"&limit="+limit+"&offset="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
-	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-	});
-}
-console.log(parameter);
-// Makes the HTTP GET request and registers on success callback function handleStarResult
+
+$(document).ready(function() {
+	var someVarName = localStorage.getItem("someVarKey");
+	$('#sel1 option[value="'+someVarName+'"]').attr('selected',true);
+	console.log($('#sel1 option:contains("'+someVarName+'")'));
+	jQuery("#sel1").change(function() {
+	
+	
+	let limit=getParameterByName('limit');
+	var select = $("#sel1 option:selected").val();
+	localStorage.setItem("someVarKey", select);
+	
+	var newUrl = location.href.replace("limit="+limit, "limit="+select);
+	window.location.replace(newUrl);
+//	window.location.href.replace("limit="+limit, "limit="+select);
+//	location.reload();
+	
+});
+});
+
