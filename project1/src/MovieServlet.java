@@ -57,8 +57,7 @@ public class MovieServlet extends HttpServlet{
             result+=updateBySort(request);
             
             result+=updateByPage(request);
-            System.out.println(result);
-            
+           
             
             
 
@@ -148,7 +147,7 @@ public class MovieServlet extends HttpServlet{
         
         if (genre != null) {
         	//browse by genre
-        	System.out.println(genre);
+        	
         	query= "select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings ,genres_in_movies g,genres\n" + 
         			"where movies.id=ratings.movieId and  g.movieId=movies.id "
@@ -168,8 +167,7 @@ public class MovieServlet extends HttpServlet{
 	}
 	public String updateBySort(HttpServletRequest request) {
 		String order = request.getParameter("order");
-		System.out.println(order);
-		System.out.println("hahaha");
+		
 		if(order!=null) {
 			if(order.equals("rateA")) {
 				return "ORDER BY rating ASC ";
@@ -194,7 +192,34 @@ public class MovieServlet extends HttpServlet{
 	}
 	
 	public String updateBySearch(HttpServletRequest request) {
-		return "";
+		String query="select m.id,title, year, director,rating\n"
+				+"from movies m, ratings r,stars s,stars_in_movies sm\n"
+				+"WHERE m.id=r.movieId and sm.movieId=m.id and sm.starId=s.id";
+		String title = request.getParameter("title");
+        String year = request.getParameter("year");
+		String director = request.getParameter("director");
+        String star = request.getParameter("stars");
+       
+        
+        
+        if(title!="") {
+        	query+=" and m.title LIKE '%"+title+"%'\n";
+        }
+        
+        if(year!="") {
+        	query+=" and year="+year+"\n";
+        }
+        if (director!=""){
+        	query+=" and director LIKE '%"+director+"%'\n";
+        }
+        if(star!="") {
+        	query+=" and s.name LIKE '%"+star+"%'\n";
+        }
+        
+        query+="Group by m.id,title, year, director,rating\n";
+        
+        return query;
+        
 	}
 	
 	public ArrayList<String> getGenres(Connection dbcon, String id){

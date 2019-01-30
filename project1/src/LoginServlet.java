@@ -19,25 +19,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * This class is declared as LoginServlet in web annotation, 
- * which is mapped to the URL pattern /api/login
- */
+
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
         if (this.loginSucceed(username,password)) {
-            // Login succeeds
-            // Set this user into current session
+            
             String sessionId = ((HttpServletRequest) request).getSession().getId();
             Long lastAccessTime = ((HttpServletRequest) request).getSession().getLastAccessedTime();
             request.getSession().setAttribute("user", new User(username));

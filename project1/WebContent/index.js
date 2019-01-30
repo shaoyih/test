@@ -156,14 +156,16 @@ function getNextHTML(current,totalPage){
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 
+let offset=getParameterByName('page');
+let order=getParameterByName('order');
+let limit=getParameterByName('limit');
 
 let mode=getParameterByName("by");
 if (mode=="browse"){
 	let parameter = getParameterByName('startsWith');
-	let limit=getParameterByName('limit');
-	let offset=getParameterByName('page');
-	let order=getParameterByName('order');
-	console.log(order);
+	
+
+	
 	
 	
 	if (parameter){
@@ -186,6 +188,21 @@ if (mode=="browse"){
 		    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 		});
 	}
+}
+else{
+	let title=getParameterByName('title');
+	let year=getParameterByName('year');
+	let director=getParameterByName('director');
+	let star=getParameterByName('stars');
+	console.log("into it")
+	jQuery.ajax({
+	    dataType: "json", // Setting return data type
+	    method: "GET", // Setting request method
+	    url: "project1/movies?by=search&title=" + title+"&year="+year+"&director="+director+"&stars="+star+"&limit="+limit+"&page="+offset, 
+	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+	});
+
+	
 }
 
 $(document).ready(function() {
