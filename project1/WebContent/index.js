@@ -67,6 +67,7 @@ function handleStarResult(resultData) {
     let starTableBodyElement = jQuery("#movie_table_body");
     let totalPage=resultData[0]["totalPage"];
     madePagination(totalPage);
+    madeSort();
     // Iterate through resultData, no more than 10 entries
     for (let i = 1; i < resultData.length; i++) {
 
@@ -90,6 +91,29 @@ function handleStarResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         starTableBodyElement.append(rowHTML);
     }
+}
+function madeSort(){
+	
+	let Dropdown=jQuery("#orderDropDown");
+	let order=["rateA","rateD","titleA","titleD"];
+	for(let i=0;i<order.length;i++){
+		Dropdown.append(getOrderHtml(order[i]));
+	}
+}
+
+function getOrderHtml(order){
+	let current=getParameterByName('order');
+	var baseUrl=location.href;
+	console.log("order testing")
+	console.log(current);
+	if(current){
+		baseUrl=baseUrl.replace(current,order);
+	}
+	else{
+		baseUrl=String(baseUrl)+"&order="+order;
+	}
+	
+	return "<li><a href='"+baseUrl+"'>"+order+"</a></li>";
 }
 function madePagination(total){
 	let current=getParameterByName('page');
@@ -138,13 +162,16 @@ if (mode=="browse"){
 	let parameter = getParameterByName('startsWith');
 	let limit=getParameterByName('limit');
 	let offset=getParameterByName('page');
+	let order=getParameterByName('order');
+	console.log(order);
+	
 	
 	if (parameter){
 		
 		jQuery.ajax({
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
-		    url: "project1/movies?by=browse&startsWith=" + parameter+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
+		    url: "project1/movies?by=browse&startsWith=" + parameter+"&order="+order+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
 		    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 		});
 		
@@ -155,7 +182,7 @@ if (mode=="browse"){
 		jQuery.ajax({
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
-		    url: "project1/movies?by=browse&genre=" + parameter+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
+		    url: "project1/movies?by=browse&genre=" + parameter+"&order="+order+"&limit="+limit+"&page="+offset, // Setting request url, which is mapped by StarsServlet in Stars.java
 		    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 		});
 	}

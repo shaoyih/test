@@ -55,7 +55,9 @@ public class MovieServlet extends HttpServlet{
             //no matter what mode, we always need to add sorting and pages
             
             result+=updateBySort(request);
+            
             result+=updateByPage(request);
+            System.out.println(result);
             
             
             
@@ -165,6 +167,23 @@ public class MovieServlet extends HttpServlet{
 		return query;
 	}
 	public String updateBySort(HttpServletRequest request) {
+		String order = request.getParameter("order");
+		System.out.println(order);
+		System.out.println("hahaha");
+		if(order!=null) {
+			if(order.equals("rateA")) {
+				return "ORDER BY rating ASC ";
+			}
+			else if(order.equals("rateD")) {
+				return "ORDER BY rating DESC ";
+			}
+			else if(order.equals("titleA")) {
+				return "ORDER BY title ASC ";
+			}
+			else if(order.equals("titleD")) {
+				return "ORDER BY title DESC ";
+			}
+		}
 		return "";
 	}
 	public String updateByPage(HttpServletRequest request) {
