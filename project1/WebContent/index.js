@@ -78,7 +78,7 @@ function handleStarResult(resultData) {
             // Add a link to single-star.html with id passed with GET url parameter
             '<a href="single_movie.html?id=' + resultData[i]['id'] + '">'
             + resultData[i]["title"] +     // display star_name for the link text
-            '</a>' +
+            '</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+
             "</th>";
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
@@ -86,7 +86,10 @@ function handleStarResult(resultData) {
         rowHTML+= getGenres(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
         rowHTML += "</tr>";
-
+        $( "button" ).click(function() {
+        	console.log(this.value);
+        	window.location.replace("shoppingCart.html?movie="+this.value);
+        	});
         // Append the row created to the table body, which will refresh the page
         starTableBodyElement.append(rowHTML);
     }
