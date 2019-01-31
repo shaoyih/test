@@ -42,6 +42,13 @@ function getAlpha(){
 	alphaSection.append(rowHTML);
 	
 }
+function submitSearchKey(formSubmitEvent){
+    console.log("submit search form");
+    formSubmitEvent.preventDefault();
+    query="index.html?by=search&"+$("#search_form").serialize()+"&page=1&limit=10"
+    window.location.replace(query);
+}
 getGenres();
 getAlpha();
+$("#search_form").submit((event) => submitSearchKey(event));
 

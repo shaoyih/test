@@ -55,8 +55,9 @@ public class MovieServlet extends HttpServlet{
             //no matter what mode, we always need to add sorting and pages
             
             result+=updateBySort(request);
-            result+=updateByPage(request);
             
+            result+=updateByPage(request);
+           
             
             
 
@@ -118,16 +119,25 @@ public class MovieServlet extends HttpServlet{
     }
 	public int getTotalPage(Statement statement,String result) {
 		
-		int numberOfRows=0;
-		try {
-			ResultSet rs = statement.executeQuery(result);
-			rs.last();
-			numberOfRows = rs.getRow();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return numberOfRows;
+		//processing the query
+				String query="SELECT COUNT(*) as ct";
+				int index=result.indexOf("from");
+				query=query + result.substring(index);
+				
+				int numberOfRows=0;
+				try {
+					
+					ResultSet rs = statement.executeQuery(query);
+					rs.next();
+					int ct=(int) rs.getLong("ct"); 
+					numberOfRows=ct;
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				return numberOfRows;
 		
 	}
 	public String updateByBrowse(HttpServletRequest request) {
@@ -137,7 +147,7 @@ public class MovieServlet extends HttpServlet{
         
         if (genre != null) {
         	//browse by genre
-        	System.out.println(genre);
+        	
         	query= "select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings ,genres_in_movies g,genres\n" + 
         			"where movies.id=ratings.movieId and  g.movieId=movies.id "
@@ -156,6 +166,22 @@ public class MovieServlet extends HttpServlet{
 		return query;
 	}
 	public String updateBySort(HttpServletRequest request) {
+		String order = request.getParameter("order");
+		
+		if(order!=null) {
+			if(order.equals("rateA")) {
+				return "ORDER BY rating ASC ";
+			}
+			else if(order.equals("rateD")) {
+				return "ORDER BY rating DESC ";
+			}
+			else if(order.equals("titleA")) {
+				return "ORDER BY title ASC ";
+			}
+			else if(order.equals("titleD")) {
+				return "ORDER BY title DESC ";
+			}
+		}
 		return "";
 	}
 	public String updateByPage(HttpServletRequest request) {
@@ -166,7 +192,34 @@ public class MovieServlet extends HttpServlet{
 	}
 	
 	public String updateBySearch(HttpServletRequest request) {
-		return "";
+		String query="select m.id,title, year, director,rating\n"
+				+"from movies m, ratings r,stars s,stars_in_movies sm\n"
+				+"WHERE m.id=r.movieId and sm.movieId=m.id and sm.starId=s.id";
+		String title = request.getParameter("title");
+        String year = request.getParameter("year");
+		String director = request.getParameter("director");
+        String star = request.getParameter("stars");
+       
+        
+        
+        if(title!="") {
+        	query+=" and m.title LIKE '%"+title+"%'\n";
+        }
+        
+        if(year!="") {
+        	query+=" and year="+year+"\n";
+        }
+        if (director!=""){
+        	query+=" and director LIKE '%"+director+"%'\n";
+        }
+        if(star!="") {
+        	query+=" and s.name LIKE '%"+star+"%'\n";
+        }
+        
+        query+="Group by m.id,title, year, director,rating\n";
+        
+        return query;
+        
 	}
 	
 	public ArrayList<String> getGenres(Connection dbcon, String id){
