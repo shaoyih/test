@@ -61,6 +61,7 @@ function handleSessionData(resultDataString) {
     
     
 }
+
 function handleupdateData(resultDataString){
 	
 	return;
@@ -157,6 +158,9 @@ $.get(
     "project1/shoppingCart?movie="+movieId,
     (resultDataString) => handleSessionData(resultDataString)
 );
+$("#check_out").click(function(){
+	window.location.replace("checkout.html");
+})
 //Makes the HTTP GET request and registers on success callback function handleResult
 //jQuery.ajax({
 // dataType: "json",  // Setting return data type

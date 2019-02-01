@@ -120,7 +120,7 @@ public class MovieServlet extends HttpServlet{
 	public int getTotalPage(Statement statement,String result) {
 		
 		//processing the query
-				String query="SELECT COUNT(*) as ct";
+				String query="SELECT COUNT(*) as ct ";
 				int index=result.indexOf("from");
 				query=query + result.substring(index);
 				
@@ -159,8 +159,8 @@ public class MovieServlet extends HttpServlet{
         	query=
         			"select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings \n" + 
-        			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%'\n";
-        			
+        			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%' \n";
+        	System.out.println(query);
         }
         
 		return query;

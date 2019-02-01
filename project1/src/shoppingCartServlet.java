@@ -21,17 +21,7 @@ public class shoppingCartServlet extends HttpServlet {
     /**
      * handles POST requests to store session information
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-        String mode = request.getParameter("movie");
-
-        JsonObject responseJsonObject = new JsonObject();
-        responseJsonObject.addProperty("sessionID", sessionId);
-       
-        // write all the data into the jsonObject
-        response.getWriter().write(responseJsonObject.toString());
-    }
+    
 
     /**
      * handles GET requests to add and show the item list information

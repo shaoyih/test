@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<meta charset="UTF-8">
+<title>Check out page</title>
+
+<style>
+	body{
+		margin-left:20px;
+		margin-right:20px;
+	}
+	
+
+</style>
+
+</head>
+<body>
+<p>hello</p>
+
+
+<form id='check_out'>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="firstName">Fist Name</label>
+      <input type="text" class="form-control" name="firstName" placeholder="First name">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="lastName">Last Name</label>
+      <input type="text" class="form-control" name="lastName" placeholder="Last name">
+    </div>
+  </div>
+ 
+  
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="cardNum">Card number</label>
+      <input type="text" class="form-control" name="cardNum">
+    </div>
+   
+    <div class="form-group col-md-2">
+      <label for="date">Expiration date</label>
+      <input type="text" class="form-control" name="date" placeholder="yyyy-mm-dd">
+    </div>
+  </div>
+  
+  <button type="submit" class="btn btn-primary " >Check out</button>
+</form>
+<table class="table d-none" id="whole-table" >
+    <thead>
+      <tr>
+        <th scope="col">Movie</th>
+        <th scope="col">SaleId</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+    <tbody id="movie-table">
+      <!-- <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto <br>Otto <br>Otto </td>
+        
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        
+      </tr> -->
+      
+    </tbody>
+</table>
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="./checkout.js"></script>
+  
+
+</body>
+
+</html>
