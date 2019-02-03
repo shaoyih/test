@@ -78,19 +78,15 @@ function handleStarResult(resultData) {
             "<th>" +
             // Add a link to single-star.html with id passed with GET url parameter
             '<a href="single_movie.html?id=' + resultData[i]['id'] + '">'
-            + resultData[i]["title"] +     // display star_name for the link text
-            '</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+
-            "</th>";
+            + resultData[i]["title"] +"</th>";
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML+= getGenres(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
+        rowHTML+="<th>"+'</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>"
         rowHTML += "</tr>";
-        $( "button" ).click(function() {
-        	console.log(this.value);
-        	window.location.replace("shoppingCart.html?movie="+this.value);
-        	});
+       
         // Append the row created to the table body, which will refresh the page
         starTableBodyElement.append(rowHTML);
     }
@@ -159,6 +155,7 @@ function getNextHTML(current,totalPage){
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 
+
 let offset=getParameterByName('page');
 let order=getParameterByName('order');
 let limit=getParameterByName('limit');
@@ -201,12 +198,60 @@ else{
 	jQuery.ajax({
 	    dataType: "json", // Setting return data type
 	    method: "GET", // Setting request method
-	    url: "project1/movies?by=search&title=" + title+"&year="+year+"&director="+director+"&stars="+star+"&limit="+limit+"&page="+offset, 
+	    url: "project1/movies?by=search&title=" + title+"&year="+year+"&director="+director+"&stars="+star+"&order="+order+"&limit="+limit+"&page="+offset, 
 	    success: (resultData) => handleStarResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 	});
 
 	
 }
+$(document).on('click', 'button',function(){
+	rawUrl="shoppingCart.html?movie=";
+	rawUrl+=this.value;
+	window.location.replace(rawUrl);
+}
+)
+//navbar part
+function getGenres(){
+	let genreSection=jQuery("#genreDropDown");
+	console.log(genreSection);
+	let genres=['Action','Adult','Adventure','Animation','Biography',
+		'Comedy','Crime','Documentary','Drama','Family','Fantasy','History',
+		'Horror','Music','Musical','Mystery','Reality-TV','Romance','Sci-Fi',
+		'Sport','Thriller','War','Western'];
+	rowHTML="";
+	for (let i=0;i<genres.length;i++){
+		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&genre="+genres[i]+"'>"+genres[i]+"</a></li>";
+		
+	}
+	genreSection.append(rowHTML);
+	
+}
+
+function getAlpha(){
+	let alphaSection=jQuery("#titleDropDown");
+	
+	let alphas=[ 'A', 'B', 'C', 'D', 'E', 'F', 
+		'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
+		'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+	rowHTML="";
+	for (let i=0;i<alphas.length;i++){
+		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&startsWith="+alphas[i]+"'>"+alphas[i]+"</a></li>";
+		
+	}
+	alphaSection.append(rowHTML);
+	
+}
+getAlpha();
+getGenres();
+$(window).on("scroll", function() {
+	if($(window).scrollTop()) {
+				$('nav').addClass('black');
+	}
+
+	else {
+				$('nav').removeClass('black');
+	}
+})
 
 $(document).ready(function() {
 	var someVarName = localStorage.getItem("someVarKey");

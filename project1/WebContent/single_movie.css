@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+#Nav{
+    		color: white;
+    		background-color: dark;
+    		opacity:0.8;
+    		Height: 50px;
+    		
+    	}
+    	#Nav a{
+    		color:white;
+    		}
+    	body{
+    		font-family: san-serif;
+    		font-size 11pt;
+    		
+    		background-image: url(https://images5.alphacoders.com/542/542019.jpg);
+    		background-size: cover;
+  			
+    	}
+    	table tr{
+    		color: white;
+    	}
+    	table tr a{
+    		color:white;
+    	}
+    	h1{
+    		color: white;
+    	}

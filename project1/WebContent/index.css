@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+    	#Nav{
+    		color: white;
+    		background-color: black;
+    		opacity:0.8;
+    		Height: 50px;
+    		
+    	}
+    	#Nav a{
+    		color:white;
+    		}
+    	body{
+    		font-family: san-serif;
+    		font-size 11pt;
+    		background-color: rgb(66,98,163);
+    		background-image: url(1.jpg);
+    		
+  			background-size: 100%;
+    	}
+    	h1{
+    		font-size: 70pt;
+    	}
+    	#movie_t{
+    			
+  				margin: auto;
+  				top: 0;
+  				right: 0;
+  				bottom: 0;
+  				left: 0;
+  				width: 80%;
+		}
+		table.table-dark{
+    						
+    				background-color: rgba(98, 98, 98, 0.4);		
+    						
+    						
+    						
+  		}
+  		
+  		table thead th { color: white; font-size:18pt; }
+  		table tr { color: white; font-size:15pt; }
+  		table tr a{
+    		color:white;
+    	}
+    	.pager {
+    padding-left: 0;
+    margin: 20px 0;
+    text-align: center;
+    list-style: none;
+}
+.pager li {
+    display: inline;
+}
+    	.pager li>a, .pager li>span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+}
+	ul a {
+    color: #337ab7;
+    text-decoration: none;
+	}
+	.form-group{
+	margin:auto;
+	width:30%;
+	}
+	.form-group label{
+	text-align:center;
+	}
+   

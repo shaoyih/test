@@ -81,8 +81,11 @@ function handleResult(resultData) {
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML+= getGenres(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
+        rowHTML +="<th>"+'</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>";
         rowHTML += "</tr>";
-
+        console.log(rowHTML);
+        
+        
         // Append the row created to the table body, which will refresh the page
         starTableBodyElement.append(rowHTML);
     }
@@ -92,6 +95,16 @@ function handleResult(resultData) {
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
+
+//handle button click 
+
+$(document).on('click', 'button',function(){
+	rawUrl="shoppingCart.html?movie=";
+	rawUrl+=this.value;
+	window.location.replace(rawUrl);
+});
+
+
 let movieId = getParameterByName('id');
 
 

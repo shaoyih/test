@@ -1,7 +1,4 @@
-/**
- * Handle the data returned by LoginServlet
- * @param resultDataString jsonObject
- */
+
 function handleLoginResult(resultDataString) {
     resultDataJson = JSON.parse(resultDataString);
 

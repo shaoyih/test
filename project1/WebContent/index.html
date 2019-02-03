@@ -8,111 +8,66 @@
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="index.css" rel="stylesheet">
+	<link href="navBar.css" rel="stylesheet">
     <title>Movie List</title>
-    
-    <style>
-    	#Nav{
-    		color: white;
-    		background-color: black;
-    		opacity:0.8;
-    		Height: 50px;
-    		
-    	}
-    	#Nav a{
-    		color:white;
-    		}
-    	body{
-    		font-family: san-serif;
-    		font-size 11pt;
-    		background-color: rgb(66,98,163);
-    		background-image: url(1.jpg);
-  			background-size: 100%;
-    	}
-    	h1{
-    		font-size: 70pt;
-    	}
-    	#movie_t{
-    			
-  				margin: auto;
-  				top: 0;
-  				right: 0;
-  				bottom: 0;
-  				left: 0;
-  				width: 80%;
-		}
-		table.table-hover{
-    						border:1px solid dark;
-    						margin-top:5px;
-    						background-color: black;
-    						opacity:0.8;
-    						
-  		}
-  		table thead th { color: white; font-size:18pt; }
-  		table tr { color: white; font-size:15pt; }
-  		table tr a{
-    		color:white;
-    	}
-    	.pager {
-    padding-left: 0;
-    margin: 20px 0;
-    text-align: center;
-    list-style: none;
-}
-.pager li {
-    display: inline;
-}
-    	.pager li>a, .pager li>span {
-    display: inline-block;
-    padding: 5px 14px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 15px;
-}
-	ul a {
-    color: #337ab7;
-    text-decoration: none;
-	}
-	.form-group{
-	margin:auto;
-	width:30%;
-	}
-	.form-group label{
-	text-align:center;
-	}
-    	
-    </style>
+
+
 </head>
 <body>
 
-<div id="Nav">
-	<h3><a href="/Project1"> HOME</a></h3> 
-</div>
+	<div class="wrapper">
+  		<nav>
+ 			<div class="tt">Fabflix</div>
+  			<ul>
+
+  					<li>
+    				<form action="" class="search_form">
+   					<input type="text" name="" value="" placeholder="search">
+    				<button type="submit" name="button" class="btn btn-info">search</button>
+    				</form>
+  				  	</li>
+		            <li><a href="mainPage.html" class="mainButton">Main page</a></li>
+		  				<li class="dropdown">
+		        		<a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by Genres
+		            	<span class="caret"></span></a>
+		        		<ul id=genreDropDown class="dropdown-menu" >
+		        		</ul>
+		    		</li>
+ 					<li class="dropdown">
+				        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by movieTitle
+				            <span class="caret"></span></a>
+				        <ul class="dropdown-menu" id=titleDropDown>
+				           
+				        </ul>
+				    </li>
+  			  	<li style="float:right"><a class="active" href="shoppingCart.html">Cart</a></li>
+  			</ul>
+  		</nav>
+  		<section class="sec1"></section>
+ 	</div>
+
 
 <ul class="nav nav-tabs">
-    <li class="nav-item"><a class="nav-link" href="/Project1"> HOME</a></li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Browse by Genres
             <span class="caret"></span></a>
         <ul id=orderDropDown class="dropdown-menu" >
-        	
-            
         </ul>
     </li>
-    
+
 </ul>
 
 
-<h1 align="center">Movies</h1>
 
+<h1 align="center">Movies</h1>
 <div id=movie_t>
-	<table id=star_table class="table table-hover" >
-	    <!-- Create a table header -->
+	<table id=star_table class="table table-dark" >
 	    <thead>
 	    <tr>
-	        <!-- Titles of each column-->
 	        <th>Movie</th>
 	        <th>Rating</th>
 	        <th>year</th>
@@ -125,15 +80,10 @@
 	</table>
 </div>
 
-<!-- Load jQuery and Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<script src="index.js"></script>
 <ul class="pager" id="pagination">
- 
+
 </ul>
 <div class="form-group">
   <label for="sel1">Select number of items</label>
@@ -144,8 +94,13 @@
     <option value="100">100</option>
   </select>
 </div>
-
 </body>
+
+<!-- Load jQuery and Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="index.js"></script>
 
 
 </html>
