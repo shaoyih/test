@@ -7,6 +7,7 @@ nav{
   top:0;
   left:0;
   padding: 10px 50px;
+  
 
 }
 
@@ -52,18 +53,35 @@ nav ul li a{
 }
 
 nav ul li form{
-  line-height: 80px;
+	
+  border:none;
+  font-color: white;
 }
-.search_form input {
-     height: 50%;
-     width: 60%;
-     border: none;
+.search_form input[type=text] {
+	display: inline-block;
+     border: 2px solid rgb(255,219,0);
+     margin: 0;
+     border-radius:4px;
+     background-color: #535353;
+     
+     color: rgb(255,219,0);
 
 }
-.search_form button {
-  height:20%；
-   width: 20%；
-   border: none;
+::placeholder{
+	color:rgb(255,219,0);
+	font-size: 14px;
+}
+nav ul li form button {
+  height:10%；
+  width: 20%；
+  margin-right: 16px;
+  display: inline-block;
+  background-color: #535353;
+   cursor: pointer;
+   border: 2px double rgb(255,219,0);
+}
+.fa-search{
+	color:rgb(255,219,0);
 }
 nav.black ul li a{
   color: #fff;
@@ -78,7 +96,7 @@ nav ul li a.active{
 }
 section.sec1{
   width: 100%;
-  height: 40vh;
+  height: 20vh;
   background: url('1.jpg');
   background-size: cover;
 

@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Login to Fablix</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
 </head>
-<body>
-<h2>Login to Fablix</h2>
 
 
 
-<form id="login_form" method="post" action="#">
-		<fieldset>
-		<legend> Sign in or Sign up</legend>
-		<br>
-		<label>username:</label>
-		<input type="text" name="username"><br><br>
-		<label>password:</label>
-		<input type="password" name="password"><br><br>
-		<input type="submit" value="Login">
-		
-		</fieldset>
-	</form>
 
+    <div class="layer">
+		<div class="loginPart">
+		<form id="login_form" method="post" action="#">
+				
+				<legend> Sign in or Sign up</legend>
+				<br>
+				<label>username:</label>
+				<input type="text" name="username"><br><br>
+				<label>password:</label>
+				<input type="password" name="password"><br><br>
+				<input type="submit" value="Login">
+				
+				
+			</form>
+		</div>
+    
+</div>
 <div id="login_error_message"></div>
 
 <!-- include jQuery-->
@@ -29,5 +33,5 @@
 <!-- include our own JS file -->
 <script src="./login.js"></script>
 
-</body>
+
 </html>

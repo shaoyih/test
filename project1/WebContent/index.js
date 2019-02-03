@@ -69,6 +69,7 @@ function handleStarResult(resultData) {
     madePagination(totalPage);
     madeSort();
     // Iterate through resultData, no more than 10 entries
+    
     for (let i = 1; i < resultData.length; i++) {
 
         // Concatenate the html tags with resultData jsonObject
@@ -83,6 +84,7 @@ function handleStarResult(resultData) {
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML+= getGenres(resultData[i]["genres"]);
+        console.log(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
         rowHTML+="<th>"+'</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>"
         rowHTML += "</tr>";
@@ -90,6 +92,7 @@ function handleStarResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         starTableBodyElement.append(rowHTML);
     }
+    
 }
 function madeSort(){
 	
@@ -211,14 +214,14 @@ $(document).on('click', 'button',function(){
 }
 )
 //navbar part
-function getGenres(){
+function allGenres(){
 	let genreSection=jQuery("#genreDropDown");
 	console.log(genreSection);
 	let genres=['Action','Adult','Adventure','Animation','Biography',
 		'Comedy','Crime','Documentary','Drama','Family','Fantasy','History',
 		'Horror','Music','Musical','Mystery','Reality-TV','Romance','Sci-Fi',
 		'Sport','Thriller','War','Western'];
-	rowHTML="";
+	let rowHTML="";
 	for (let i=0;i<genres.length;i++){
 		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&genre="+genres[i]+"'>"+genres[i]+"</a></li>";
 		
@@ -227,13 +230,13 @@ function getGenres(){
 	
 }
 
-function getAlpha(){
+function allAlpha(){
 	let alphaSection=jQuery("#titleDropDown");
 	
 	let alphas=[ 'A', 'B', 'C', 'D', 'E', 'F', 
 		'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
 		'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-	rowHTML="";
+	let rowHTML="";
 	for (let i=0;i<alphas.length;i++){
 		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&startsWith="+alphas[i]+"'>"+alphas[i]+"</a></li>";
 		
@@ -241,8 +244,9 @@ function getAlpha(){
 	alphaSection.append(rowHTML);
 	
 }
-getAlpha();
-getGenres();
+allAlpha();
+allGenres();
+
 $(window).on("scroll", function() {
 	if($(window).scrollTop()) {
 				$('nav').addClass('black');
