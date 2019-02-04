@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login to Fablix</title>
-    
-    
-  	<link href="login.css" rel="stylesheet">
+    <link href="login.css" rel="stylesheet">
 </head>
 
 
@@ -13,27 +11,29 @@
 
 <body>
 
-<h1 id="header"> Fablix </h1>
+<h1 id="header"> Fabflix </h1>
 
 
-    <div class="layer">
+  <div class="layer">
 		<div class="loginPart">
-		
+		<h1>Log In</h1>
 		<form id="login_form" method="post" action="#">
-				
 				<br>
-				<label>username:</label>
-				<input type="text" name="username"><br><br>
-				<label>password:</label>
+				
+				<label>username:</label><br>
+				<input class="userN" type="text" name="username"><br><br>
+				<label>password:</label><br>
 				<input type="password" name="password"><br><br>
-				<input type="submit" value="Login">
+				<input type="submit" value="Log in">
 				
 				
 			</form>
-		</div>
+			<br><br>
+			<div id="login_error_message"></div>
+	</div>
     
 </div>
-<div id="login_error_message"></div>
+
 
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
