@@ -41,8 +41,9 @@ public class loginFilter implements Filter{
 			
 		}
 		private boolean isUrlAllowedWithoutLogin(String URL) {
-			URL=URL.toLowerCase();
-			return URL.contains("login");
+			String requestURI=URL.toLowerCase();
+			return requestURI.endsWith("login.html") || requestURI.endsWith("login.js")
+	                || requestURI.endsWith("api/login")||requestURI.endsWith("login1.jpg")||requestURI.endsWith("login.css");
 		}
 
 }

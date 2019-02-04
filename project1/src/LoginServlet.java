@@ -44,11 +44,9 @@ public class LoginServlet extends HttpServlet {
             // Login fails
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "fail");
-            if (!username.equals("anteater")) {
-                responseJsonObject.addProperty("message", "user " + username + " doesn't exist");
-            } else {
-                responseJsonObject.addProperty("message", "incorrect password");
-            }
+            
+            responseJsonObject.addProperty("message", "credentials do not match");
+            
             response.getWriter().write(responseJsonObject.toString());
         }
     }
