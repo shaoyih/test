@@ -42,7 +42,7 @@ public class loginFilter implements Filter{
 		}
 		private boolean isUrlAllowedWithoutLogin(String URL) {
 			URL=URL.toLowerCase();
-			return URL.endsWith("login.html")||URL.endsWith("login.js")||URL.endsWith("api/login");
+			return URL.contains("login");
 		}
 
 }

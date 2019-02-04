@@ -3,17 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Login to Fablix</title>
-    <link rel="stylesheet" type="text/css" href="login.css">
+    
+    
+    <style>
+    	.loginPart{
+		  	width: 320px;
+		    height: 420px;
+		    background: rgba(0, 0, 0, 0.7);
+			top: 50%;
+			left: 50%;
+			position: absolute;
+		    transform: translate(-50%,-50%);
+		    box-sizing: border-box;
+		    padding: 90px 50px;
+			
+		}
+
+
+
+		body {
+		    background:url('1.jpg');
+		    background-size: 100%;
+		    top: 0;
+		    left: 0;
+		}
+		
+		.layer {
+		    background-color: rgba(0,0,0, 0.4);
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    height: 100vh; 
+		    width:  100vw;
+		}
+    </style>
 </head>
 
 
 
 
+<body>
+
+
+
+<h1>Log In</h1>
     <div class="layer">
 		<div class="loginPart">
+		
 		<form id="login_form" method="post" action="#">
 				
-				<legend> Sign in or Sign up</legend>
 				<br>
 				<label>username:</label>
 				<input type="text" name="username"><br><br>
@@ -32,6 +70,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- include our own JS file -->
 <script src="./login.js"></script>
-
+</body>
 
 </html>
