@@ -118,16 +118,21 @@ jQuery.fn.exists = function(){return this.length>0;}
 
 function decrementValue(id){
 	id=id.toString();
-	if ($("#error_meg"+id).exists()){return;}
+	if ($("#error_meg"+id).exists() && $("#error_meg"+id).text=="cannot be less than 0"){return;}
 	
 	let value = parseInt($('#number'+id).val());
 
     value--;
-    
-    if (value<0){
+    console.log(value);
+    if (value<-1){
     	$(".container"+id).append("<p id='error_meg"+id+"'>cannot be less than 0</p>");
     }
-    else if (value==0){
+    if (value==0){
+    	$('#number'+id).val(value);
+    	$(".container"+id).append("<p id='error_meg"+id+"'>tab one more time to delete</p>");
+    }
+    
+    else if (value==-1){
     	$('#number'+id).val(value);
     	updateItem(id);
     	$(".container"+id).parent().parent().remove();
