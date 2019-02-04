@@ -45,11 +45,14 @@ public class shoppingCartServlet extends HttpServlet {
     private String firstComeSession(HttpServletRequest request, HttpServletResponse response) {
     	HttpSession session = request.getSession();
     	String item = request.getParameter("movie");
+    	
         // get the previous items in a ArrayList
         HashMap<String,Integer> previousItems = (HashMap<String,Integer>) session.getAttribute("previousItems");
         if (previousItems == null) {
             previousItems = new HashMap<>();
-            previousItems.put(item,1);
+            if (!item.equals("null")) {
+            	previousItems.put(item,1);
+            }
             session.setAttribute("previousItems", previousItems);
         } else {
             // prevent corrupted states through sharing under multi-threads
@@ -61,7 +64,9 @@ public class shoppingCartServlet extends HttpServlet {
             		
             	}
             	else {
-            		previousItems.put(item, 1);
+            		if (!item.equals("null")) {
+                    	previousItems.put(item,1);
+                    }
             	}
             }
         }
@@ -84,7 +89,7 @@ public class shoppingCartServlet extends HttpServlet {
         	if (previousItems.containsKey(item)) {
         		System.out.println(value);
         		int temp=Integer.parseInt(value);
-        		if (temp==0) {
+        		if (temp==-1) {
         			System.out.println(item);
         			previousItems.remove(item);
         		}
