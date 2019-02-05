@@ -198,6 +198,9 @@ $(document).on('click', '#act',function(){
 	window.location.replace(rawUrl);
 }
 )
+
+localStorage.setItem("page-url", window.location.href );
+
 $("#nav-bar1").load("navBar.html");
 $(document).ready(function() {
 	var someVarName = localStorage.getItem("someVarKey");

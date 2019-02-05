@@ -72,7 +72,11 @@
 	}
 	.form-group{
 	margin:auto;
-	width:30%;
+	width:100%;
+	}
+	#page-b{
+	margin:auto;
+		width: 30%；
 	}
 	.form-group label{
 	text-align:center;

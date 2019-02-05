@@ -6,7 +6,7 @@
 
     <title>Movie List</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-	
+	<link rel="stylesheet" href="checkout.css">
 <meta charset="UTF-8">
 <title>Check out page</title>
 </head>
@@ -15,7 +15,7 @@
 <h1></h1>
 <div id="nav-bar1"></div>
 <form id='check_out'>
-  <div class="form-row">
+  
     <div class="form-group col-md-6">
       <label for="firstName">Fist Name</label>
       <input type="text" class="form-control" name="firstName" placeholder="First name">
@@ -24,22 +24,19 @@
       <label for="lastName">Last Name</label>
       <input type="text" class="form-control" name="lastName" placeholder="Last name">
     </div>
-  </div>
- 
   
-  <div class="form-row">
     <div class="form-group col-md-6">
       <label for="cardNum">Card number</label>
       <input type="text" class="form-control" name="cardNum">
     </div>
    
-    <div class="form-group col-md-2">
+    <div class="form-group col-md-6">
       <label for="date">Expiration date</label>
       <input type="text" class="form-control" name="date" placeholder="yyyy-mm-dd">
     </div>
-  </div>
   
-  <button type="submit" class="btn btn-primary " >Check out</button>
+  
+  <button type="submit" class="btn btn-primary ssst" >Check out</button>
 </form>
 <table class="table d-none" id="whole-table" >
     <thead>

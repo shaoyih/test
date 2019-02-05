@@ -91,6 +91,11 @@ function handleResult(resultData) {
     }
 }
 
+function createButton(){
+	let bButtonElement = jQuery("#back-button");
+	let rowHTML1 = "<a class='btn btn-outline-warning' href='"+localStorage.getItem("page-url")+"'>movies</a>;";
+	bButtonElement.append(rowHTML1);
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
@@ -104,7 +109,8 @@ $(document).on('click', '#act',function(){
 	window.location.replace(rawUrl);
 }
 )
-
+console.log(localStorage.getItem("page-url"));
+createButton();
 
 let movieId = getParameterByName('id');
 

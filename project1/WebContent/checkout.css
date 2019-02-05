@@ -2,5 +2,26 @@
 body{
 		margin-left:20px;
 		margin-right:20px;
+		background-image:url(index.jpg);
 		
 	}
+	
+#check_out{
+	
+	
+	margin: 10% 40%; 
+	width:50%
+}
+
+.ssst{
+	margin: 10% 20%; 
+	
+}
+
+table.table-dark{
+    						
+    				background-color: rgba(98, 98, 98, 0.7);		
+    					
+    						
+    						
+  		}
