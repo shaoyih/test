@@ -19,11 +19,19 @@ function getGenres(array){
 	let rowHTML = "";
 	rowHTML += "<th>";
 	for (let i = 0; i < array.length; i++) {
-		rowHTML+=array[i];
+			console.log(array[i]);
+            rowHTML +=
+            
+            // Add a link to single-star.html with id passed with GET url parameter
+			"<a href='index.html?by=browse&page=1&limit=10&genre=" + array[i]+ "'>"+array[i]+
+           // display star_name for the link text
+            '</a>' ;
 		rowHTML+="<br>";
 		
 	}
+	console.log(rowHTML);
 	rowHTML += "</th>";
+	console.log(rowHTML);
 	return rowHTML;
 }
 function getStars(array){
