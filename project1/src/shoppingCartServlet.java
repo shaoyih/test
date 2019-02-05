@@ -92,6 +92,7 @@ public class shoppingCartServlet extends HttpServlet {
         		if (temp==-1) {
         			System.out.println(item);
         			previousItems.remove(item);
+        			System.out.println(previousItems);
         		}
         		else{
         			previousItems.put(item, temp);

@@ -39,12 +39,18 @@ function allAlpha(){
 	
 }
 function submitSearchKey(formSubmitEvent){
-    console.log("submit search form");
+    
     formSubmitEvent.preventDefault();
-    query="index.html?by=search&"+$("#search_form").serialize()+"&page=1&limit=10"
+    query="index.html?by=search&"+$("#search_form").serialize()+"&page=1&limit=10";
+    window.location.replace(query);
+}
+function submitSearchName(formSubmitEvent){
+    console.log($("#search_form1").serialize());
+    formSubmitEvent.preventDefault();
+    query="index.html?by=search&"+$("#search_form1").serialize()+"&page=1&limit=10";
     window.location.replace(query);
 }
 allAlpha();
 allGenres();
 $("#search_form").submit((event) => submitSearchKey(event));
-$("#search_form1").submit((event) => submitSearchKey(event));
+$("#search_form1").submit((event) => submitSearchName(event));

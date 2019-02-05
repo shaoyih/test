@@ -202,22 +202,22 @@ public class MovieServlet extends HttpServlet{
        
         
         
-        if(title!="") {
+        if(title!="" &&!title.equals("null")) {
         	query+=" and m.title LIKE '%"+title+"%'\n";
         }
         
-        if(year!="") {
+        if(year!=""&&!year.equals("null")) {
         	query+=" and year="+year+"\n";
         }
-        if (director!=""){
+        if (director!=""&&!director.equals("null")){
         	query+=" and director LIKE '%"+director+"%'\n";
         }
-        if(star!="") {
+        if(star!=""&&!star.equals("null")) {
         	query+=" and s.name LIKE '%"+star+"%'\n";
         }
         
         query+="Group by m.id,title, year, director,rating\n";
-        
+        System.out.println(query);
         return query;
         
 	}
