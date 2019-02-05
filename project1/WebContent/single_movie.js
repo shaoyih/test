@@ -81,7 +81,7 @@ function handleResult(resultData) {
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML+= getGenres(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
-        rowHTML +="<th>"+'</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>";
+        rowHTML +="<th>"+'</a>' +"<br> <button id='act' type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>";
         rowHTML += "</tr>";
         console.log(rowHTML);
         
@@ -98,17 +98,17 @@ function handleResult(resultData) {
 
 //handle button click 
 
-$(document).on('click', 'button',function(){
+$(document).on('click', '#act',function(){
 	rawUrl="shoppingCart.html?movie=";
 	rawUrl+=this.value;
 	window.location.replace(rawUrl);
-});
+}
+)
 
 
 let movieId = getParameterByName('id');
 
-
-//Makes the HTTP GET request and registers on success callback function handleResult
+$("#nav-bar1").load("navBar.html");
 jQuery.ajax({
  dataType: "json",  // Setting return data type
  method: "GET",// Setting request method

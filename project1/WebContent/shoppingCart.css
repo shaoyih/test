@@ -1,1 +1,19 @@
 @charset "UTF-8";
+body{
+	
+	background-color: black;
+	 width: auto;
+    height: auto;
+    overflow:auto;
+    background-image: url(5.jpg);
+    background-size: 100%;
+}
+
+
+table.table-dark{
+    						
+    				background-color: rgba(98, 98, 98, 0.7);		
+    					
+    						
+    						
+  		}

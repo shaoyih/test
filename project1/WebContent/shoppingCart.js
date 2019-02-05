@@ -1,18 +1,3 @@
-/**
- * This example is following frontend and backend separation.
- *
- * Before this .js is loaded, the html skeleton is created.
- *
- * This .js performs two steps:
- *      1. Use jQuery to talk to backend API to get the json data.
- *      2. Populate the data to correct html elements.
- */
-
-
-/**
- * Handles the data returned by the API, read the jsonObject and populate data into html elements
- * @param resultData jsonObject
- */
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -163,13 +148,7 @@ $.get(
     "project1/shoppingCart?movie="+movieId,
     (resultDataString) => handleSessionData(resultDataString)
 );
+
 $("#check_out").click(function(){
 	window.location.replace("checkout.html");
 })
-//Makes the HTTP GET request and registers on success callback function handleResult
-//jQuery.ajax({
-// dataType: "json",  // Setting return data type
-// method: "GET",// Setting request method
-// url: "project1/single_movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
-// success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
-//});

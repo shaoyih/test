@@ -13,13 +13,16 @@
     	body{
     		font-family: san-serif;
     		font-size 11pt;
-    		background-color: rgb(66,98,163);
-    		background-image: url(1.jpg);
+    		
+    		background-image: url(index.jpg);
+    		
+    		 
     		
   			background-size: 100%;
     	}
     	h1{
     		font-size: 70pt;
+    		color: rgb(255,219,0);
     	}
     	#movie_t{
     			
@@ -32,14 +35,17 @@
 		}
 		table.table-dark{
     						
-    				background-color: rgba(98, 98, 98, 0.4);		
-    						
+    				background-color: rgba(98, 98, 98, 0.7);		
+    					
     						
     						
   		}
   		
-  		table thead th { color: white; font-size:18pt; }
-  		table tr { color: white; font-size:15pt; }
+  		table thead th { color: white; font-size:18pt;}
+  		table tr { color: white; font-size:15pt;}
+  		table tr.spaceUnder>td{
+  				padding-bottom: 100px;
+  		}
   		table tr a{
     		color:white;
     	}
@@ -55,9 +61,10 @@
     	.pager li>a, .pager li>span {
     display: inline-block;
     padding: 5px 14px;
-    background-color: #fff;
+    background-color: black;
     border: 1px solid #ddd;
     border-radius: 15px;
+    color:rgb(255,219,0);
 }
 	ul a {
     color: #337ab7;
@@ -70,4 +77,11 @@
 	.form-group label{
 	text-align:center;
 	}
-   
+   .nav{
+   		background-color: black;
+   		
+   }
+  	.nav-item a{
+   		color:rgb(255,219,0);
+   }
+  

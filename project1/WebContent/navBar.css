@@ -8,27 +8,58 @@ nav{
   left:0;
   padding: 10px 50px;
   
+  
 
 }
 
+.adv-search{
+	display:inline-block;
+}
 nav.black{
   position:fixed;
   background:black;
-
+	opacity:0.8;
 
   height:100px;
   padding:10px 100px;
 
 }
 
-
-nav .tt{
+.sea{
+	position: absolute;
+	left: 38%;
+	top:  30px;
+	float: left;
+	height: 100px;
+	width: 400px;
+	
+	display: inline-block; 
+}
+.sea form{
+	display: inline-block;
+}
+.sea button{
+	
+	cursor: pointer;
+	background-color: #535353;
+	height: 40px;
+	width:40px;
+	border: none;
+	
+}
+nav .tit a{
   padding: 22px 20px;
   height: 80px;
   float: left;
-  font-size: 24px;
+  font-size: 50px;
+  top: 0px;
+  left: 10px;
+  font-family: georgia;
+  font-style: italic;
   transition: .3s;
-  color:white;
+  color:rgb(255,219,0);
+  position: absolute;
+  text-decoration: none;
 }
 
 nav .black .tt{
@@ -46,42 +77,68 @@ nav ul{
 nav ul li a{
     line-height: 80px;
     color: white;
-    padding:12px 30px;
+    padding:5px 15px;
     text-decoration: none;
-    text-transform:uppercase;
+    text-transform:Capital;
     transition: .3s;
 }
 
-nav ul li form{
-	
-  border:none;
-  font-color: white;
-}
+
 .search_form input[type=text] {
 	display: inline-block;
-     border: 2px solid rgb(255,219,0);
+    
      margin: 0;
-     border-radius:4px;
+     border: none;
      background-color: #535353;
-     
+     width: 80%;
+     height: 40px;
      color: rgb(255,219,0);
+     caret-color: rgb(255,219,0);
+     
 
 }
+.search_form1 input[type=text] {
+	display: inline-block;
+    
+     margin: 0;
+     border: none;
+     background-color: #535353;
+     width: 80%;
+     height: 40px;
+     color: rgb(255,219,0);
+     caret-color: rgb(255,219,0);
+     
+
+}
+
+.search_form input[type=text]:focus{
+	outline:none
+}
+
+
 ::placeholder{
 	color:rgb(255,219,0);
-	font-size: 14px;
+	font-size: 18px;
 }
-nav ul li form button {
-  height:10%；
-  width: 20%；
-  margin-right: 16px;
+.search_form button {
+ height: 40px;
+ width:40px;
+ 
+  border: none;
   display: inline-block;
-  background-color: #535353;
+  background-color: black;
    cursor: pointer;
-   border: 2px double rgb(255,219,0);
+   
 }
 .fa-search{
 	color:rgb(255,219,0);
+	
+}
+.fa-list{
+	color:rgb(255,219,0);
+}
+#adv{
+	border-right: 5px solid rgb(255,219,0);
 }
 nav.black ul li a{
   color: #fff;
@@ -90,18 +147,41 @@ nav ul li a:focus{
   outline:none;
 }
 nav ul li a.active{
-  background: #E2472F;
-  color: #fff;
+  background: rgb(255,219,0);;
+  color: black;
   border-radius:6px;
 }
 section.sec1{
   width: 100%;
-  height: 20vh;
-  background: url('1.jpg');
+  height: 15vh;
+  background-color:black;
   background-size: cover;
 
 }
 
 .dropdown-menu{
 	background-color: black;
+	opacity: 0.9;
+}
+.dropdown-menu button{
+	width:100%;
+}
+.form-group label{
+	color: rgb(255,219,0);
+}
+#ss1:hover{
+	background-color: rgb(255,219,0);
+	font-size: 20px;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 350px;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar { 
+    display: none; 
+}
+.act1{
+	background-color: rgb(255,219,0);
 }

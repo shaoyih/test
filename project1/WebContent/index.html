@@ -8,53 +8,21 @@
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">   
 	<link href="index.css" rel="stylesheet">
 	<link href="navBar.css" rel="stylesheet">
     <title>Movie List</title>
 
 
 </head>
-<body>
+<body style="background-color: black">
 
-	<div class="wrapper">
-  		<nav>
- 			<div class="tt">Fabflix</div>
-  			<ul>
-
-  					<li>
-    				<form action="" class="search_form">
-   					<input type="text" placeholder="search by name.."><button type="submit" name="button"><i class="fa fa-search"></i></button>
-    				<a href="mainPage.html" class="mainButton">Advance Search</a>
-    				</form>
-  				  	</li>
-  				  	
-		            <li><a href="mainPage.html" class="mainButton">Main page</a></li>
-		            
-		  				<li class="dropdown">
-		        		<a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by Genres
-		            	<span class="caret"></span></a>
-		        		<ul id=genreDropDown class="dropdown-menu" >
-		        		</ul>
-		    		</li>
- 					<li class="dropdown">
-				        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by movieTitle
-				            <span class="caret"></span></a>
-				        <ul class="dropdown-menu" id=titleDropDown>
-				           
-				        </ul>
-				    </li>
-  			  	<li style="float:right"><a class="active" href="shoppingCart.html">Checkout</a></li>
-  			</ul>
-  		</nav>
-  		<section class="sec1"></section>
- 	</div>
+ 	
+<div id="nav-bar1"></div>
 
 <ul class="nav nav-tabs">
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Sort By
+        <a class="nav-link" id="sb1" data-toggle="dropdown" href="#">Sort By
             <span class="caret"></span></a>
         <ul id=orderDropDown class="dropdown-menu" >
         </ul>
@@ -64,7 +32,7 @@
 
 
 
-<h1 align="center">Movies</h1>
+<h1 align="center" style="color: rgb(255,219,0); font-size:50px;">Movies</h1>
 <div id=movie_t>
 	<table id=star_table class="table table-dark" >
 	    <thead>
@@ -101,8 +69,8 @@
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="index.js"></script>
+
 
 
 </html>

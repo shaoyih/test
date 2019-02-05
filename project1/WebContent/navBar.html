@@ -1,37 +1,83 @@
 <html>
 
   <head>
+  
+   <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
   		<link href="navBar.css" rel="stylesheet">
-  		<link href="http://fonts.googleapis.com/css?faimly=Quicksand:500" rel="stylesheet">
+  		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  		<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-  </head>
+  		<link href="navBar.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Leckerli+One' rel='stylesheet' type='text/css'>  </head>
 
 
   <body>
-  		<div class="wrapper">
-  			<nav class="top-bar fixed">
-  				<div class="tt">Fabflix</div>
-  				<ul>
-  					<li>
-    					<form action="" class="search_form">
-    					<input type="text" name="" value="" placeholder="search">
-    					<button type="button" name="button">search</button>
-    					</form>
-  					</li>
-
-  				  <li><a href="#">Browse by title</a></li>
-  				  <li><a href="#">Browse by Genre</a></li>
-            	  
-  				  <li style="float:right"><a class="active" href="#about">Checkout</a></li>
-  				</ul>
-  			</nav>
-  			<section class="sec1"></section>
-  	</div>
-
+  	<div class="wrapper">
+  		<nav>
+ 			<div class="tit"><a href="mainPage.html" class="mainButton"> Fablix</a></div>
+ 			<div class="sea">
+ 			
+ 			
+ 			
+ 			
+ 				<div class="adv-search">
+ 				<button type="button" name="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"><i class="fa fa-list"></i></button>
+ 				<div class="dropdown-menu">
+				  <form class="px-5 py-4" id="search_form">
+				    <div class="form-group">
+				      <label>Title</label>
+				      <input type="text" class="form-control" name="title" placeholder="title">
+				    </div>
+				    <div class="form-group">
+				      <label>Year</label>
+				      <input type="text" class="form-control" placeholder="year" name="year">
+				    </div>
+				    <div class="form-group">
+				      <label>Director</label>
+				      <input type="text" class="form-control" placeholder="director's name" name="director">
+				    </div>
+				    <div class="form-group">
+				      <label>Stars</label>
+				      <input type="text" class="form-control"  placeholder="stars' name" name="stars">
+				    </div>
+					<div class="dropdown-divider"></div>
+				    <button type="submit" class="btn btn-primary" id="ss1">Search</button>
+				  </form>
+				  
+				  
+				</div>
+				  
+				 </div><form class="search_form">
+					<input type="text" placeholder="search by name.." name="title">
+					<button type="submit"><i class="fa fa-search"></i></button>
+    				
+    			</form>
+    		</div>
+  			<ul>
+		  				<li class="dropdown">
+		        		<a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by Genres
+		            	<span class="caret"></span></a>
+		        		<ul id=genreDropDown class="dropdown-menu scrollable-menu" >
+		        		</ul>
+		    		</li>
+ 					<li class="dropdown">
+				        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by movieTitle
+				            <span class="caret"></span></a>
+				        <ul class="dropdown-menu scrollable-menu" id=titleDropDown>
+				           
+				        </ul>
+				    </li>
+  			  	<li style="float:right"><a class="active act1" href="shoppingCart.html">Checkout</a></li>
+  			</ul>
+  		</nav>
+  		<section class="sec1"></section>
+ 	</div>
+ 	
 
     <script src="./navBar.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> <!-- drop down annimation -->
 	</body>
 
 </html>

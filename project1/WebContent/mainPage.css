@@ -1,1 +1,9 @@
 @charset "UTF-8";
+
+body{
+    	font-family: san-serif;
+    	font-size 11pt;
+   		background-color: rgb(66,98,163);
+    	background-image: url(1.jpg);
+  		background-size: cover;
+ }

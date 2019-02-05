@@ -5,6 +5,7 @@
     		background-color: dark;
     		opacity:0.8;
     		Height: 50px;
+    		width: fit;
     		
     	}
     	#Nav a{
@@ -13,7 +14,7 @@
     	body{
     		font-family: san-serif;
     		font-size 11pt;
-    		
+    		background-color: rgb(66,98,163);
     		background-image: url(https://images5.alphacoders.com/542/542019.jpg);
     		background-size: cover;
   			

@@ -1,19 +1,3 @@
-/**
- * This example is following frontend and backend separation.
- *
- * Before this .js is loaded, the html skeleton is created.
- *
- * This .js performs two steps:
- *      1. Use jQuery to talk to backend API to get the json data.
- *      2. Populate the data to correct html elements.
- */
-
-
-/**
- * Handles the data returned by the API, read the jsonObject and populate data into html elements
- * @param resultData jsonObject
- */
-
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -86,7 +70,7 @@ function handleStarResult(resultData) {
         rowHTML+= getGenres(resultData[i]["genres"]);
         console.log(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
-        rowHTML+="<th>"+'</a>' +"<br> <button type='button' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>"
+        rowHTML+="<th>"+'</a>' +"<br> <button type='button' id='act' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>"
         rowHTML += "</tr>";
        
         // Append the row created to the table body, which will refresh the page
@@ -98,12 +82,13 @@ function madeSort(){
 	
 	let Dropdown=jQuery("#orderDropDown");
 	let order=["rateA","rateD","titleA","titleD"];
+	let order1=["rate Low to High","rate High to Low","title: First to Last","title: Last to First"]
 	for(let i=0;i<order.length;i++){
-		Dropdown.append(getOrderHtml(order[i]));
+		Dropdown.append(getOrderHtml(order[i],order1[i]));
 	}
 }
 
-function getOrderHtml(order){
+function getOrderHtml(order,order1){
 	let current=getParameterByName('order');
 	var baseUrl=location.href;
 	console.log("order testing")
@@ -115,7 +100,7 @@ function getOrderHtml(order){
 		baseUrl=String(baseUrl)+"&order="+order;
 	}
 	
-	return "<li><a href='"+baseUrl+"'>"+order+"</a></li>";
+	return "<li><a href='"+baseUrl+"'>"+order1+"</a></li>";
 }
 function madePagination(total){
 	let current=getParameterByName('page');
@@ -207,56 +192,13 @@ else{
 
 	
 }
-$(document).on('click', 'button',function(){
+$(document).on('click', '#act',function(){
 	rawUrl="shoppingCart.html?movie=";
 	rawUrl+=this.value;
 	window.location.replace(rawUrl);
 }
 )
-//navbar part
-function allGenres(){
-	let genreSection=jQuery("#genreDropDown");
-	console.log(genreSection);
-	let genres=['Action','Adult','Adventure','Animation','Biography',
-		'Comedy','Crime','Documentary','Drama','Family','Fantasy','History',
-		'Horror','Music','Musical','Mystery','Reality-TV','Romance','Sci-Fi',
-		'Sport','Thriller','War','Western'];
-	let rowHTML="";
-	for (let i=0;i<genres.length;i++){
-		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&genre="+genres[i]+"'>"+genres[i]+"</a></li>";
-		
-	}
-	genreSection.append(rowHTML);
-	
-}
-
-function allAlpha(){
-	let alphaSection=jQuery("#titleDropDown");
-	
-	let alphas=[ 'A', 'B', 'C', 'D', 'E', 'F', 
-		'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 
-		'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-	let rowHTML="";
-	for (let i=0;i<alphas.length;i++){
-		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&startsWith="+alphas[i]+"'>"+alphas[i]+"</a></li>";
-		
-	}
-	alphaSection.append(rowHTML);
-	
-}
-allAlpha();
-allGenres();
-
-$(window).on("scroll", function() {
-	if($(window).scrollTop()) {
-				$('nav').addClass('black');
-	}
-
-	else {
-				$('nav').removeClass('black');
-	}
-})
-
+$("#nav-bar1").load("navBar.html");
 $(document).ready(function() {
 	var someVarName = localStorage.getItem("someVarKey");
 	$('#sel1 option[value="'+someVarName+'"]').attr('selected',true);
@@ -270,8 +212,7 @@ $(document).ready(function() {
 	
 	var newUrl = location.href.replace("limit="+limit, "limit="+select);
 	window.location.replace(newUrl);
-//	window.location.href.replace("limit="+limit, "limit="+select);
-//	location.reload();
+
 	
 });
 });

@@ -73,7 +73,7 @@ function handleResult(resultData) {
 
 let starId = getParameterByName('id');
 
-
+$("#nav-bar1").load("navBar.html");
 jQuery.ajax({
     dataType: "json",  
     method: "GET",

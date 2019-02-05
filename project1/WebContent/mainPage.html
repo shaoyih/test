@@ -8,8 +8,10 @@
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link href="mainPage.css" rel="stylesheet">
     <title>Movie List</title>
-    
-	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="navBar.css" rel="stylesheet">
 	
 	
    
@@ -17,46 +19,17 @@
 <body>
 
 
+<div id="nav-bar1"></div>
 
-<ul class="nav nav-tabs">
-    
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by Genres
-            <span class="caret"></span></a>
-        <ul id=genreDropDown class="dropdown-menu" >
-            
-        </ul>
-    </li>
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse by movieTitle
-            <span class="caret"></span></a>
-        <ul class="dropdown-menu" id=titleDropDown>
-           
-        </ul>
-    </li>
-    
-</ul>
 
-<div>
-		<form align="center" id="search_form">
-			<fieldset>
-				<legend>Search Bar </legend>
-				<input type="text" placeholder="title" name="title"><br>
-				<input type="text" placeholder="year" name="year"><br>
-				<input type="text" placeholder="director's name" name="director"><br>
-				<input type="text" placeholder="stars' name" name="stars"><br>
-				<input type="submit" value="search">
-			</fieldset>
-		
-		</form>
-</div>
 
 
 <!-- Load jQuery and Bootstrap JS -->
-
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="navBar.js"></script>
 <script src="mainPage.js"></script>
+
 </body>
 
 

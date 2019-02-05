@@ -44,4 +44,4 @@ function submitLoginForm(formSubmitEvent) {
 
 // Bind the submit action of the form to a handler function
 $("#check_out").submit((event) => submitLoginForm(event));
-
+$("#nav-bar1").load("navBar.html");
