@@ -9,7 +9,8 @@ function handleLoginResult(resultDataString) {
     console.log(resultDataJson);
     console.log(resultDataJson["status"]);
     console.log(resultDataJson["data"]);
-
+    
+    if(resultDataJson["status"]=="success"){
     $("#check_out").remove();
     rowHTML="";
     document.getElementById("whole-table").classList.remove("d-none");
@@ -25,6 +26,13 @@ function handleLoginResult(resultDataString) {
         rowHTML+="</tr>";
     }
     $("#movie-table").append(rowHTML);
+    }
+    else{
+    	//change the setting of the popup window
+    	console.log("into wrong");
+    	document.getElementById("wrongInfo").style.display="block";
+    	
+    }
 }
 
 
@@ -45,3 +53,6 @@ function submitLoginForm(formSubmitEvent) {
 // Bind the submit action of the form to a handler function
 $("#check_out").submit((event) => submitLoginForm(event));
 $("#nav-bar1").load("navBar.html");
+document.getElementsByClassName("close")[0].onclick=function(){
+	document.getElementById("wrongInfo").style.display="none";
+};

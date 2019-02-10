@@ -19,7 +19,6 @@ function getGenres(array){
 	let rowHTML = "";
 	rowHTML += "<th>";
 	for (let i = 0; i < array.length; i++) {
-			console.log(array[i]);
             rowHTML +=
             
             // Add a link to single-star.html with id passed with GET url parameter
@@ -29,9 +28,7 @@ function getGenres(array){
 		rowHTML+="<br>";
 		
 	}
-	console.log(rowHTML);
 	rowHTML += "</th>";
-	console.log(rowHTML);
 	return rowHTML;
 }
 function getStars(array){
@@ -52,12 +49,12 @@ function getStars(array){
 	return rowHTML;
 }
 function handleStarResult(resultData) {
-    console.log("handleStarResult: populating star table from resultData");
 
     
     // Find the empty table body by id "star_table_body"
     let starTableBodyElement = jQuery("#movie_table_body");
     let totalPage=resultData[0]["totalPage"];
+    console.log(totalPage);
     madePagination(totalPage);
     madeSort();
     // Iterate through resultData, no more than 10 entries
@@ -76,7 +73,6 @@ function handleStarResult(resultData) {
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["director"] + "</th>";
         rowHTML+= getGenres(resultData[i]["genres"]);
-        console.log(resultData[i]["genres"]);
         rowHTML+= getStars(resultData[i]["stars"]);
         rowHTML+="<th>"+'</a>' +"<br> <button type='button' id='act' class='btn btn-primary btn-lg' value='"+resultData[i]["title"]+"'>add to cart</button>"+"</th>"
         rowHTML += "</tr>";
@@ -99,8 +95,6 @@ function madeSort(){
 function getOrderHtml(order,order1){
 	let current=getParameterByName('order');
 	var baseUrl=location.href;
-	console.log("order testing")
-	console.log(current);
 	if(current){
 		baseUrl=baseUrl.replace(current,order);
 	}
@@ -143,7 +137,6 @@ function getNextHTML(current,totalPage){
 	
 	
 	var baseUrl = location.href.replace("page="+current, "page="+offset);
-	console.log(baseUrl);
 	return "<li ><a  href='"+baseUrl+"'>Next</a></li>";
 }
 
@@ -165,7 +158,7 @@ if (mode=="browse"){
 	
 	
 	if (parameter){
-		
+		console.log("project1/movies?by=browse&genre=" + parameter+"&order="+order+"&limit="+limit+"&page="+offset);
 		jQuery.ajax({
 		    dataType: "json", // Setting return data type
 		    method: "GET", // Setting request method
@@ -176,6 +169,7 @@ if (mode=="browse"){
 	}
 	else{
 		parameter = getParameterByName('genre');
+		console.log("project1/movies?by=browse&genre=" + parameter+"&order="+order+"&limit="+limit+"&page="+offset);
 		
 		jQuery.ajax({
 		    dataType: "json", // Setting return data type
@@ -190,7 +184,7 @@ else{
 	let year=getParameterByName('year');
 	let director=getParameterByName('director');
 	let star=getParameterByName('stars');
-	console.log("into it")
+	console.log("project1/movies?by=search&title=" + title+"&year="+year+"&director="+director+"&stars="+star+"&order="+order+"&limit="+limit+"&page="+offset);
 	jQuery.ajax({
 	    dataType: "json", // Setting return data type
 	    method: "GET", // Setting request method
@@ -213,7 +207,6 @@ $("#nav-bar1").load("navBar.html");
 $(document).ready(function() {
 	var someVarName = localStorage.getItem("someVarKey");
 	$('#sel1 option[value="'+someVarName+'"]').attr('selected',true);
-	console.log($('#sel1 option:contains("'+someVarName+'")'));
 	jQuery("#sel1").change(function() {
 	
 	

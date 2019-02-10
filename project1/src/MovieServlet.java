@@ -51,7 +51,7 @@ public class MovieServlet extends HttpServlet{
             else {
             	result+=updateBySearch(request);
             }
-            total_page=getTotalPage(statement,result);
+            total_page=getTotalPage(statement,result,mode);
             //no matter what mode, we always need to add sorting and pages
             
             result+=updateBySort(request);
@@ -117,12 +117,18 @@ public class MovieServlet extends HttpServlet{
         out.close();
 
     }
-	public int getTotalPage(Statement statement,String result) {
+	public int getTotalPage(Statement statement,String result, String mode) {
 		
 		//processing the query
 				String query="SELECT COUNT(*) as ct ";
 				int index=result.indexOf("from");
 				query=query + result.substring(index);
+				System.out.println(mode);
+				
+				if(mode.equals("search")) {
+					query="SELECT COUNT(*) as ct FROM(\n"+query+") as SubQuery";
+				}
+				System.out.println(query);
 				
 				int numberOfRows=0;
 				try {
@@ -160,9 +166,9 @@ public class MovieServlet extends HttpServlet{
         			"select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings \n" + 
         			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%' \n";
-        	System.out.println(query);
+        	
         }
-        
+        System.out.println(query);
 		return query;
 	}
 	public String updateBySort(HttpServletRequest request) {

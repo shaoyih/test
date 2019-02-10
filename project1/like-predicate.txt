@@ -1,0 +1,2 @@
+For advance search part we used simple query "LIKE % %" after the field we want to find. It will solve the problem of pattern that start with or end with. Then we usually can get the result we want.
+For title browse part we used like " %" after it. since we want to find the movie start with the letter that accept all of pattern if they have same capital letter.

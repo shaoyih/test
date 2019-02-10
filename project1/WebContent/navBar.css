@@ -82,9 +82,7 @@ nav ul li a{
     text-transform:Capital;
     transition: .3s;
 }
-
-
-.search_form input[type=text] {
+#search_form1 input[type=text] {
 	display: inline-block;
     
      margin: 0;
@@ -94,27 +92,11 @@ nav ul li a{
      height: 40px;
      color: rgb(255,219,0);
      caret-color: rgb(255,219,0);
-     
 
 }
-.search_form1 input[type=text] {
-	display: inline-block;
-    
-     margin: 0;
-     border: none;
-     background-color: #535353;
-     width: 80%;
-     height: 40px;
-     color: rgb(255,219,0);
-     caret-color: rgb(255,219,0);
-     
-
-}
-
-.search_form input[type=text]:focus{
+.search_form1 input[type=text]:focus{
 	outline:none
 }
-
 
 ::placeholder{
 	color:rgb(255,219,0);
