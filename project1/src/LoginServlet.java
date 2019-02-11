@@ -1,5 +1,6 @@
 import com.google.gson.JsonObject;
 
+
 import javax.annotation.Resource;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
@@ -27,7 +29,7 @@ public class LoginServlet extends HttpServlet {
     private DataSource dataSource;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+       
         try {
             recaptchaVerify.verify(gRecaptchaResponse);
         } catch (Exception e) {
@@ -35,6 +37,7 @@ public class LoginServlet extends HttpServlet {
         }
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        System.out.println(username);
       
         if (this.loginSucceed(username,password)) {
             
@@ -62,15 +65,27 @@ public class LoginServlet extends HttpServlet {
 		try {
 			dbcon = dataSource.getConnection();
 			Statement statement = dbcon.createStatement();
-			String query = ("select count(*) from customers where email= ? and password= ? ;");
+			String query = ("select * from customers where email= ?");
 			
-			PreparedStatement rs = dbcon.prepareStatement(query);
-			rs.setString(1,username);
-			rs.setString(2,password);
-			ResultSet res=rs.executeQuery();
-			if (res.next() && res.getInt("count(*)")>0) return true;
+			PreparedStatement ps = dbcon.prepareStatement(query);
+			ps.setString(1,username);
+			
+			ResultSet rs=ps.executeQuery();
+			
+			boolean checkResult= false;
+			
+			if (rs.next()) {
+			    //get password
+				String encryptedPassword = rs.getString("password");
+				
+				// use the encryptor we use before to excute
+				checkResult = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+				
+				return checkResult;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println("sql fail");
 			e.printStackTrace();
 		}
 
