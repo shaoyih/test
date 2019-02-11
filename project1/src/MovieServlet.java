@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,7 +38,8 @@ public class MovieServlet extends HttpServlet{
         
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-
+        boolean browse=false;
+        boolean search=false;
         try {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
@@ -47,11 +49,13 @@ public class MovieServlet extends HttpServlet{
             
             if (mode.equals("browse")) {
             	result+=updateByBrowse(request);
+            	browse=true;
             }
             else {
             	result+=updateBySearch(request);
+            	search=true;
             }
-            total_page=getTotalPage(statement,result,mode);
+            total_page=getTotalPage( dbcon,request, result, browse, search, mode);
             //no matter what mode, we always need to add sorting and pages
             
             result+=updateBySort(request);
@@ -62,7 +66,12 @@ public class MovieServlet extends HttpServlet{
             
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(result);
+            
+            
+            PreparedStatement prepare=dbcon.prepareStatement(result);
+            updateParameter(request,prepare,browse,search,true);
+           
+            ResultSet rs = prepare.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
             JsonObject page = new JsonObject();
@@ -117,7 +126,61 @@ public class MovieServlet extends HttpServlet{
         out.close();
 
     }
-	public int getTotalPage(Statement statement,String result, String mode) {
+	public void updateParameter(HttpServletRequest request,PreparedStatement result,boolean browse,boolean search,boolean checkLimit) {
+		
+		  int index=1;
+		
+	       try {
+	    	   if (browse) {
+		   			String genre = request.getParameter("genre");
+		   			String alpha = request.getParameter("startsWith");
+		   			if (genre != null) {
+		   				result.setString(index++, genre);
+		   				
+		   				
+		   			}
+		   			else{
+		   				result.setString(index++, alpha+"%");
+		   			}
+	    	   }
+	    	   //search
+	    	   else {
+	    		   String title = request.getParameter("title");
+	    	        String year = request.getParameter("year");
+	    			String director = request.getParameter("director");
+	    	        String star = request.getParameter("stars");
+	    	        if(title!="" &&!title.equals("null")) {
+	    	        	result.setString(index++, "%"+title+"%");
+	    	        }
+	    	        
+	    	        if(year!=""&&!year.equals("null")) {
+	    	        	result.setInt(index++, Integer.parseInt(year));
+	    	        }
+	    	        if (director!=""&&!director.equals("null")){
+	    	        	result.setString(index++, "%"+director+"%");
+	    	        }
+	    	        if(star!=""&&!star.equals("null")) {
+	    	        	result.setString(index++, "%"+star+"%");
+	    	        }
+	    		   
+	    		   
+	    	   }
+	    	   if (checkLimit) {
+	    	   int limit = Integer.parseInt(request.getParameter("limit"));
+	           String page = request.getParameter("page");
+	           int offset= (Integer.parseInt(page)-1)*limit;
+	           result.setInt(index++,limit);
+	           result.setInt(index++,offset);
+	    	   
+	    	   }
+			} catch (SQLException e) {
+				
+			}
+	       
+		
+	}
+	
+	public int getTotalPage(Connection dbcon ,HttpServletRequest request,String result,boolean browse,boolean search,String mode) {
 		
 		//processing the query
 				String query="SELECT COUNT(*) as ct ";
@@ -133,7 +196,10 @@ public class MovieServlet extends HttpServlet{
 				int numberOfRows=0;
 				try {
 					
-					ResultSet rs = statement.executeQuery(query);
+					PreparedStatement prepare=dbcon.prepareStatement(query);
+		            updateParameter(request,prepare,browse,search,false);
+		            System.out.println(prepare);
+					ResultSet rs = prepare.executeQuery();
 					rs.next();
 					int ct=(int) rs.getLong("ct"); 
 					numberOfRows=ct;
@@ -149,15 +215,13 @@ public class MovieServlet extends HttpServlet{
 	public String updateByBrowse(HttpServletRequest request) {
 		String query="";
 		String genre = request.getParameter("genre");
-        String alpha = request.getParameter("startsWith");
-        
         if (genre != null) {
         	//browse by genre
         	
         	query= "select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings ,genres_in_movies g,genres\n" + 
         			"where movies.id=ratings.movieId and  g.movieId=movies.id "
-        			+ "AND g.genreId=genres.Id AND genres.name='"+genre+"'\n";
+        			+ "AND g.genreId=genres.Id AND genres.name= ? \n";
         	
         }
         else {
@@ -165,7 +229,7 @@ public class MovieServlet extends HttpServlet{
         	query=
         			"select movies.id,title, year, director,rating\n" + 
         			"from movies, ratings \n" + 
-        			"where movies.id=ratings.movieId and movies.title like '"+alpha+"%' \n";
+        			"where movies.id=ratings.movieId and movies.title like ? \n";
         	
         }
         System.out.println(query);
@@ -191,10 +255,9 @@ public class MovieServlet extends HttpServlet{
 		return "";
 	}
 	public String updateByPage(HttpServletRequest request) {
-		String limit = request.getParameter("limit");
-        String page = request.getParameter("page");
-        int offset= (Integer.parseInt(page)-1)*Integer.parseInt(limit);
-		return "LIMIT "+limit+" OFFSET "+Integer.toString(offset)+";";
+		
+        return "LIMIT ? OFFSET ? ;";
+//		return "LIMIT "+limit+" OFFSET "+Integer.toString(offset)+";";
 	}
 	
 	public String updateBySearch(HttpServletRequest request) {
@@ -205,22 +268,34 @@ public class MovieServlet extends HttpServlet{
         String year = request.getParameter("year");
 		String director = request.getParameter("director");
         String star = request.getParameter("stars");
-       
-        
-        
         if(title!="" &&!title.equals("null")) {
-        	query+=" and m.title LIKE '%"+title+"%'\n";
+        	query+=" and m.title LIKE ? \n";
         }
         
         if(year!=""&&!year.equals("null")) {
-        	query+=" and year="+year+"\n";
+        	query+=" and year=? \n";
         }
         if (director!=""&&!director.equals("null")){
-        	query+=" and director LIKE '%"+director+"%'\n";
+        	query+=" and director LIKE ? \n";
         }
         if(star!=""&&!star.equals("null")) {
-        	query+=" and s.name LIKE '%"+star+"%'\n";
+        	query+=" and s.name LIKE ? \n";
         }
+        
+        
+//        if(title!="" &&!title.equals("null")) {
+//        	query+=" and m.title LIKE '%"+title+"%'\n";
+//        }
+//        
+//        if(year!=""&&!year.equals("null")) {
+//        	query+=" and year="+year+"\n";
+//        }
+//        if (director!=""&&!director.equals("null")){
+//        	query+=" and director LIKE '%"+director+"%'\n";
+//        }
+//        if(star!=""&&!star.equals("null")) {
+//        	query+=" and s.name LIKE '%"+star+"%'\n";
+//        }
         
         query+="Group by m.id,title, year, director,rating\n";
         System.out.println(query);
@@ -240,11 +315,13 @@ public class MovieServlet extends HttpServlet{
 
         String query = "select genres.name\n" + 
         		"from genres_in_movies g, genres\n" + 
-        		"where g.movieId = '"+id+"' and g.genreId=genres.id;\n";
+        		"where g.movieId = ? and g.genreId=genres.id;\n";
 
-        // Perform the query
+        
         try {
-			ResultSet res = statement.executeQuery(query);
+        	PreparedStatement prepare=dbcon.prepareStatement(query);
+        	prepare.setString(1, id);
+			ResultSet res = prepare.executeQuery();
 			while (res.next()) {
 				result.add(res.getString("genres.name"));
 			}
@@ -266,12 +343,15 @@ public class MovieServlet extends HttpServlet{
 
         String query = "select stars.name,stars.id\n" + 
         		"from stars ,stars_in_movies\n" + 
-        		"where stars_in_movies.movieId= '"+id+"'and stars_in_movies.starId=stars.id;\n" + 
+        		"where stars_in_movies.movieId= ? and stars_in_movies.starId=stars.id;\n" + 
         		"";
 
         // Perform the query
         try {
-			ResultSet res = statement.executeQuery(query);
+        	PreparedStatement prepare=dbcon.prepareStatement(query);
+        	prepare.setString(1, id);
+			ResultSet res = prepare.executeQuery();
+			
 			while (res.next()) {
 				ArrayList<String> temp= new ArrayList<String>();
 				temp.add(res.getString("stars.name"));

@@ -44,11 +44,14 @@ public class SingleMovieServlet extends HttpServlet{
 
             String query = "select id,title, year, director,rating\n" + 
             		"from movies, ratings\n" + 
-            		"where movies.id = '"+id+"' and movies.id=ratings.movieId;\n";
+            		"where movies.id = ? and movies.id=ratings.movieId;\n";
             		
 
-            // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement prepare = dbcon.prepareStatement(query);
+        	prepare.setString(1,id);
+			
+			ResultSet rs=prepare.executeQuery();
+			
 
             JsonArray jsonArray = new JsonArray();
 
@@ -112,11 +115,15 @@ public class SingleMovieServlet extends HttpServlet{
 
         String query = "select genres.name\n" + 
         		"from genres_in_movies g, genres\n" + 
-        		"where g.movieId = '"+id+"' and g.genreId=genres.id;\n";
+        		"where g.movieId = ? and g.genreId=genres.id;\n";
 
         // Perform the query
         try {
-			ResultSet res = statement.executeQuery(query);
+        	PreparedStatement prepare = dbcon.prepareStatement(query);
+        	prepare.setString(1,id);
+			
+			ResultSet res=prepare.executeQuery();
+			
 			while (res.next()) {
 				result.add(res.getString("genres.name"));
 			}
@@ -136,12 +143,16 @@ public class SingleMovieServlet extends HttpServlet{
 
         String query = "select stars.name,stars.id\n" + 
         		"from stars ,stars_in_movies\n" + 
-        		"where stars_in_movies.movieId= '"+id+"'and stars_in_movies.starId=stars.id;\n" + 
+        		"where stars_in_movies.movieId= ? and stars_in_movies.starId=stars.id;\n" + 
         		"";
 
         // Perform the query
         try {
-			ResultSet res = statement.executeQuery(query);
+        	PreparedStatement prepare = dbcon.prepareStatement(query);
+        	prepare.setString(1,id);
+			
+			ResultSet res=prepare.executeQuery();
+			
 			while (res.next()) {
 				ArrayList<String> temp= new ArrayList<String>();
 				temp.add(res.getString("stars.name"));

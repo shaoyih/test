@@ -80,9 +80,14 @@ public class checkoutServlet extends HttpServlet {
 			
 		Statement statement = dbcon.createStatement();
 		String query = ("select id from customers \n" + 
-					"where (ccID LIKE '"+cardNum+"') and firstName='"+firstName+
-					"' and lastName='"+lastName+"';");
-			ResultSet rs = statement.executeQuery(query);
+					"where (ccID LIKE ? ) and firstName= ? and lastName= ? ;");
+			
+			PreparedStatement prepare = dbcon.prepareStatement(query);
+        	prepare.setString(1,cardNum);
+        	prepare.setString(2,firstName);
+        	prepare.setString(3,lastName);
+			ResultSet rs=prepare.executeQuery();
+        
 			
 		if (rs.next() ) customer_id=rs.getInt("id"); 
 		

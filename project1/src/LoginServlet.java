@@ -62,11 +62,13 @@ public class LoginServlet extends HttpServlet {
 		try {
 			dbcon = dataSource.getConnection();
 			Statement statement = dbcon.createStatement();
-			String query = ("select count(*) from customers where email='"+username
-						+"'and password='"+password+"';");
-			ResultSet rs = statement.executeQuery(query);
+			String query = ("select count(*) from customers where email= ? and password= ? ;");
 			
-			if (rs.next() && rs.getInt("count(*)")>0) return true;
+			PreparedStatement rs = dbcon.prepareStatement(query);
+			rs.setString(1,username);
+			rs.setString(2,password);
+			ResultSet res=rs.executeQuery();
+			if (res.next() && res.getInt("count(*)")>0) return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
