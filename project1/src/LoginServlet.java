@@ -26,9 +26,16 @@ public class LoginServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+        try {
+            recaptchaVerify.verify(gRecaptchaResponse);
+        } catch (Exception e) {
+            return;
+        }
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
+      
         if (this.loginSucceed(username,password)) {
             
             String sessionId = ((HttpServletRequest) request).getSession().getId();

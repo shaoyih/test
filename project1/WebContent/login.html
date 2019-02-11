@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Login to Fablix</title>
     <link href="login.css" rel="stylesheet">
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 
@@ -25,10 +26,11 @@
 				<label>password:</label><br>
 				<input type="password" name="password"><br><br>
 				<input type="submit" value="Log in">
-				
+				<div id=g-recap class="g-recaptcha" data-sitekey="6Lc6fpAUAAAAAGDhif4zw126pDCz_pmGcFoEtnZf"></div>
 				
 			</form>
 			<br><br>
+			
 			<div id="login_error_message"></div>
 	</div>
     
