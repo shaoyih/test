@@ -1,10 +1,14 @@
 
 function handleStarResult(resultDataString){
-	return;
+	console.log(resultDataString["message"]);
 }
 
 function handleMovieResult(resultDataString){
-	return;
+	
+	
+	console.log(resultDataString["message"]);
+	
+	
 }
 
 //add star part
@@ -40,6 +44,7 @@ function handleTableInfo(resultData){
 	let rowHtml="<ul>";
 	console.log(resultData);
 	for(let i=1;i<resultData.length;i++){
+		
 		rowHtml+="<li><a href='#'>"+resultData[i]["name"]+"</a></li>";
 		rowHtml+="<li><table class=\"table table-dark\">"+
 				"<thead>"+
@@ -51,13 +56,16 @@ function handleTableInfo(resultData){
 					
 				"</tbody>"+
 				"</table></li>";
+		
 				let name=resultData[i]["name"];
+				console.log("name is "+name);
 				jQuery.ajax({
 					dataType: "json",
 					method: "get",
-					url: "api/dashboard?by=get&name="+resultData[i]["name"],
-					success: (resultData)=>handleAttrInfo(resultData,name)
+					url: "api/dashboard?by=get&type=a&name="+name,
+					success: (resultData1)=>handleAttrInfo(resultData1,name)
 				});
+		
 	}
 	rowHtml+="</ul>"
 	stats.append(rowHtml);
@@ -67,7 +75,7 @@ function handleAttrInfo(resultData,name){
 	console.log(name);
 	let stats =jQuery("#"+name);
 	console.log(resultData);
-	for(let i=1;i<resultData.length;i++){
+	for(let i=0;i<resultData.length;i++){
 		let rowHTML="<tr>";
 		rowHTML+="<th>"+resultData[i]["name"]+"</th>";
 		rowHTML+="<th>"+resultData[i]["type"]+"</th>";
@@ -83,7 +91,7 @@ function handleAttrInfo(resultData,name){
 jQuery.ajax({
 	dataType: "json",
 	method: "get",
-	url: "api/dashboard",
+	url: "api/dashboard?by=get&type=t",
 	success: (resultData)=>handleTableInfo(resultData)
 });
 

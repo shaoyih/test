@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.sql.CallableStatement;
 import java.util.*;
 
@@ -33,10 +34,15 @@ public class _dashboarServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("application/json");
-		getAllNames(request,response);
+		
 		String by=request.getParameter("by");
-		if(by.equals("get")) {
-			String name=request.getParameter("get");
+		String type=request.getParameter("type");
+		if(by.equals("get") && type.equals("t")) {
+			getAllNames(request,response);
+		}
+		if(by.equals("get") && type.equals("a")) {
+			String name=request.getParameter("name");
+			
 			getAttrForTables(request,response,name);
 		}
 		else if (by.equals("insertS")) {
@@ -47,6 +53,9 @@ public class _dashboarServlet extends HttpServlet {
 			System.out.println("inserting movie");
 			insertMovie(request,response);
 		}
+		
+		
+		
 		
 	}
 	private void insertMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
@@ -61,23 +70,33 @@ public class _dashboarServlet extends HttpServlet {
 			String g=request.getParameter("genre");
 			String y=request.getParameter("year");
 			String d=request.getParameter("director");
-			String m="";
+			
 			cst.setString(1, t);
+			if(y!=null && y!="") {
 			cst.setInt(2,Integer.parseInt(y));
+			}
+			else {
+				cst.setString(2, null);
+			}
 			cst.setString(3, d);
 			cst.setString(4, s);
 			cst.setString(5, g);
-			cst.setString(6, m);
-			
+			cst.registerOutParameter(6, Types.VARCHAR);
 			boolean result=cst.execute();
-			String output=cst.getString("message");
-			System.out.println(m);
+			//dealing the feedback
+			String output=cst.getString(6);
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("message", output);
+			out.write(jsonObject.toString());
+			System.out.println(output);
 			
 		}catch(Exception e) {
+			
+			System.out.println("into exception");
 			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("errorMessage", e.getMessage());
+			jsonObject.addProperty("message", e.getMessage());
 			out.write(jsonObject.toString());
-			response.setStatus(500);
+			response.setStatus(501);
 		}
 	}
 	private void insertStar(HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException {
@@ -90,20 +109,25 @@ public class _dashboarServlet extends HttpServlet {
 			
 			String SN=request.getParameter("starName");
 			String t=request.getParameter("starBirth");
-			String m="";
+			System.out.println("result t is :'"+t+"'");
 			cst.setString(1, SN);
-			if(t!=null) {
+			
+			if(t!=null && t!="") {
+		
 			cst.setInt(2,Integer.parseInt(t));
 			}
 			else {
 				cst.setString(2, null);
 			}
-			cst.setString(3,m);
+			cst.registerOutParameter(3,Types.VARCHAR);
 			
 			
 			boolean result=cst.execute();
-			String output=cst.getString("message");
-			System.out.println(m);
+			String output=cst.getString(3);
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("message", output);
+			out.write(jsonObject.toString());
+			System.out.println(output);
 			
 		}catch(Exception e) {
 			JsonObject jsonObject = new JsonObject();
@@ -113,7 +137,8 @@ public class _dashboarServlet extends HttpServlet {
 		}
 	}
 	private void getAttrForTables(HttpServletRequest request, HttpServletResponse response,String name) throws ServletException,IOException {
-		System.out.print("into name process!!!");
+		System.out.println("into name process!");
+		System.out.println(name);
 		PrintWriter out=response.getWriter();
 		String query="SELECT COLUMN_NAME as name,DATA_TYPE as type FROM information_schema.COLUMNS WHERE table_name= ? ;";
 		
@@ -152,7 +177,7 @@ public class _dashboarServlet extends HttpServlet {
 	}
 	
 	private void getAllNames(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
-		System.out.print("into getname Process!!!!!!!!!!!");
+		
 		PrintWriter out=response.getWriter();
 		String query="SELECT TABLE_NAME as name FROM information_schema.TABLES WHERE `TABLE_SCHEMA`='moviedb';";
 		
@@ -175,7 +200,7 @@ public class _dashboarServlet extends HttpServlet {
             rs.close();
             statement.close();
             conn.close();
-            System.out.println("finish process");
+            
 		}catch (Exception e) {
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("errorMessage", e.getMessage());

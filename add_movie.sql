@@ -44,15 +44,15 @@ BEGIN
 				BEGIN
                 
                 SELECT MAX(id) INTO MovieId FROM movies;
-				SELECT CAST(SUBSTRING(MovieId,3,7) AS unsigned)+1 into buffer;
+				SELECT CAST(SUBSTRING(MovieId,3) AS unsigned integer)+1 into buffer;
 				SELECT CONCAT(SUBSTRING(MovieId,1,2),CAST(buffer AS CHAR)) INTO MovieId;
-                INSERT INTO movies (id,title,year,director) values(MovieId,title,year,director);
+                INSERT INTO movies (id,title,year,director) values(MovieId,title,year,director); 
                 
 				SELECT id INTO GenreId FROM genres WHERE name=genre;
 				IF (GenreId is NULL)
 					THEN 
 						SELECT MAX(id)+1 INTO GenreId FROM genres;
-						SELECT CAST(GenreId AS CHAR) INTO message;
+						
 						INSERT INTO genres (id,name) values (GenreId,genre);
 				END IF;
 				INSERT INTO genres_in_movies (genreId,movieId) values (GenreId,MovieId);
@@ -60,13 +60,13 @@ BEGIN
 				SELECT id INTO StarId FROM stars WHERE name=star;
 				IF (StarId is NULL)
 					THEN 
-						SELECT MAX(id)+1 INTO StarId FROM stars;
-						SELECT CAST(SUBSTRING(StarId,3,7) AS unsigned)+1 into buffer;
+						SELECT MAX(id) INTO StarId FROM stars;
+						SELECT CAST(SUBSTRING(StarId,3) AS unsigned integer)+1 into buffer;
 						SELECT CONCAT(SUBSTRING(StarId,1,2),CAST(buffer AS CHAR)) INTO StarId;
-						SELECT CAST(StarId AS CHAR) INTO message;
-						INSERT INTO stars (id,name) values (StarId,star);
+						
+						INSERT INTO stars (id,name) values (StarId,star); 
 				END IF;
-				INSERT INTO stars_in_movies (StarId,movieId) values (StarId,MovieId);
+				INSERT INTO stars_in_movies (StarId,movieId) values (StarId,MovieId); 
                 SELECT 'success' INTO message;
                 END;
 			ELSE
