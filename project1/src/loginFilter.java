@@ -31,20 +31,42 @@ public class loginFilter implements Filter{
 				return;
 				
 			}
-			if(httpRequest.getSession().getAttribute("user")==null) {
-				httpResponse.sendRedirect("login.html");
-			}
-			else {
-				
+			if(httpRequest.getSession().getAttribute("user")!=null && httpRequest.getSession().getAttribute("employee")!=null){
 				chain.doFilter(request, response);
 			}
+			
+			else if(httpRequest.getSession().getAttribute("employee")!=null && isDashBoard(httpRequest.getRequestURI())) {
+				chain.doFilter(request, response);
+				return;
+			}
+			
+			else if(httpRequest.getSession().getAttribute("user")!=null && !isDashBoard(httpRequest.getRequestURI())) {
+				chain.doFilter(request, response);
+				return;
+			}
+			else {
+				if(httpRequest.getSession().getAttribute("user")==null) {
+					httpResponse.sendRedirect("login.html");
+				}
+					
+				else {
+					httpResponse.sendRedirect("employee_login.html");
+				}
+			}
+			
 			
 			
 		}
 		private boolean isUrlAllowedWithoutLogin(String URL) {
 			String requestURI=URL.toLowerCase();
 			return requestURI.endsWith("login.html") || requestURI.endsWith("login.js")
-	                || requestURI.endsWith("api/login")||requestURI.endsWith("login1.jpg")||requestURI.endsWith("login.css");
+	                || requestURI.endsWith("api/login")||requestURI.endsWith("login1.jpg")||requestURI.endsWith("login.css")
+	                || requestURI.endsWith("employee_login.html")|| requestURI.endsWith("employee_login.js")
+	                ||requestURI.endsWith("api/employee_login");
+		}
+		private boolean isDashBoard(String URL) {
+			String requestURI=URL.toLowerCase();
+			return requestURI.contains("dashboard");
 		}
 
 }

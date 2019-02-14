@@ -7,17 +7,19 @@ $(window).on("scroll", function() {
 						$('nav').removeClass('black');
 			}
 })
-
-function allGenres(){
+jQuery.ajax({
+ dataType: "json",  // Setting return data type
+ method: "GET",// Setting request method
+ url: "project1/get_genres" , // Setting request url, which is mapped by StarsServlet in Stars.java
+ success: (resultData) => allGenres(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
+});
+function allGenres(resultData){
 	let genreSection=jQuery("#genreDropDown");
-	console.log(genreSection);
-	let genres=['Action','Adult','Adventure','Animation','Biography',
-		'Comedy','Crime','Documentary','Drama','Family','Fantasy','History',
-		'Horror','Music','Musical','Mystery','Reality-TV','Romance','Sci-Fi',
-		'Sport','Thriller','War','Western'];
+
 	let rowHTML="";
-	for (let i=0;i<genres.length;i++){
-		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&genre="+genres[i]+"'>"+genres[i]+"</a></li>";
+	
+	for (let i=0;i<resultData.length;i++){
+		rowHTML+="<li><a href='index.html?by=browse&page=1&limit=10&genre="+resultData[i]["name"]+"'>"+resultData[i]["name"]+"</a></li>";
 		
 	}
 	genreSection.append(rowHTML);

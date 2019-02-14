@@ -50,7 +50,7 @@ function getStars(array){
 }
 function handleStarResult(resultData) {
 
-    
+	console.log("here",resultData);
     // Find the empty table body by id "star_table_body"
     let starTableBodyElement = jQuery("#movie_table_body");
     let totalPage=resultData[0]["totalPage"];
@@ -58,7 +58,7 @@ function handleStarResult(resultData) {
     madePagination(totalPage);
     madeSort();
     // Iterate through resultData, no more than 10 entries
-    
+    console.log("here",resultData);
     for (let i = 1; i < resultData.length; i++) {
 
         // Concatenate the html tags with resultData jsonObject

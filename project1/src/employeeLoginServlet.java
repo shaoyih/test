@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.jasypt.util.password.StrongPasswordEncryptor;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,19 +21,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
-public class LoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+/**
+ * Servlet implementation class employeeLoginServlet
+ */
+@WebServlet(name = "employeeLoginServlet", urlPatterns = "/api/employee_login")
+public class employeeLoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-       
-        try {
-            recaptchaVerify.verify(gRecaptchaResponse);
-        } catch (Exception e) {
-            return;
-        }
+    	
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         System.out.println(username);
@@ -44,7 +43,7 @@ public class LoginServlet extends HttpServlet {
             
             String sessionId = ((HttpServletRequest) request).getSession().getId();
             Long lastAccessTime = ((HttpServletRequest) request).getSession().getLastAccessedTime();
-            request.getSession().setAttribute("user", new User(username));
+            request.getSession().setAttribute("employee", new employee(username));
 
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
@@ -62,48 +61,29 @@ public class LoginServlet extends HttpServlet {
         }
     }
     private boolean loginSucceed(String username,String password) {
-    	boolean success = false;
     	 Connection dbcon;
 		try {
 			dbcon = dataSource.getConnection();
 			Statement statement = dbcon.createStatement();
-
-			String query = ("select * from customers where email= ?;");
+			String query = ("select * from employees where email= ?");
 			
-			PreparedStatement rs = dbcon.prepareStatement(query);
-			rs.setString(1,username);
-			
-			ResultSet res=rs.executeQuery();
-			
-			if (res.next()) {
-			    // get the encrypted password from the database
-				String encryptedPassword = res.getString("password");
-				
-				// use the same encryptor to compare the user input password with encrypted password stored in DB
-				success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
-			}
-
-		
-
-			String query1 = ("select * from customers where email= ?");
-			
-			PreparedStatement ps = dbcon.prepareStatement(query1);
+			PreparedStatement ps = dbcon.prepareStatement(query);
 			ps.setString(1,username);
 			
-			ResultSet rs1=ps.executeQuery();
+			ResultSet rs=ps.executeQuery();
 			
 			boolean checkResult= false;
 			
-			if (rs1.next()) {
+			if (rs.next()) {
 			    //get password
-				String encryptedPassword = rs1.getString("password");
+				String encryptedPassword = rs.getString("password");
 				
 				// use the encryptor we use before to excute
 				checkResult = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+				System.out.println("get the pass ");
 				
 				return checkResult;
 			}
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("sql fail");
@@ -111,8 +91,7 @@ public class LoginServlet extends HttpServlet {
 		}
 
   
-    	return success;
+    	return false;
     }
-}
 
-    
+}

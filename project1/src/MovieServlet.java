@@ -103,7 +103,7 @@ public class MovieServlet extends HttpServlet{
                 jsonArray.add(jsonObject);
                
             }
-            
+            System.out.println("finish");
             // write JSON string to output
             out.write(jsonArray.toString());
             // set response status to 200 (OK)
@@ -165,13 +165,15 @@ public class MovieServlet extends HttpServlet{
 	    		   
 	    		   
 	    	   }
+	    	   System.out.println("after-------");
+	    	   System.out.println(result);
 	    	   if (checkLimit) {
 	    	   int limit = Integer.parseInt(request.getParameter("limit"));
 	           String page = request.getParameter("page");
 	           int offset= (Integer.parseInt(page)-1)*limit;
 	           result.setInt(index++,limit);
 	           result.setInt(index++,offset);
-	    	   
+	           System.out.println(result);
 	    	   }
 			} catch (SQLException e) {
 				
