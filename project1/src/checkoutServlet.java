@@ -37,21 +37,21 @@ public class checkoutServlet extends HttpServlet {
         String date = request.getParameter("date");
         System.out.println("here");
         Connection dbcon = null;
-		try {
-			dbcon = dataSource.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            dbcon = dataSource.getConnection();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         if (this.loginSucceed(dbcon, firstName,lastName,cardNum,date)) {
             
             JsonObject total=null;
-        	try {
-				total=updateSales(request, dbcon,firstName,lastName,cardNum);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            try {
+                total=updateSales(request, dbcon,firstName,lastName,cardNum);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
             responseJsonObject.addProperty("message", "success");
@@ -67,96 +67,117 @@ public class checkoutServlet extends HttpServlet {
         }
     }
     private JsonObject updateSales(HttpServletRequest request,Connection dbcon, String firstName,String lastName,String cardNum) throws SQLException {
-    	//get customer id
-    	//get movieId
-    	//INSERT INTO sales VALUES (DEfault, 490001, 'tt0357987','2005/10/21');
-    	
-    	cardNum= cardNum.replaceAll("....(?!$)", "$0%");
-    	int customer_id=0;
-    	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-    	Date date = new Date();
-    	String todayDate=dateFormat.format(date);
-    	
-			
-		Statement statement = dbcon.createStatement();
-		String query = ("select id from customers \n" + 
-					"where (ccID LIKE ? ) and firstName= ? and lastName= ? ;");
-			
-			PreparedStatement prepare = dbcon.prepareStatement(query);
-        	prepare.setString(1,cardNum);
-        	prepare.setString(2,firstName);
-        	prepare.setString(3,lastName);
-			ResultSet rs=prepare.executeQuery();
+        //get customer id
+        //get movieId
+        //INSERT INTO sales VALUES (DEfault, 490001, 'tt0357987','2005/10/21');
         
-			
-		if (rs.next() ) customer_id=rs.getInt("id"); 
-		
-		JsonObject totalJson = new JsonObject();
-		
-		
-		
-		
-		
-		
-    	
-    	HttpSession session = request.getSession();
-    	HashMap<String,Integer> previousItems = (HashMap<String,Integer>) session.getAttribute("previousItems");
-    	
-    	System.out.println(customer_id);
-    	System.out.println(todayDate);
-        for (String key : previousItems.keySet()) {
-        	String movieId="";
-        	
-        	
-        	
-    		Statement statement1 = dbcon.createStatement();
-    		String query1 = ("select id from movies\n" + 
-    					"where title='"+key+"';");
-    		ResultSet rs1 = statement1.executeQuery(query1);
-    		
+        cardNum= cardNum.replaceAll("....(?!$)", "$0%");
+        int customer_id=0;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        String todayDate=dateFormat.format(date);
+        
             
-    	    if (rs1.next() ) movieId=rs1.getString("id"); 
-    		
-        	int value=previousItems.get(key);
-        	JsonArray innerArray = new JsonArray();
-        	for (int i=0;i<value;i++) {
-        		long saleId = -1L;
-        		Statement update = dbcon.createStatement();
-                update.executeUpdate("INSERT INTO sales VALUES (default, "+customer_id+", "
-                		+ "'"+movieId+"','"+todayDate+"');",Statement.RETURN_GENERATED_KEYS);
-                ResultSet rs2 = update.getGeneratedKeys();
+        Statement statement = dbcon.createStatement();
+        String query = ("select id from customers \n" + 
+                    "where (ccID LIKE ? ) and firstName= ? and lastName= ? ;");
+            
+            PreparedStatement prepare = dbcon.prepareStatement(query);
+            prepare.setString(1,cardNum);
+            prepare.setString(2,firstName);
+            prepare.setString(3,lastName);
+            ResultSet rs=prepare.executeQuery();
+        
+            
+        if (rs.next() ) customer_id=rs.getInt("id"); 
+        
+        JsonObject totalJson = new JsonObject();
+        
+        
+        
+        
+        
+        
+        
+        HttpSession session = request.getSession();
+        HashMap<String,Integer> previousItems = (HashMap<String,Integer>) session.getAttribute("previousItems");
+        
+        System.out.println(customer_id);
+        System.out.println(todayDate);
+        for (String key : previousItems.keySet()) {
+            String movieId="";
+            
+            
+            
+            Statement statement1 = dbcon.createStatement();
+            String query1 = ("select id from movies\n" + 
+                        "where title=?;");
+            PreparedStatement prepare1 = dbcon.prepareStatement(query1);
+            prepare1.setString(1,key);
+            
+            ResultSet rs1=prepare1.executeQuery();
+        
+            
+            
+            if (rs1.next() ) movieId=rs1.getString("id"); 
+            
+            int value=previousItems.get(key);
+            JsonArray innerArray = new JsonArray();
+            for (int i=0;i<value;i++) {
+                long saleId = -1L;
+
+                String query11 = "INSERT INTO sales VALUES (default, ?, ?,?);";
+                PreparedStatement prepare11 = dbcon.prepareStatement(query11,Statement.RETURN_GENERATED_KEYS);
+                prepare11.setInt(1,customer_id);
+                prepare11.setString(2,movieId);
+                prepare11.setString(3,todayDate);
+                
+            
+                prepare11.executeUpdate();
+                
+                
+                
+                
+                ResultSet rs2 = prepare11.getGeneratedKeys();
                 if (rs2 != null && rs2.next()) {
                     saleId = rs2.getLong(1);
                 }
 
                 innerArray.add(saleId);
-        	}
-        	totalJson.add(key, innerArray);
-        	
+            }
+            totalJson.add(key, innerArray);
+            
         }
         return totalJson;
         
     }
     private boolean loginSucceed(Connection dbcon, String firstName,String lastName,String cardNum,String date) {
-    	 
-    	 cardNum= cardNum.replaceAll("....(?!$)", "$0%");
-    	 System.out.println(cardNum);
-		try {
-			
-			Statement statement = dbcon.createStatement();
-			String query = ("select count(*) from creditcards \n" + 
-					"where (id LIKE '"+cardNum+"') and firstName='"+firstName+
-					"' and lastName='"+lastName+"' AND expiration='"+date+"' ;");
-			ResultSet rs = statement.executeQuery(query);
-			
-			if (rs.next() && rs.getInt("count(*)")>0) return true;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+         
+         cardNum= cardNum.replaceAll("....(?!$)", "$0%");
+         System.out.println(cardNum);
+        try {
+            
+            
+            String query = ("select count(*) from creditcards \n" + 
+                    "where (id LIKE ?) and firstName= ? and lastName= ? AND expiration= ? ;");
+            PreparedStatement prepare = dbcon.prepareStatement(query);
+            prepare.setString(1,cardNum);
+            prepare.setString(2,firstName);
+            prepare.setString(3,lastName);
+            prepare.setString(4,date);
+        
+            ResultSet rs=prepare.executeQuery();
+            
+            
+            
+            if (rs.next() && rs.getInt("count(*)")>0) return true;
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
   
-    	return false;
+        return false;
     }
 }
 
