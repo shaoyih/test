@@ -47,6 +47,7 @@ BEGIN
 				SELECT CAST(SUBSTRING(MovieId,3) AS unsigned integer)+1 into buffer;
 				SELECT CONCAT(SUBSTRING(MovieId,1,2),CAST(buffer AS CHAR)) INTO MovieId;
                 INSERT INTO movies (id,title,year,director) values(MovieId,title,year,director); 
+                INSERT INTO ratings VALUES(MovieId,0,0);
                 
 				SELECT id INTO GenreId FROM genres WHERE name=genre;
 				IF (GenreId is NULL)
