@@ -1,5 +1,10 @@
 package Parsing;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,10 +21,48 @@ public class Star_parse extends DefaultHandler {
 	HashMap<String,Star> stars;
 	private String tempVal;
 	private Star starTemp;
-	
+	private int maxR;
+	private String beginIndex;
 	//initialize class 
 	public Star_parse() {
         stars = new HashMap<>();
+        Connection conn = null;
+        beginIndex="";
+        maxR=0;
+    	String jdbcURL="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
+    	
+    	 try {
+    		 try {
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 conn = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
+    		 Statement select = conn.createStatement();
+    			
+    	        ResultSet result = select.executeQuery("Select * from stars");
+    	        while(result.next()) {
+    	        	String id=result.getString("id");
+    	        	beginIndex=id.substring(0,2);
+    	        	int current_id=Integer.parseInt(id.substring(2));
+    	        	if(current_id >maxR) {
+    	        		maxR=current_id;
+    	        	}
+    	        }
+    	        System.out.println(maxR);
+    	        System.out.println(beginIndex);
+    	} catch (SQLException e) {
+    		 e.printStackTrace();
+    	}
+    	 
+       
     }
 	
 	 public HashMap<String,Star> parseDocument() {
@@ -55,10 +98,18 @@ public class Star_parse extends DefaultHandler {
 
 	        if (qName.equalsIgnoreCase("actor")) {
 	            //add it to the list
-	            stars.put(starTemp.getName(),starTemp);
+	        	String name=starTemp.getName();
+	        	if (stars.containsKey(name) ){
+	        		System.out.println("star "+name+" with same name already exists"); 
+	        	}
+	        	else{
+	        		starTemp.setId(beginIndex+(Integer.toString(++maxR)));
+	        		stars.put(starTemp.getName(),starTemp);
+	        	}
 
 	        } else if (qName.equalsIgnoreCase("stagename")) {
-	            starTemp.setName(tempVal);
+	        	
+	            starTemp.setName(tempVal.toLowerCase());
 	        } else if (qName.equalsIgnoreCase("dob")) {
 	        	if(isYear(tempVal)) {
 	            starTemp.setDob(Integer.parseInt(tempVal));
@@ -100,7 +151,7 @@ public class Star_parse extends DefaultHandler {
 	    	return stars;
 	    }
 	    
-//	   
+	   
 //	    public static void main(String[] args) {
 //	    	long tStart = System.currentTimeMillis(); 
 //	        Star_parse sp = new Star_parse();

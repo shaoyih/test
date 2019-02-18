@@ -19,7 +19,8 @@ public class BatchInsert {
 	private static HashSet<Movie> movies;
 	private static HashMap<String,Integer> genresMap;
 	private static HashMap<String,List<Star>> stars;
-	
+	private static HashMap<String,Star> actors;
+	private static HashSet<String> movies_id;
 	@Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
@@ -31,12 +32,15 @@ public class BatchInsert {
 				genresMap=gp.getGenres();
 				
 				SIM_parse sp = new SIM_parse();
-				stars=sp.parseDocument();
+				sp.parseDocument();
+				stars=sp.getMovieStar();
+				actors=sp.getActor();
 				Movie_parse mp = new Movie_parse();
 				mp.parseDocument();
 				movies=mp.getMovies();
-		        
-
+				movies_id=mp.getMoviesID();
+				
+				
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -67,7 +71,7 @@ public class BatchInsert {
     	int[] iNoRows;
     	
     	
-    	
+    	int count=0;
     
     	
     	try {
@@ -79,6 +83,7 @@ public class BatchInsert {
 		
 		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
 		    Iterator it = movies.iterator();
+		    
 	        while (it.hasNext()) 
 		   	     {
 	        	 	System.out.println("starting to insert");
@@ -88,10 +93,7 @@ public class BatchInsert {
 	        	 		int year=movie.getYear();
 	        	 		String director=movie.getDirector();
 	        	 		
-	        	 		    if (id=="") {
-	        	 		    	System.out.println(movie);
-	        	 		    	break;
-	        	 		    }
+	        	 		    ++count;
 	        	 			
 			    		    psInsertRecord.setString(1, id);
 			    		    psInsertRecord.setString(2, title);
@@ -105,25 +107,285 @@ public class BatchInsert {
 		    iNoRows=psInsertRecord.executeBatch();
 		    dbcon.commit();
     	
-		    psInsertRecord.executeUpdate();
+		   
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
     	
     	
-		
+    	System.out.println("finished");
+		System.out.println(count);
 		
 	}
+	private  void batchInsertGenre() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+		PreparedStatement psInsertRecord=null;
+		
+    	String sqlInsertRecord="INSERT INTO genres_in_movies (genreId, movieId)\n" + 
+    			"VALUES (?,?);";
+    	int[] iNoRows;
+
+    	int count=0;
+    	try {
+    	
+
+			dbcon.setAutoCommit(false);
+		
+		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
+		    Iterator it = movies.iterator();
+		    
+	        while (it.hasNext()) 
+		   	     {
+	        	 	
+	        	Movie movie=(Movie) it.next();
+    	 		String id=movie.getId();
+    	 		List<String> genres=movie.getGenre();
+    	 		if (genres==null ||genres.size()==0) {
+    	 			//????
+    	 			System.out.println("movie "+movie.getTitle()+" doesn't have genre");
+    	 			continue;
+    	 		}
+    	 		else {
+    	 			Iterator g = genres.iterator();
+    	 			while (g.hasNext()) {
+   	        	 	
+    	 					String genre_name=((String) g.next()).toLowerCase();
+    	 					System.out.println(genre_name);
+    	 					
+    	 					int genre_id=genresMap.get(genre_name);
+
+	        	 		    ++count;
+	        	 			
+			    		    psInsertRecord.setInt(1, genre_id);
+			    		    
+			    		    psInsertRecord.setString(2, id);
+
+			    		    psInsertRecord.addBatch();
+    	 					
+    	 			}
+    	 			
+    	 		}
+	        	 	
+	        	 	
+		    	 }
+		    		
+		    iNoRows=psInsertRecord.executeBatch();
+		    dbcon.commit();
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	
+    	
+    	System.out.println("finished");
+		System.out.println(count);
+		
+	}
+	private  void batchInsertStar() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+		PreparedStatement psInsertRecord=null;
+		PreparedStatement psInsertRecord1=null;
+    	String sqlInsertRecord="insert into stars(id, name,birthYear) VALUES(?,?,default);";
+    	String sqlInsertRecord1="insert into stars(id, name,birthYear) VALUES(?,?,?);";
+    	HashSet<Star> haveBirth=new HashSet<Star> ();
+    	int[] iNoRows;
+
+    	int count=0;
+    	try {
+    		
+
+			dbcon.setAutoCommit(false);
+		
+		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
+		    Iterator it = actors.values().iterator();
+		    
+	        while (it.hasNext()){
+	        	 	
+	        	Star star=(Star) it.next();
+    	 		String id=star.getId();
+    	 		String name=star.getName();
+    	 		int dob=star.getDob();
+    	 		
+    	 		if (dob!=0) {
+    	 			haveBirth.add(star);
+    	 			continue;
+    	 		}
+    	 		else {
+    	 			
+	        	 		    ++count;
+	        	 			
+			    		    psInsertRecord.setString(1, id);
+			    		    
+			    		    psInsertRecord.setString(2, name);
+			    		    psInsertRecord.addBatch();
+    	 					
+    	 		
+    	 		} 	
+		   }
+		    		
+		    psInsertRecord.executeBatch();
+		    dbcon.commit();
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	try {
+			dbcon.setAutoCommit(false);
+		
+		    psInsertRecord1=dbcon.prepareStatement(sqlInsertRecord1);
+		    Iterator it = haveBirth.iterator();
+		    
+	        while (it.hasNext()){
+	        	 	
+	        	Star star=(Star) it.next();
+    	 		String id=star.getId();
+    	 		String name=star.getName();
+    	 		int dob=star.getDob();
+    	 	
+	        	 ++count;
+	        	 			
+			    psInsertRecord1.setString(1, id);
+			    		    
+			    psInsertRecord1.setString(2, name);
+			    psInsertRecord1.setInt(3, dob);
+			    psInsertRecord1.addBatch();
+    	 					
+    	 		
+	        }
+		  
+		    		
+		    psInsertRecord1.executeBatch();
+		    dbcon.commit();
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	
+    	
+    	System.out.println("finished");
+		System.out.println(count);
+		
+	}
+	private  void batchInsertStarMovie() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+		PreparedStatement psInsertRecord=null;
+		
+    	
+    	String sqlInsertRecord="insert into stars_in_movies (starId, movieId)" + 
+    			"VALUES (?,?);";
+    	int[] iNoRows;
+
+    	int count=0;
+    	try {
+    		Class.forName("com.mysql.jdbc.Driver").newInstance();
+
+			dbcon.setAutoCommit(false);
+		
+		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
+		    Iterator it = movies.iterator();
+		    
+	        while (it.hasNext()) 
+		   	     {
+	        	 	
+	        	Movie movie=(Movie) it.next();
+    	 		String id=movie.getId();
+    	 		List<Star> star_list=stars.get(id);
+    	 		if (star_list==null ||star_list.size()==0) {
+    	 			//????
+    	 			
+    	 			System.out.println("movie "+movie.getTitle()+" "+movie.getId()+" doesn't have stars "+star_list);
+    	 			continue;
+    	 		}
+    	 		else {
+    	 			Iterator g = star_list.iterator();
+    	 			while (g.hasNext()) {
+   	        	 	
+    	 					Star single_star=(Star) g.next();
+    	 					System.out.println(single_star);
+    	 					
+    	 					String star_id=single_star.getId();
+
+	        	 		    ++count;
+	        	 			
+			    		    psInsertRecord.setString(1, star_id);
+			    		    
+			    		    psInsertRecord.setString(2, id);
+
+			    		    psInsertRecord.addBatch();
+    	 					
+    	 			}
+    	 			
+    	 		}
+	        	 	
+	        	 	
+		    	 }
+		    		
+		    iNoRows=psInsertRecord.executeBatch();
+		    dbcon.commit();
+		   
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	try {
+	           if(psInsertRecord!=null) psInsertRecord.close();
+	           if(dbcon!=null) dbcon.close();
+	        } catch(Exception e) {
+	            e.printStackTrace();
+	        }
+    	
+    	System.out.println("finished");
+		System.out.println(count);
+		
+	}
+	
 	
 	 public static void main(String[] args) {
 		long tStart = System.currentTimeMillis(); 
 		BatchInsert sp = new BatchInsert();
-//		System.out.println(movies);
+		
+            
+            
+
+
+        
+		
 //		System.out.println(stars);
 //		System.out.println(genresMap);
+		HashSet<String> ids=new HashSet<>();
+//		
+//        System.out.println(ids.size());
+//        
+//        Iterator it = movies.iterator();
+//        while (it.hasNext()) 
+//  	     {
+//   	 	
+//        	Movie movie=(Movie) it.next();
+//		String id=movie.getId();
+//		List<String> genres=movie.getGenre();
+//		if (genres==null ||genres.size()==0) {
+//			//????
+//			System.out.println("movie "+movie.getTitle()+" doesn't have genre");
+//			continue;
+//		}
+//		else {
+//			Iterator g = genres.iterator();
+//			while (g.hasNext()) {
+//      	 	
+//					String genre_name=(String) g.next();
+//					int genre_id=genresMap.get(genre_name);
+//   	 			
+//       	 		System.out.println(genre_id);
+//			}
+//		}
+//  	     }
+//        System.out.println(genresMap);
 		try {
 			sp.batchInsert();
+			sp.batchInsertGenre();
+			sp.batchInsertStar();
+			sp.batchInsertStarMovie();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,6 +396,7 @@ public class BatchInsert {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(movies.size());
 	    long tEnd = System.currentTimeMillis();
 	    long tDelta = tEnd - tStart;
 	    double elapsedSeconds = tDelta / 1000.0;

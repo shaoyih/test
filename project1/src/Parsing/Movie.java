@@ -79,6 +79,8 @@ public class Movie {
 		sb.append("Movie Details - ");
 		sb.append("title:" + getTitle());
 		sb.append(",");
+		sb.append("id:" + getId());
+		sb.append(",");
 		sb.append("year:"+getYear());
 		sb.append(",");
 		sb.append("director:" + getDirector());

@@ -41,6 +41,19 @@ public class Final_parse {
         	}
         }
 	}
+	private static void getGenreList(Connection conn) throws SQLException{
+		genresMap=new HashMap<>();
+		Statement select = conn.createStatement();
+		int maxR=0;
+        ResultSet result = select.executeQuery("Select * from genres");
+        while(result.next()) {
+        	int id=result.getInt("id");
+        	genresMap.put(result.getString("name").toLowerCase(),id);
+        	
+        }
+        
+	}
+	
 	private static void loadGenres(Connection conn) {
 		PreparedStatement psInsertRecord=null;
 		int[] iNoRows=null;
@@ -87,7 +100,7 @@ public class Final_parse {
     	 putIntoGenres(conn);
     	 
     	 loadGenres(conn);
-    	
+    	 getGenreList(conn);
         
   /*      StarParse sp = new Star_parse();
         sp.parseDocument();

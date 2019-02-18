@@ -185,12 +185,12 @@ public class Movie_parse extends DefaultHandler{
 			 	
 	    }
 		 else if (qName.equalsIgnoreCase("fid")) {
-			 	movieTemp.setId(tempVal);
+			 	movieTemp.setId(tempVal.toLowerCase());
 			 	
 			 	//System.out.println(tempVal);
 		 }
 		 else if (qName.equalsIgnoreCase("t")) {
-			 	movieTemp.setTitle(tempVal);
+			 	movieTemp.setTitle(tempVal.toLowerCase());
 		 }
 		 else if(qName.equalsIgnoreCase("year")) {
 			 if(isYear(tempVal)) {
@@ -202,11 +202,12 @@ public class Movie_parse extends DefaultHandler{
 		 }
 		 //for director we only require one name so we set the last as our final director, reason use dirs instead of dir is we met a bug before.
 		 else if(qName.equalsIgnoreCase("dirs")) {
-			 movieTemp.setDirector(tempVal);
+			 movieTemp.setDirector(tempVal.toLowerCase());
 			 
 		 }
 		 else if(qName.equalsIgnoreCase("cat")) {
 			 if (tempVal!=null && tempVal.length()!=0) {
+				 tempVal=tempVal.toLowerCase();
 				 	genres.add(tempVal);
 				 	movieTemp.addGenre(tempVal);
 		    	 }
@@ -244,6 +245,10 @@ public class Movie_parse extends DefaultHandler{
 	 public HashSet<Movie> getMovies(){
 		 
 		 return this.movies;
+	 }
+	 public HashSet<String> getMoviesID(){
+		 
+		 return this.movies_id;
 	 }
 //	 public static void main(String[] args) {
 //	    	long tStart = System.currentTimeMillis(); 
