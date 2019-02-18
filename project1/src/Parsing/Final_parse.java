@@ -2,6 +2,7 @@ package Parsing;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,15 +12,17 @@ import java.sql.SQLException;
 
 public class Final_parse {
 	private static HashSet<String> genres;
-	private static HashMap<String,Movie> movies;
+	private static HashSet<Movie> movies;
 	private static HashMap<String,Integer> genresMap;
-	
+//	private static HashMap<String,List<Star>> stars;
 
 	private static void getDataFromMs() {
 		Movie_parse mp = new Movie_parse();
+//		SIM_parse sp = new SIM_parse();
         mp.parseDocument();
         genres=mp.getGenres();
-        movies=mp.getMovies();
+        
+//        stars=sp.parseDocument();
 	}
 	private static void putIntoGenres(Connection conn) throws SQLException{
 		Statement select = conn.createStatement();
@@ -66,7 +69,7 @@ public class Final_parse {
 		
 
 	}
-	public static void main(String[] argu) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public  HashMap<String,Integer> getGenres() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		//counter
     	long tStart = System.currentTimeMillis(); 
     	getDataFromMs();
@@ -82,10 +85,9 @@ public class Final_parse {
     	}
     	 genresMap=new HashMap<>();
     	 putIntoGenres(conn);
-    	 System.out.println(genresMap.toString());
-    	 loadGenres(conn);
     	 
-		
+    	 loadGenres(conn);
+    	
         
   /*      StarParse sp = new Star_parse();
         sp.parseDocument();
@@ -103,13 +105,13 @@ public class Final_parse {
              e.printStackTrace();
          }
      	
-
-        
-        //counter
-        long tEnd = System.currentTimeMillis();
-        long tDelta = tEnd - tStart;
-        double elapsedSeconds = tDelta / 1000.0;
-        System.out.println("time used: "+elapsedSeconds );
+    	 return genresMap;
+//        
+//        //counter
+//        long tEnd = System.currentTimeMillis();
+//        long tDelta = tEnd - tStart;
+//        double elapsedSeconds = tDelta / 1000.0;
+//        System.out.println("time used: "+elapsedSeconds );
         
        
 	}

@@ -1,11 +1,20 @@
 package Parsing;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map; 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import javax.sql.DataSource;
+
+import java.io.PrintWriter;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -13,18 +22,50 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 public class Movie_parse extends DefaultHandler{
-	private HashMap<String,Movie> movies;
+	private HashSet<Movie> movies;
 	private String tempVal;
 	private Movie movieTemp;
-	private String movieId;
+	private Connection dbcon ;
+	
+	
 	private HashSet<String> genres;
+	private HashSet<String> movies_id;
+	private HashSet<Movie> movies_in_db;
+	
+	@Resource(name = "jdbc/moviedb")
+    private DataSource dataSource;
+	
 	
 	public Movie_parse() {
-		movies=new HashMap<>();
+		movies=new HashSet<>();
 		genres=new HashSet<>();
+		movies_id=new HashSet<>();
+		movies_in_db=new HashSet<>();
+		String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
+    	try {
+			dbcon = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
 	}
 	public void parseDocument() {
+			try {
+				movies=loadDBdata();
+			
+				movies_in_db.addAll(movies);
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        SAXParserFactory spf = SAXParserFactory.newInstance();
 	        try {
 	            SAXParser sp = spf.newSAXParser();
@@ -37,7 +78,51 @@ public class Movie_parse extends DefaultHandler{
 	        } catch (IOException ie) {
 	            ie.printStackTrace();
 	        }
+	        movies.removeAll(movies_in_db);
+	        //keep only parse movies
 	    }
+	public HashSet<Movie> loadDBdata() throws SQLException {
+		HashSet<Movie> result=new HashSet<>();
+		 Statement statement = dbcon.createStatement();
+
+         String query = "select id,title, year, director from movies";
+         		
+
+         PreparedStatement prepare = dbcon.prepareStatement(query);
+     	
+			
+		ResultSet rs=prepare.executeQuery();
+			
+
+        
+
+
+         while (rs.next()) {
+            
+			try {
+				Movie temp1=new Movie();
+				String title = rs.getString("title");
+				int year = rs.getInt("year");
+	             String director = rs.getString("director");
+	             
+	             String movie_id = rs.getString("id");
+	             temp1.setDirector(director);
+	             temp1.setYear(year);
+	             temp1.setTitle(title);
+	             temp1.setId(movie_id);
+	             result.add(temp1);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+            
+         }
+		return result;
+         
+         
+		
+	}
 	 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 	        //reset
 	        tempVal = "";
@@ -67,12 +152,41 @@ public class Movie_parse extends DefaultHandler{
 	    }
 
 	 public void endElement(String uri, String localName, String qName) throws SAXException {
+		 tempVal=tempVal.trim();
 		 if (qName.equalsIgnoreCase("film")) {
-	            //add it to the hashmap
-	            movies.put(movieId,movieTemp);
+	            
+				 String id=movieTemp.getId();;
+	 	 		String title=movieTemp.getTitle();
+	 	 		int year=movieTemp.getYear();
+	 	 		String director=movieTemp.getDirector();
+	 	 		
+	 	 		if (id==null ||id =="" || title==null || title ==""|| year==0 || director==null ||director =="") {
+	 	 			System.out.println("error (empty required field)"+movieTemp);
+	 	 			//field is empty
+	 	 		}
+	 	 		else {
+	 	 			if(movies_id.contains(id)) {
+				 		//one fid to multiple value
+				 		System.out.println("duplicate fid ("+id+")exists,"+ title+" is escaping");
+				 	}
+				 	else {
+				 		if (movies.contains(movieTemp)) {
+				 			//duplicate according to project 3 movie identifier (title,director,year)
+				 			System.out.println("duplicate field (director and year and title) exists,"+ title+" is escaping");
+				 		}
+				 		else{
+				 			movies.add(movieTemp);
+				 			movies_id.add(id);
+				 		}
+				 		
+				 	}
+	 	 			
+	 	 		}
+			 	
 	    }
 		 else if (qName.equalsIgnoreCase("fid")) {
-			 	movieId=tempVal;
+			 	movieTemp.setId(tempVal);
+			 	
 			 	//System.out.println(tempVal);
 		 }
 		 else if (qName.equalsIgnoreCase("t")) {
@@ -81,7 +195,10 @@ public class Movie_parse extends DefaultHandler{
 		 else if(qName.equalsIgnoreCase("year")) {
 			 if(isYear(tempVal)) {
 		         movieTemp.setYear(Integer.parseInt(tempVal));
-		      } 	
+		      } 
+			 else {
+				 movieTemp.setYear(0);
+			 }
 		 }
 		 //for director we only require one name so we set the last as our final director, reason use dirs instead of dir is we met a bug before.
 		 else if(qName.equalsIgnoreCase("dirs")) {
@@ -89,8 +206,12 @@ public class Movie_parse extends DefaultHandler{
 			 
 		 }
 		 else if(qName.equalsIgnoreCase("cat")) {
-			 genres.add(tempVal);
-			 movieTemp.addGenre(tempVal);
+			 if (tempVal!=null && tempVal.length()!=0) {
+				 	genres.add(tempVal);
+				 	movieTemp.addGenre(tempVal);
+		    	 }
+			 
+			 
 		 }
 	 }
 	 public void printData() {
@@ -100,11 +221,11 @@ public class Movie_parse extends DefaultHandler{
 	        	System.out.print(dir);
 	        	System.out.print(", ");
 	        }*/
-	        for (String id: movies.keySet()){
+	        for (Movie id: movies){
 
 	            
-	            String value = movies.get(id).toString();  
-	            System.out.println(id + " " + value);  
+	            
+	            System.out.println(id );  
 
 
 	        } 
@@ -120,18 +241,19 @@ public class Movie_parse extends DefaultHandler{
 	 public HashSet<String> getGenres(){
 		 return this.genres;
 	 }
-	 public HashMap<String,Movie> getMovies(){
+	 public HashSet<Movie> getMovies(){
+		 
 		 return this.movies;
 	 }
-	/* public static void main(String[] args) {
-	    	long tStart = System.currentTimeMillis(); 
-	        Movie_parse sp = new Movie_parse();
-	        sp.parseDocument();
-	        sp.printData();
-	        long tEnd = System.currentTimeMillis();
-	        long tDelta = tEnd - tStart;
-	        double elapsedSeconds = tDelta / 1000.0;
-	        System.out.println("time used: "+elapsedSeconds );
-	        
-	    }*/
+//	 public static void main(String[] args) {
+//	    	long tStart = System.currentTimeMillis(); 
+//	        Movie_parse sp = new Movie_parse();
+//	        sp.parseDocument();
+//	        sp.printData();
+//	        long tEnd = System.currentTimeMillis();
+//	        long tDelta = tEnd - tStart;
+//	        double elapsedSeconds = tDelta / 1000.0;
+//	        System.out.println("time used: "+elapsedSeconds );
+//	        
+//	    }
 }

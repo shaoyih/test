@@ -1,6 +1,7 @@
 package Parsing;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,16 +13,16 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 public class Star_parse extends DefaultHandler {
-	List<Star> stars;
+	HashMap<String,Star> stars;
 	private String tempVal;
 	private Star starTemp;
 	
 	//initialize class 
 	public Star_parse() {
-        stars = new ArrayList<Star>();
+        stars = new HashMap<>();
     }
 	
-	 public void parseDocument() {
+	 public HashMap<String,Star> parseDocument() {
 	        SAXParserFactory spf = SAXParserFactory.newInstance();
 	        try {
 	            SAXParser sp = spf.newSAXParser();
@@ -34,6 +35,7 @@ public class Star_parse extends DefaultHandler {
 	        } catch (IOException ie) {
 	            ie.printStackTrace();
 	        }
+	        return stars;
 	    }
 	    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 	        //reset
@@ -53,13 +55,16 @@ public class Star_parse extends DefaultHandler {
 
 	        if (qName.equalsIgnoreCase("actor")) {
 	            //add it to the list
-	            stars.add(starTemp);
+	            stars.put(starTemp.getName(),starTemp);
 
 	        } else if (qName.equalsIgnoreCase("stagename")) {
 	            starTemp.setName(tempVal);
 	        } else if (qName.equalsIgnoreCase("dob")) {
 	        	if(isYear(tempVal)) {
 	            starTemp.setDob(Integer.parseInt(tempVal));
+	        	}
+	        	else {
+		            starTemp.setDob(0);
 	        	}
 	        }
 
@@ -78,25 +83,34 @@ public class Star_parse extends DefaultHandler {
 	    }
 	    public void printData() {
 
-	        
+	    	for (String id: stars.keySet()){
 
-	        Iterator<Star> it = stars.iterator();
-	        while (it.hasNext()) {
-	            System.out.println(it.next().toString());
-	        }
+	            
+	            String value = stars.get(id).toString();  
+	            System.out.println(id + " " + value);  
+
+
+	        } 
+
+	        
 	        System.out.println("No of Stars '" + stars.size() + "'.");
 	    }
-	    /*
-	    public static void main(String[] args) {
-	    	long tStart = System.currentTimeMillis(); 
-	        Star_parse sp = new Star_parse();
-	        sp.parseDocument();
-	        sp.printData();
-	        long tEnd = System.currentTimeMillis();
-	        long tDelta = tEnd - tStart;
-	        double elapsedSeconds = tDelta / 1000.0;
-	        System.out.println("time used: "+elapsedSeconds );
+	    public HashMap<String,Star> returnData() {
+
+	    	return stars;
 	    }
-	    */
+	    
+//	   
+//	    public static void main(String[] args) {
+//	    	long tStart = System.currentTimeMillis(); 
+//	        Star_parse sp = new Star_parse();
+//	        sp.parseDocument();
+//	        sp.printData();
+//	        long tEnd = System.currentTimeMillis();
+//	        long tDelta = tEnd - tStart;
+//	        double elapsedSeconds = tDelta / 1000.0;
+//	        System.out.println("time used: "+elapsedSeconds );
+//	    }
+//	    
 
 }
