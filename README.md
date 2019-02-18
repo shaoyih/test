@@ -4,10 +4,10 @@
 
 using batch insert and hash to optimaize speed
 
-###batch insert
+### batch insert
 use preparstatement and batch insert to insert data into sql
 
-###hash
+###  hash
 - override hashcode in Movie in order to hash based on title,year,director
 - get data from db and make a hashmap of the data to remove duplicates, so 
 sql don't have to check for duplicate every times it inserts.
