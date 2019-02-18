@@ -78,7 +78,7 @@ public class BatchInsert {
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
 			
 			
-		     
+    		System.out.println("starting to insert movie");
 			dbcon.setAutoCommit(false);
 		
 		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
@@ -86,7 +86,7 @@ public class BatchInsert {
 		    
 	        while (it.hasNext()) 
 		   	     {
-	        	 	System.out.println("starting to insert");
+	        	 	
 	        	 	Movie movie=(Movie) it.next();
 	        	 		String id=movie.getId();
 	        	 		String title=movie.getTitle();
@@ -114,7 +114,7 @@ public class BatchInsert {
 		}
     	
     	
-    	System.out.println("finished");
+    	System.out.println("finished inserting movies");
 		System.out.println(count);
 		
 	}
@@ -130,7 +130,7 @@ public class BatchInsert {
     	
 
 			dbcon.setAutoCommit(false);
-		
+			System.out.println("starting to insert genres_in_movies");
 		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
 		    Iterator it = movies.iterator();
 		    
@@ -150,7 +150,7 @@ public class BatchInsert {
     	 			while (g.hasNext()) {
    	        	 	
     	 					String genre_name=((String) g.next()).toLowerCase();
-    	 					System.out.println(genre_name);
+    	 					
     	 					
     	 					int genre_id=genresMap.get(genre_name);
 
@@ -178,7 +178,7 @@ public class BatchInsert {
 		}
     	
     	
-    	System.out.println("finished");
+    	System.out.println("finished inserting genres_in_movies");
 		System.out.println(count);
 		
 	}
@@ -192,7 +192,7 @@ public class BatchInsert {
 
     	int count=0;
     	try {
-    		
+    		System.out.println("starting to insert stars");
 
 			dbcon.setAutoCommit(false);
 		
@@ -264,7 +264,7 @@ public class BatchInsert {
 		}
     	
     	
-    	System.out.println("finished");
+    	System.out.println("finished inserting stars");
 		System.out.println(count);
 		
 	}
@@ -281,7 +281,7 @@ public class BatchInsert {
     		Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 			dbcon.setAutoCommit(false);
-		
+			System.out.println("starting to insert stars_in_movies");
 		    psInsertRecord=dbcon.prepareStatement(sqlInsertRecord);
 		    Iterator it = movies.iterator();
 		    
@@ -302,7 +302,6 @@ public class BatchInsert {
     	 			while (g.hasNext()) {
    	        	 	
     	 					Star single_star=(Star) g.next();
-    	 					System.out.println(single_star);
     	 					
     	 					String star_id=single_star.getId();
 
@@ -335,7 +334,7 @@ public class BatchInsert {
 	            e.printStackTrace();
 	        }
     	
-    	System.out.println("finished");
+    	System.out.println("finished inserting stars_in_movies");
 		System.out.println(count);
 		
 	}
