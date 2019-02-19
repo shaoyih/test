@@ -46,7 +46,7 @@ BEGIN
             Then
 				BEGIN
                 
-                SELECT MAX(id) INTO MovieId FROM movies WHERE id LIKE 'tt%';
+                SELECT MAX(id) INTO MovieId FROM movies WHERE id LIKE 'tt______%';
 				SELECT CAST(SUBSTRING(MovieId,3) AS unsigned integer)+1 into buffer;
 				SELECT CONCAT(SUBSTRING(MovieId,1,2),CAST(buffer AS CHAR)) INTO MovieId;
                 INSERT INTO movies (id,title,year,director) values(MovieId,title,year,director); 
