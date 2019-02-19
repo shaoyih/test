@@ -64,7 +64,7 @@ public class BatchInsert {
 	    }
 	 
 	
-	private  void batchInsert() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	private  int batchInsert() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		PreparedStatement psInsertRecord=null;
     	String sqlInsertRecord="INSERT INTO movies (id, title, year, director)\n" + 
     			"VALUES (?,?,?,?);";
@@ -99,7 +99,7 @@ public class BatchInsert {
 			    		    psInsertRecord.setString(2, title);
 			    		    psInsertRecord.setInt(3, year);
 			    		    psInsertRecord.setString(4, director);
-			    		   
+			    		    psInsertRecord.setString(5, id);
 			    		    psInsertRecord.addBatch();
 	        	 	
 		    	 }
@@ -115,10 +115,10 @@ public class BatchInsert {
     	
     	
     	System.out.println("finished inserting movies");
-		System.out.println(count);
+    	return count;
 		
 	}
-	private  void batchInsertGenre() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	private  int batchInsertGenre() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		PreparedStatement psInsertRecord=null;
 		
     	String sqlInsertRecord="INSERT INTO genres_in_movies (genreId, movieId)\n" + 
@@ -179,10 +179,10 @@ public class BatchInsert {
     	
     	
     	System.out.println("finished inserting genres_in_movies");
-		System.out.println(count);
+    	return count;
 		
 	}
-	private  void batchInsertStar() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	private  int batchInsertStar() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		PreparedStatement psInsertRecord=null;
 		PreparedStatement psInsertRecord1=null;
     	String sqlInsertRecord="insert into stars(id, name,birthYear) VALUES(?,?,default);";
@@ -265,10 +265,10 @@ public class BatchInsert {
     	
     	
     	System.out.println("finished inserting stars");
-		System.out.println(count);
+		return count;
 		
 	}
-	private  void batchInsertStarMovie() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	private  int batchInsertStarMovie() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		PreparedStatement psInsertRecord=null;
 		
     	
@@ -335,7 +335,7 @@ public class BatchInsert {
 	        }
     	
     	System.out.println("finished inserting stars_in_movies");
-		System.out.println(count);
+		return count;
 		
 	}
 	
@@ -343,48 +343,22 @@ public class BatchInsert {
 	 public static void main(String[] args) {
 		long tStart = System.currentTimeMillis(); 
 		BatchInsert sp = new BatchInsert();
-		
-            
-            
-
-
-        
-		
+	
 //		System.out.println(stars);
 //		System.out.println(genresMap);
 		HashSet<String> ids=new HashSet<>();
-//		
-//        System.out.println(ids.size());
-//        
-//        Iterator it = movies.iterator();
-//        while (it.hasNext()) 
-//  	     {
-//   	 	
-//        	Movie movie=(Movie) it.next();
-//		String id=movie.getId();
-//		List<String> genres=movie.getGenre();
-//		if (genres==null ||genres.size()==0) {
-//			//????
-//			System.out.println("movie "+movie.getTitle()+" doesn't have genre");
-//			continue;
-//		}
-//		else {
-//			Iterator g = genres.iterator();
-//			while (g.hasNext()) {
-//      	 	
-//					String genre_name=(String) g.next();
-//					int genre_id=genresMap.get(genre_name);
-//   	 			
-//       	 		System.out.println(genre_id);
-//			}
-//		}
-//  	     }
-//        System.out.println(genresMap);
+
 		try {
-			sp.batchInsert();
-			sp.batchInsertGenre();
-			sp.batchInsertStar();
-			sp.batchInsertStarMovie();
+			int c1=sp.batchInsert();
+			int c2=sp.batchInsertGenre();
+			int c3=sp.batchInsertStar();
+			int c4=sp.batchInsertStarMovie();
+			System.out.println("# of movies :  "+c1 );
+			System.out.println("# of genres—in-movie: "+c2 );
+			System.out.println("# of genres "+genresMap.size() );
+			
+			System.out.println("# of stars :"+c3 );
+			System.out.println("# of stars_in_movies :"+c4 );
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,7 +7,8 @@ in year integer,
 in director varchar(100),
 in star varchar(100),
 in genre varchar(32),
-out message varchar(100))
+out message varchar(100),
+out statuss varchar(100))
 
 BEGIN
 	DECLARE MovieId varchar(10);
@@ -20,20 +21,22 @@ BEGIN
     
 	IF (star is NULL) OR (length(star)<=0) or (title is NULL) OR (length(title)<=0) or (year is NULL) OR (length(year)!=4) or (director is NULL) OR (length(director)<=0) or (genre is NULL) OR (length(genre)<=0) THEN
 		BEGIN
+			SELECT 'fail' INTO statuss;
 			IF (star is NULL) OR (length(star)<=0)
-				THEN SELECT 'star fails' INTO message;
+				THEN SELECT 'star' INTO message;
 			END IF;
 			IF(title is NULL) OR (length(title)<=0)
-				THEN SELECT 'title fails' INTO message;
+				THEN SELECT 'title' INTO message;
 			END IF;
 			IF(year is NULL) OR (length(year)!=4)
-				THEN SELECT 'year fails' INTO message;
+				THEN SELECT 'year' INTO message;
+                
 			END IF;
 			IF(director is NULL) OR (length(director)<=0)
-				THEN SELECT 'director fails' INTO message;
+				THEN SELECT 'director' INTO message;
 			END IF;
 			IF (genre is NULL) OR (length(genre)<=0)
-				THEN SELECT 'genre fails' INTO message;
+				THEN SELECT 'genre' INTO message;
 			END IF;
 		END;
     ELSE
@@ -43,7 +46,7 @@ BEGIN
             Then
 				BEGIN
                 
-                SELECT MAX(id) INTO MovieId FROM movies;
+                SELECT MAX(id) INTO MovieId FROM movies WHERE id LIKE 'tt%';
 				SELECT CAST(SUBSTRING(MovieId,3) AS unsigned integer)+1 into buffer;
 				SELECT CONCAT(SUBSTRING(MovieId,1,2),CAST(buffer AS CHAR)) INTO MovieId;
                 INSERT INTO movies (id,title,year,director) values(MovieId,title,year,director); 
@@ -68,10 +71,10 @@ BEGIN
 						INSERT INTO stars (id,name) values (StarId,star); 
 				END IF;
 				INSERT INTO stars_in_movies (StarId,movieId) values (StarId,MovieId); 
-                SELECT 'success' INTO message;
+                SELECT 'success' INTO statuss;
                 END;
 			ELSE
-				SELECT 'The movie exist' INTO message;
+				SELECT 'exist' INTO statuss;
             END IF;
 			
         END;

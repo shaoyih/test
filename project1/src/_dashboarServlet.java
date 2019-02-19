@@ -63,7 +63,7 @@ public class _dashboarServlet extends HttpServlet {
 		try {
 			
 			Connection conn=dataSource.getConnection();
-			String query="{call add_movie(?,?,?,?,?,?)}";
+			String query="{call add_movie(?,?,?,?,?,?,?)}";
 			CallableStatement cst=conn.prepareCall(query);
 			String t=request.getParameter("title");
 			String s=request.getParameter("star");
@@ -82,11 +82,27 @@ public class _dashboarServlet extends HttpServlet {
 			cst.setString(4, s);
 			cst.setString(5, g);
 			cst.registerOutParameter(6, Types.VARCHAR);
+			cst.registerOutParameter(7, Types.VARCHAR);
 			boolean result=cst.execute();
 			//dealing the feedback
 			String output=cst.getString(6);
+			String status=cst.getString(7);
 			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("message", output);
+			
+			
+			if(status.equals("success")) {
+				jsonObject.addProperty("status", status);
+				jsonObject.addProperty("message","Movie '"+t+"' successfully added!");
+			}
+			else if(status.equals("exist")){
+				jsonObject.addProperty("status", status);
+				jsonObject.addProperty("message","Movie '"+t+"' existed");
+			}
+			else {
+				jsonObject.addProperty("status", status);
+				jsonObject.addProperty("message", "'"+output+"' cannot be empty!");
+			}
+			
 			out.write(jsonObject.toString());
 			System.out.println(output);
 			
@@ -125,7 +141,7 @@ public class _dashboarServlet extends HttpServlet {
 			boolean result=cst.execute();
 			String output=cst.getString(3);
 			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("message", output);
+			jsonObject.addProperty("message", "'"+SN+"' is successfully added!");
 			out.write(jsonObject.toString());
 			System.out.println(output);
 			

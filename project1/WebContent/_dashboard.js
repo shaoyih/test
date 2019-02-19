@@ -1,12 +1,14 @@
 
 function handleStarResult(resultDataString){
-	console.log(resultDataString["message"]);
+	$("#feedback-message").text(resultDataString["message"]);
+	document.getElementById("wrongInfo").style.display="block";
 }
 
 function handleMovieResult(resultDataString){
 	
 	
-	console.log(resultDataString["message"]);
+	$("#feedback-message").text(resultDataString["message"]);
+	document.getElementById("wrongInfo").style.display="block";
 	
 	
 }
@@ -94,4 +96,8 @@ jQuery.ajax({
 	url: "api/dashboard?by=get&type=t",
 	success: (resultData)=>handleTableInfo(resultData)
 });
+
+document.getElementsByClassName("close")[0].onclick=function(){
+	document.getElementById("wrongInfo").style.display="none";
+};
 
