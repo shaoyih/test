@@ -7,13 +7,9 @@ $(window).on("scroll", function() {
 						$('nav').removeClass('black');
 			}
 })
-jQuery.ajax({
- dataType: "json",  // Setting return data type
- method: "GET",// Setting request method
- url: "project1/get_genres" , // Setting request url, which is mapped by StarsServlet in Stars.java
- success: (resultData) => allGenres(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
-});
+
 function allGenres(resultData){
+	
 	let genreSection=jQuery("#genreDropDown");
 
 	let rowHTML="";
@@ -52,7 +48,14 @@ function submitSearchName(formSubmitEvent){
     query="index.html?by=search&"+$("#search_form1").serialize()+"&page=1&limit=10";
     window.location.replace(query);
 }
+
+jQuery.ajax({
+	 dataType: "json",  // Setting return data type
+	 method: "GET",// Setting request method
+	 url: "project1/get_genres" , // Setting request url, which is mapped by StarsServlet in Stars.java
+	 success: (resultData) => allGenres(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
+	});
 allAlpha();
-allGenres();
+
 $("#search_form").submit((event) => submitSearchKey(event));
 $("#search_form1").submit((event) => submitSearchName(event));

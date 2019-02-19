@@ -45,12 +45,16 @@ public class loginFilter implements Filter{
 				return;
 			}
 			else {
+				String url = ((HttpServletRequest)request).getRequestURL().toString();
+				
+				
+				
 				if(httpRequest.getSession().getAttribute("user")==null) {
 					httpResponse.sendRedirect("login.html");
 				}
 					
 				else {
-					httpResponse.sendRedirect("employee_login.html");
+					httpResponse.sendRedirect("_dashboard.html");
 				}
 			}
 			
@@ -61,7 +65,7 @@ public class loginFilter implements Filter{
 			String requestURI=URL.toLowerCase();
 			return requestURI.endsWith("login.html") || requestURI.endsWith("login.js")
 	                || requestURI.endsWith("api/login")||requestURI.endsWith("login1.jpg")||requestURI.endsWith("login.css")
-	                || requestURI.endsWith("employee_login.html")|| requestURI.endsWith("employee_login.js")
+	                || requestURI.endsWith("_dashboard.html")|| requestURI.endsWith("_dashboard.js")
 	                ||requestURI.endsWith("api/employee_login");
 		}
 		private boolean isDashBoard(String URL) {

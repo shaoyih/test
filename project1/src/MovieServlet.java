@@ -61,7 +61,7 @@ public class MovieServlet extends HttpServlet{
             result+=updateBySort(request);
             
             result+=updateByPage(request);
-           
+            System.out.println(result);
             
             
 
