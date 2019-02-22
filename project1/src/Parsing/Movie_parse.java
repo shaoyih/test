@@ -47,7 +47,7 @@ public class Movie_parse extends DefaultHandler{
 		genres=new HashSet<>();
 		movies_id=new HashSet<>();
 		movies_in_db=new HashSet<>();
-		String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
+		String jdbcURL="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&useSSL=false";
     	try {
 			dbcon = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
 		} catch (SQLException e) {

@@ -81,5 +81,5 @@ BEGIN
 	END IF;
 	 
 END $$
-year
+
 DELIMITER ;

@@ -105,6 +105,7 @@ public class _dashboarServlet extends HttpServlet {
 			
 			out.write(jsonObject.toString());
 			System.out.println(output);
+			conn.close();
 			
 		}catch(Exception e) {
 			
@@ -145,12 +146,15 @@ public class _dashboarServlet extends HttpServlet {
 			out.write(jsonObject.toString());
 			System.out.println(output);
 			
+			
+            conn.close();
 		}catch(Exception e) {
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("errorMessage", e.getMessage());
 			out.write(jsonObject.toString());
 			response.setStatus(500);
 		}
+		out.close();
 	}
 	private void getAttrForTables(HttpServletRequest request, HttpServletResponse response,String name) throws ServletException,IOException {
 		System.out.println("into name process!");

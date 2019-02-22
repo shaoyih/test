@@ -63,6 +63,7 @@ public class UpdateSecurePassword {
                     email);
             updateQueryList.add(updateQuery);
         }
+        
         rs.close();
         ResultSet rs1 = statement.executeQuery(query1);
         while (rs1.next()) {
