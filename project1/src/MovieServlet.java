@@ -61,7 +61,7 @@ public class MovieServlet extends HttpServlet{
             result+=updateBySort(request);
             
             result+=updateByPage(request);
-            System.out.println(result);
+            
             
             
 
@@ -150,7 +150,12 @@ public class MovieServlet extends HttpServlet{
 	    			String director = request.getParameter("director");
 	    	        String star = request.getParameter("stars");
 	    	        if(title!="" &&!title.equals("null")) {
-	    	        	result.setString(index++, "%"+title+"%");
+	    	        	String query="";
+	    	        	String [] arrOfStr = title.split(" ");
+	    	        	for (String i:arrOfStr) {
+	    	        		query+="+"+i+"* ";
+	    	        	}
+	    	        	result.setString(index++, query);
 	    	        }
 	    	        
 	    	        if(year!=""&&!year.equals("null")) {
@@ -188,19 +193,19 @@ public class MovieServlet extends HttpServlet{
 				String query="SELECT COUNT(*) as ct ";
 				int index=result.indexOf("from");
 				query=query + result.substring(index);
-				System.out.println(mode);
+				
 				
 				if(mode.equals("search")) {
 					query="SELECT COUNT(*) as ct FROM(\n"+query+") as SubQuery";
 				}
-				System.out.println(query);
+				
 				
 				int numberOfRows=0;
 				try {
 					
 					PreparedStatement prepare=dbcon.prepareStatement(query);
 		            updateParameter(request,prepare,browse,search,false);
-		            System.out.println(prepare);
+		            
 					ResultSet rs = prepare.executeQuery();
 					rs.next();
 					int ct=(int) rs.getLong("ct"); 
@@ -234,7 +239,7 @@ public class MovieServlet extends HttpServlet{
         			"where movies.id=ratings.movieId and movies.title like ? \n";
         	
         }
-        System.out.println(query);
+    
 		return query;
 	}
 	public String updateBySort(HttpServletRequest request) {
@@ -271,7 +276,9 @@ public class MovieServlet extends HttpServlet{
 		String director = request.getParameter("director");
         String star = request.getParameter("stars");
         if(title!="" &&!title.equals("null")) {
-        	query+=" and m.title LIKE ? \n";
+        	 
+        	
+        	query+=" and (MATCH (title) AGAINST (? IN BOOLEAN MODE)) ";
         }
         
         if(year!=""&&!year.equals("null")) {
@@ -300,7 +307,7 @@ public class MovieServlet extends HttpServlet{
 //        }
         
         query+="Group by m.id,title, year, director,rating\n";
-        System.out.println(query);
+        
         return query;
         
 	}
