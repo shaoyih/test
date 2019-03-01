@@ -36,6 +36,12 @@ public class LoginServlet extends HttpServlet {
 	        try {
 	            recaptchaVerify.verify(gRecaptchaResponse);
 	        } catch (Exception e) {
+	        	JsonObject responseJsonObject = new JsonObject();
+	            responseJsonObject.addProperty("status", "fail");
+	            
+	            responseJsonObject.addProperty("message", e.getMessage());
+	            
+	            response.getWriter().write(responseJsonObject.toString());
 	            return;
 	        }
     	}

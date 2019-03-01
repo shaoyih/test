@@ -3,6 +3,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 
 
@@ -31,6 +34,25 @@ public class loginFilter implements Filter{
 				return;
 				
 			}
+			String userAgent = httpRequest.getHeader("User-Agent");
+	    	if (userAgent != null && userAgent.contains("Android")) {
+	    		if(httpRequest.getSession().getAttribute("user")!=null) {
+	    			JsonObject responseJsonObject = new JsonObject();
+	                responseJsonObject.addProperty("status", "notlogin");
+	               
+
+	                response.getWriter().write(responseJsonObject.toString());
+	    		}
+	    		else {
+	    			JsonObject responseJsonObject = new JsonObject();
+	                responseJsonObject.addProperty("status", "login");
+	               
+
+	                response.getWriter().write(responseJsonObject.toString());
+	    		}
+	    		return;
+	    		
+	    	}
 			if(httpRequest.getSession().getAttribute("user")!=null && httpRequest.getSession().getAttribute("employee")!=null){
 				chain.doFilter(request, response);
 			}
