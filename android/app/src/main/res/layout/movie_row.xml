@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="395dp"
+        android:layout_height="156dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="16dp">
+
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="86dp"
+            android:layout_height="143dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            tools:srcCompat="@tools:sample/avatars[2]" />
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/poster"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:text="title" />
+
+        <TextView
+            android:id="@+id/movie_genres"
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_below="@id/movie_title"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/poster"
+            android:text="Genres" />
+
+        <TextView
+            android:id="@+id/movie_year"
+            android:layout_width="100dp"
+            android:layout_height="29dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/movie_title"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:text="year" />
+
+        <TextView
+            android:id="@+id/movie_stars"
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_below="@id/movie_director"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@id/poster"
+            android:text="stars" />
+
+        <TextView
+            android:id="@+id/movie_director"
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_below="@id/movie_genres"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/poster"
+            android:text="director" />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

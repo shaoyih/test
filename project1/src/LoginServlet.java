@@ -29,13 +29,17 @@ public class LoginServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-       
-        try {
-            recaptchaVerify.verify(gRecaptchaResponse);
-        } catch (Exception e) {
-            return;
-        }
+    	String userAgent = request.getHeader("User-Agent");
+    	if (userAgent != null && !userAgent.contains("Android")) {
+	    	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+	       
+	        try {
+	            recaptchaVerify.verify(gRecaptchaResponse);
+	        } catch (Exception e) {
+	            return;
+	        }
+    	}
+        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         System.out.println(username);

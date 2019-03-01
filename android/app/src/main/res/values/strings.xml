@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">fablix</string>
+    <string name="edit_message">nononono</string>
+    <string name="button_send">Send</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="searchM">GodFather</string>
+    <string name="title_activity_single_movie">singleMovie</string>
+</resources>
