@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class movies extends Activity {
-
+    int currentPage;
+    String title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,20 +34,15 @@ public class movies extends Activity {
 
 
         try {
-            final List<Movie> movies=parseMovies(bundle.getString("result"),bundle);
+            currentPage=bundle.getInt("currentPage");
+            title=bundle.getString("title");
+
+            final List<Movie> movies=parseMovies(bundle.getString("result"));
             moviesView row= new moviesView(this,movies);
             ListView listView=(ListView) findViewById(R.id.movie_list);
             listView.setAdapter(row);
             //listView.setAdapter();
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Movie m=movies.get(position);
-                    Intent goToMovies=new Intent(view.getContext(), singleMovie.class);
-                    goToMovies.putExtra("id",m.getId());
-                    startActivity(goToMovies);
-                }
-            });
+            movieJump(listView,movies);
 
 
         } catch (JSONException e) {
@@ -55,19 +51,42 @@ public class movies extends Activity {
 
     }
 
-    private void setButtonStatus(final Bundle bundle, int totalPage){
+    private void  movieJump(ListView listView, final List<Movie> movies){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie m=movies.get(position);
+                Intent goToMovies=new Intent(view.getContext(), singleMovie.class);
+                goToMovies.putExtra("id",m.getId());
+                startActivity(goToMovies);
+            }
+        });
+    }
+
+    private void refreshList(String result) throws JSONException {
+        final List<Movie> movies=parseMovies(result);
+        moviesView row= new moviesView(this,movies);
+        ListView listView=(ListView) findViewById(R.id.movie_list);
+        listView.setAdapter(row);
+        movieJump(listView,movies);
+
+    }
+
+
+
+    private void setButtonStatus( int totalMovies){
 
         Button nextBtn = findViewById(R.id.next_btn);
         Button prevBtn = findViewById(R.id.prev_btn);
-        final int currentPage=bundle.getInt("currentPage");
-        final String title=bundle.getString("title");
+
+
 
         Log.wtf("c", String.valueOf(currentPage));
-        Log.wtf("t", String.valueOf(totalPage));
+        Log.wtf("t", String.valueOf(totalMovies));
 
 
         //status
-        if(totalPage>1 && currentPage<totalPage/10){
+        if(totalMovies>1 && currentPage<totalMovies/10){
             nextBtn.setEnabled(true);
         }
         else{
@@ -84,23 +103,20 @@ public class movies extends Activity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newCur=currentPage+1;
-
-                Intent goToMovies;new Intent(v.getContext(), movies.class);
-                String url=getUrl(title,null,null,null,newCur);
-                connectToServer(v.getRootView(),url,title,newCur);
+                currentPage+=1;
+                String url=getUrl(title,null,null,null,currentPage);
+                connectToServer(url);
 
             }
         });
 
+
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newCur=currentPage-1;
-
-                Intent goToMovies;new Intent(v.getContext(), movies.class);
-                String url=getUrl(title,null,null,null,newCur);
-                connectToServer(v.getRootView(),url,title,newCur);
+                currentPage-=1;
+                String url=getUrl(title,null,null,null,currentPage);
+                connectToServer(url);
 
             }
         });
@@ -109,11 +125,11 @@ public class movies extends Activity {
 
 
 
-    private List<Movie> parseMovies(String result,Bundle bundle) throws JSONException {
+    private List<Movie> parseMovies(String result) throws JSONException {
         JSONArray objArray = new JSONArray(result);
         List<Movie> movies= new ArrayList<Movie>();
 
-        setButtonStatus(bundle,objArray.getJSONObject(0).getInt("totalPage"));
+        setButtonStatus(objArray.getJSONObject(0).getInt("totalPage"));
         for(int i=1; i<objArray.length();i++) {
             JSONObject obj = objArray.getJSONObject(i);
             //handle easy part
@@ -169,7 +185,7 @@ public class movies extends Activity {
                 "&page="+ offset;
     }
 
-    public void connectToServer(View view, final String url,final String title, final int newCur) {
+    public void connectToServer(final String url) {
         Log.wtf("into connection", "damn!!!");
 
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
@@ -184,7 +200,11 @@ public class movies extends Activity {
                     public void onResponse(String response) {
 
                         Log.d("login.success", response);
-                        handleResult(response,title,newCur);
+                        try {
+                            refreshList(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 },
@@ -200,14 +220,7 @@ public class movies extends Activity {
         queue.add(searchRequest);
     }
 
-    private void handleResult(String result, String title, int CurrentPage){
-        Intent goToMovies = new Intent(this, movies.class);
-        goToMovies.putExtra("result", result);
-        goToMovies.putExtra("currentPage", CurrentPage);
-        goToMovies.putExtra("title", title);
-        startActivity(goToMovies);
 
-    }
 
 
 }
