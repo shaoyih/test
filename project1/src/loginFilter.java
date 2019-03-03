@@ -44,11 +44,8 @@ public class loginFilter implements Filter{
 	                response.getWriter().write(responseJsonObject.toString());
 	    		}
 	    		else {
-	    			JsonObject responseJsonObject = new JsonObject();
-	                responseJsonObject.addProperty("status", "login");
-	               
-
-	                response.getWriter().write(responseJsonObject.toString());
+	    			chain.doFilter(request, response);
+	    			
 	    		}
 	    		return;
 	    		
