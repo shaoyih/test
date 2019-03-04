@@ -1,10 +1,12 @@
 package com.android.fablix;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,6 +19,8 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +29,12 @@ public class login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //NetworkManager.sharedManager(getApplicationContext());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        testLogin();
+        
 
 
     }
@@ -45,11 +53,12 @@ public class login extends AppCompatActivity {
         //goToIntent.putExtra("email",email);
         //goToIntent.putExtra("password",password);
         //goToIntent.putExtra("message", "Cannot connect to server");
+
         if(status.length()>0 && status.contains("status")) {
             JSONObject obj = new JSONObject(status);
             String rs = obj.getString("status");
             String message = obj.getString("message");
-
+            Log.wtf("status",message);
             if (rs.equals("success")){
                 startActivity(goToIntent);
             }
@@ -65,10 +74,6 @@ public class login extends AppCompatActivity {
         Log.wtf("into connection","damn!!!");
 
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
-
-
-
-
         final StringRequest loginRequest = new StringRequest(Request.Method.POST, "https://10.0.2.2:8443/Project1/api/login",
                 new Response.Listener<String>() {
                     @Override
@@ -109,6 +114,40 @@ public class login extends AppCompatActivity {
         // !important: queue.add is where the login request is actually sent
         queue.add(loginRequest);
 
+    }
+    public void testLogin() {
+        final RequestQueue queue = NetworkManager.sharedManager(this).queue;
+        final StringRequest searchRequest = new StringRequest(Request.Method.GET, "https://10.0.2.2:8443/Project1/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("login.success", response);
+                        try {
+                            JSONObject response_json = new JSONObject(response);
+                            String str_value = response_json.getString("status");
+
+                            if (!str_value.equals("notlogin")) {
+                                Intent goToIntent = new Intent(getApplicationContext(), Main.class);
+                                startActivity(goToIntent);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("login.error", error.toString());
+
+                    }
+                }
+        );
+        queue.add(searchRequest);
     }
 
 

@@ -1,10 +1,13 @@
 package com.android.fablix;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.android.volley.Request;
@@ -13,12 +16,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-public class Main extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Main extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //testLogin();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+
 
     }
 
@@ -84,6 +97,8 @@ public class Main extends AppCompatActivity {
         );
         queue.add(searchRequest);
     }
+
+
 
 
 

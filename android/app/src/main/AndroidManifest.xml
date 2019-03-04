@@ -3,7 +3,6 @@
     package="com.android.fablix">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,12 +12,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".singleMovie"></activity>
         <activity android:name=".movies" />
-        <activity android:name=".Main" />
-        <activity
-            android:name=".NetworkManager"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".test" />
+        <activity android:name=".Main" >
+
+        </activity>
+
+
+
         <activity android:name=".login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,5 +26,8 @@
             </intent-filter>
         </activity>
     </application>
+
+
+
 
 </manifest>
