@@ -156,6 +156,11 @@ public class MovieServlet extends HttpServlet{
 	    	        		query+="+"+i+"* ";
 	    	        	}
 	    	        	result.setString(index++, query);
+	    	        	//title like ? or edth(title, ?, ?))
+	    	        	String likeOperator="%"+title+"%";
+	    	        	result.setString(index++, likeOperator);
+	    	        	result.setString(index++, title);
+	    	        	result.setInt(index++, (int)Math.round(0.4*title.length()) );
 	    	        }
 	    	        
 	    	        if(year!=""&&!year.equals("null")) {
@@ -278,7 +283,7 @@ public class MovieServlet extends HttpServlet{
         if(title!="" &&!title.equals("null")) {
         	 
         	
-        	query+=" and (MATCH (title) AGAINST (? IN BOOLEAN MODE)) ";
+        	query+=" and ((MATCH (title) AGAINST (? IN BOOLEAN MODE)) or title like ? or edth(title, ?, ?))";
         }
         
         if(year!=""&&!year.equals("null")) {
