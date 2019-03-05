@@ -36,7 +36,7 @@ public class loginFilter implements Filter{
 			}
 			String userAgent = httpRequest.getHeader("User-Agent");
 	    	if (userAgent != null && userAgent.contains("Android")) {
-	    		if(httpRequest.getSession().getAttribute("user")!=null) {
+	    		if(httpRequest.getSession().getAttribute("user")==null) {
 	    			JsonObject responseJsonObject = new JsonObject();
 	                responseJsonObject.addProperty("status", "notlogin");
 	               

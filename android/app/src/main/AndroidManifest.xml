@@ -15,6 +15,10 @@
         <activity android:name=".Main" >
 
         </activity>
+        <activity android:name=".Pop"
+            android:theme="@style/pop_bar_Theme">
+
+        </activity>
 
 
 

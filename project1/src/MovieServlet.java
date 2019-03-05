@@ -282,8 +282,9 @@ public class MovieServlet extends HttpServlet{
         String star = request.getParameter("stars");
         if(title!="" &&!title.equals("null")) {
         	 
+        	//or edth(title, ?, ?))
         	
-        	query+=" and ((MATCH (title) AGAINST (? IN BOOLEAN MODE)) or title like ? or edth(title, ?, ?))";
+        	query+=" and ((MATCH (title) AGAINST (? IN BOOLEAN MODE)) or title like ? or edth(title, ?, ?)) ";
         }
         
         if(year!=""&&!year.equals("null")) {

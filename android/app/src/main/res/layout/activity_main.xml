@@ -6,35 +6,164 @@
     android:layout_height="match_parent"
     tools:context=".Main">
 
-    <include layout="@layout/toolbar"></include>
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="86dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="116dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:onClick="clickSerch"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:ignore="MissingConstraints">
 
-    <EditText
-        android:id="@+id/search_bar"
-        android:layout_width="262dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="116dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:hint="@string/searchM"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        <Button
+            android:id="@+id/search_btn2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+
+            android:background="@drawable/ad_search"
+
+            />
+
+        <EditText
+            android:id="@+id/search_bar1"
+            android:layout_width="220dp"
+            android:layout_height="43dp"
+            android:layout_gravity=""
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
+            android:ems="10"
+            android:hint="@string/searchM"
+            android:inputType="textPersonName" />
+
+        <Button
+
+            android:id="@+id/search_btn1"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+
+            android:background="@drawable/buttons"
+            android:onClick="clickSerch"
+            android:text="search" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="fill_parent"
+
+        android:layout_height="1dip"
+        android:background="@color/yellowStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        tools:ignore="MissingConstraints">
+        <View
+            android:id="@+id/view7"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@color/yellowStyle"
+
+
+            />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="1dip"
+
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="211dp"
+
+            android:background="@color/yellowStyle"
+
+
+            />
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="title"
+            android:textSize="25dp"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"/>
+        <Spinner
+            android:id="@+id/browse_by_title"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/yellowStyle"
+            android:layout_marginLeft="0dp"
+            />
+        <View
+            android:id="@+id/view8"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@color/yellowStyle"
+
+
+            />
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="genre"
+            android:textSize="25dp"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"/>
+        <Spinner
+            android:id="@+id/browse_by_genre"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/yellowStyle"
+            android:layout_marginLeft="0dp"
+            />
+        <View
+            android:id="@+id/view5"
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@color/yellowStyle"
+
+
+            />
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+
+        android:layout_height="1dip"
+        android:background="@color/yellowStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        tools:ignore="MissingConstraints" />
+
 
 </android.support.constraint.ConstraintLayout>

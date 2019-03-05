@@ -22,7 +22,12 @@
 
         <item name="titleTextStyle">@style/TitleTextStyle</item>
     </style>
-
+    <style name="pop_bar_Theme">
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
     <style name="TitleTextStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/yellowStyle</item>
         <item name="android:textSize">30dp</item>
