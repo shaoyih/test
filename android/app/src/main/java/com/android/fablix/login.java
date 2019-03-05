@@ -74,7 +74,7 @@ public class login extends AppCompatActivity {
         Log.wtf("into connection","damn!!!");
 
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
-        final StringRequest loginRequest = new StringRequest(Request.Method.POST, "https://10.0.2.2:8443/Project1/api/login",
+        final StringRequest loginRequest = new StringRequest(Request.Method.POST, "https://ec2-13-59-241-2.us-east-2.compute.amazonaws.com:8443/Project1/api/login",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

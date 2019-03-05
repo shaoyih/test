@@ -181,7 +181,7 @@ public class movies extends Activity {
         String order="";
         String limit="10";
         String offset=Integer.toString(page);
-        return "https://10.0.2.2:8443/Project1/project1/movies?"+
+        return "https://ec2-13-59-241-2.us-east-2.compute.amazonaws.com:8443/Project1/project1/movies?"+
                 "by=search&title=" + title+
                 "&year="+ year+
                 "&director="+ director+

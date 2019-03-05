@@ -95,7 +95,7 @@ public class singleMovie extends AppCompatActivity {
 
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
 
-        String url="https://10.0.2.2:8443/Project1/project1/single_movie?id="+id;
+        String url="https://ec2-13-59-241-2.us-east-2.compute.amazonaws.com:8443/Project1/project1/single_movie?id="+id;
         Log.wtf("connection1", url);
 
 
