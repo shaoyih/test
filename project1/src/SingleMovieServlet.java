@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +26,7 @@ public class SingleMovieServlet extends HttpServlet{
 		
 	
 	
-	@Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+	
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,7 +38,19 @@ public class SingleMovieServlet extends HttpServlet{
 
         try {
             // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                System.out.println("ds is null");
+            }
+            
+
+            Connection dbcon = ds.getConnection();
 
             // Declare our statement
             Statement statement = dbcon.createStatement();

@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +26,7 @@ public class MovieServlet extends HttpServlet{
 		
 	
 	
-	@Resource(name = "jdbc/moviedb")
+	
     private DataSource dataSource;
 	
 	
@@ -41,11 +43,29 @@ public class MovieServlet extends HttpServlet{
         boolean browse=false;
         boolean search=false;
         try {
+        	//without connection pooling part
             // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
+            //Connection dbcon = dataSource.getConnection();
 
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
+            
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+                out.println("envCtx is NULL");
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                out.println("ds is null.");
+                System.out.println("ds is null");
+            }
+            
+
+            Connection dbcon = ds.getConnection();
+            
+         // Declare our statement
+            
             
             if (mode.equals("browse")) {
             	result+=updateByBrowse(request);
@@ -110,7 +130,7 @@ public class MovieServlet extends HttpServlet{
             response.setStatus(200);
 
             rs.close();
-            statement.close();
+           
             dbcon.close();
         } catch (Exception e) {
         	
@@ -159,8 +179,8 @@ public class MovieServlet extends HttpServlet{
 	    	        	//title like ? or edth(title, ?, ?))
 	    	        	String likeOperator="%"+title+"%";
 	    	        	result.setString(index++, likeOperator);
-	    	        	result.setString(index++, title);
-	    	        	result.setInt(index++, (int)Math.round(0.4*title.length()) );
+	    	        	//result.setString(index++, title);
+	    	        	//result.setInt(index++, (int)Math.round(0.4*title.length()) );
 	    	        }
 	    	        
 	    	        if(year!=""&&!year.equals("null")) {
@@ -284,7 +304,7 @@ public class MovieServlet extends HttpServlet{
         	 
         	//or edth(title, ?, ?))
         	
-        	query+=" and ((MATCH (title) AGAINST (? IN BOOLEAN MODE)) or title like ? or edth(title, ?, ?)) ";
+        	query+=" and ((MATCH (title) AGAINST (? IN BOOLEAN MODE)) or title like ? ) ";
         }
         
         if(year!=""&&!year.equals("null")) {

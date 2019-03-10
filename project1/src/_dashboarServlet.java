@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,8 +29,7 @@ import java.util.*;
 @WebServlet(name="dashboarServlet",urlPatterns="/api/dashboard")
 public class _dashboarServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	@Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+	
     
 
 
@@ -61,8 +62,22 @@ public class _dashboarServlet extends HttpServlet {
 	private void insertMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
 		PrintWriter out=response.getWriter();
 		try {
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+                out.println("envCtx is NULL");
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                out.println("ds is null.");
+                System.out.println("ds is null");
+            }
+            
+
+            Connection conn = ds.getConnection();
 			
-			Connection conn=dataSource.getConnection();
 			String query="{call add_movie(?,?,?,?,?,?,?)}";
 			CallableStatement cst=conn.prepareCall(query);
 			String t=request.getParameter("title");
@@ -119,8 +134,23 @@ public class _dashboarServlet extends HttpServlet {
 	private void insertStar(HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException {
 		PrintWriter out=response.getWriter();
 		try {
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+                out.println("envCtx is NULL");
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                out.println("ds is null.");
+                System.out.println("ds is null");
+            }
+            
+
+            Connection conn = ds.getConnection();
 			
-			Connection conn=dataSource.getConnection();
+			
 			String query="{call add_star(?,?,?)}";
 			CallableStatement cst=conn.prepareCall(query);
 			
@@ -164,7 +194,21 @@ public class _dashboarServlet extends HttpServlet {
 		
 		
 		try {
-			Connection conn=dataSource.getConnection();
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+                out.println("envCtx is NULL");
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                out.println("ds is null.");
+                System.out.println("ds is null");
+            }
+            
+
+            Connection conn = ds.getConnection();
 			PreparedStatement statement=conn.prepareStatement(query);
 			statement.setString(1,name);
 			ResultSet rs=statement.executeQuery();
@@ -202,7 +246,21 @@ public class _dashboarServlet extends HttpServlet {
 		String query="SELECT TABLE_NAME as name FROM information_schema.TABLES WHERE `TABLE_SCHEMA`='moviedb';";
 		
 		try {
-			Connection conn=dataSource.getConnection();
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+                out.println("envCtx is NULL");
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                out.println("ds is null.");
+                System.out.println("ds is null");
+            }
+            
+
+            Connection conn = ds.getConnection();
 			Statement statement=conn.createStatement();
 			ResultSet rs=statement.executeQuery(query);
 			JsonArray jsonArray = new JsonArray();

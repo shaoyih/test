@@ -2,6 +2,9 @@ import com.google.gson.JsonObject;
 
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +29,8 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+    
+  
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	String userAgent = request.getHeader("User-Agent");
     	if (userAgent != null && !userAgent.contains("Android")) {
@@ -50,33 +53,53 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         System.out.println(username);
       
-        if (this.loginSucceed(username,password)) {
-            
-            String sessionId = ((HttpServletRequest) request).getSession().getId();
-            Long lastAccessTime = ((HttpServletRequest) request).getSession().getLastAccessedTime();
-            request.getSession().setAttribute("user", new User(username));
+        try {
+			if (this.loginSucceed(username,password)) {
+			    
+			    String sessionId = ((HttpServletRequest) request).getSession().getId();
+			    Long lastAccessTime = ((HttpServletRequest) request).getSession().getLastAccessedTime();
+			    request.getSession().setAttribute("user", new User(username));
 
-            JsonObject responseJsonObject = new JsonObject();
-            responseJsonObject.addProperty("status", "success");
-            responseJsonObject.addProperty("message", "success");
+			    JsonObject responseJsonObject = new JsonObject();
+			    responseJsonObject.addProperty("status", "success");
+			    responseJsonObject.addProperty("message", "success");
 
-            response.getWriter().write(responseJsonObject.toString());
-        } else {
-            // Login fails
-            JsonObject responseJsonObject = new JsonObject();
-            responseJsonObject.addProperty("status", "fail");
-            
-            responseJsonObject.addProperty("message", "USERNAME or PASSWORD is not correct!");
-            
-            response.getWriter().write(responseJsonObject.toString());
-        }
+			    response.getWriter().write(responseJsonObject.toString());
+			} else {
+			    // Login fails
+			    JsonObject responseJsonObject = new JsonObject();
+			    responseJsonObject.addProperty("status", "fail");
+			    
+			    responseJsonObject.addProperty("message", "USERNAME or PASSWORD is not correct!");
+			    
+			    response.getWriter().write(responseJsonObject.toString());
+			}
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
-    private boolean loginSucceed(String username,String password) {
+    private boolean loginSucceed(String username,String password) throws NamingException {
     	boolean success = false;
-    	 Connection dbcon;
+    	 
 		try {
-			dbcon = dataSource.getConnection();
-			Statement statement = dbcon.createStatement();
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+                
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                
+                System.out.println("ds is null");
+            }
+            
+
+            Connection dbcon = ds.getConnection();
+            
+			
 
 			String query = ("select * from customers where email= ?;");
 			

@@ -2,6 +2,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,11 +41,26 @@ public class checkoutServlet extends HttpServlet {
         System.out.println("here");
         Connection dbcon = null;
         try {
-            dbcon = dataSource.getConnection();
+        	Context initCtx = new InitialContext();
+
+            Context env = (Context) initCtx.lookup("java:comp/env");
+            if (env == null) {
+            System.out.println("ds is null");
+            }
+            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
+            if (ds == null) {
+                System.out.println("ds is null");
+            }
+            
+
+             dbcon = ds.getConnection();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        } catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         if (this.loginSucceed(dbcon, firstName,lastName,cardNum,date)) {
             
             JsonObject total=null;
@@ -78,7 +96,7 @@ public class checkoutServlet extends HttpServlet {
         String todayDate=dateFormat.format(date);
         
             
-        Statement statement = dbcon.createStatement();
+      
         String query = ("select id from customers \n" + 
                     "where (ccID LIKE ? ) and firstName= ? and lastName= ? ;");
             
@@ -109,7 +127,7 @@ public class checkoutServlet extends HttpServlet {
             
             
             
-            Statement statement1 = dbcon.createStatement();
+    
             String query1 = ("select id from movies\n" + 
                         "where title=?;");
             PreparedStatement prepare1 = dbcon.prepareStatement(query1);
