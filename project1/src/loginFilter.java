@@ -65,11 +65,17 @@ public class loginFilter implements Filter{
 			}
 			else {
 				String url = ((HttpServletRequest)request).getRequestURL().toString();
-				
-				
+				System.out.println("1");
+				System.out.println(url);
 				
 				if(httpRequest.getSession().getAttribute("user")==null) {
-					httpResponse.sendRedirect("login.html");
+					
+					if(url.endsWith("Project1/")) {
+					httpResponse.sendRedirect("Project1/login.html");
+					}
+					else {
+						httpResponse.sendRedirect("login.html");
+					}
 				}
 					
 				else {

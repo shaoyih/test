@@ -19,6 +19,7 @@ function handleLoginResult(resultDataString) {
 
 function submitLoginForm(formSubmitEvent) {
     console.log("submit login form");
+    
 
     formSubmitEvent.preventDefault();
 
@@ -31,6 +32,7 @@ function submitLoginForm(formSubmitEvent) {
     );
 }
 
+console.log(window.location.href);
 // Bind the submit action of the form to a handler function
 $("#login_form").submit((event) => submitLoginForm(event));
 
