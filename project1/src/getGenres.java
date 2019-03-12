@@ -37,19 +37,9 @@ public class getGenres extends HttpServlet{
 
         try {
             // Get a connection from dataSource
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                System.out.println("ds is null");
-            }
-            
-
-            Connection dbcon = ds.getConnection();
+        	db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
+        	Connection dbcon = ds.getConnection();
 
             // Declare our statement
             Statement statement = dbcon.createStatement();

@@ -27,7 +27,7 @@ public class MovieServlet extends HttpServlet{
 	
 	
 	
-    private DataSource dataSource;
+   
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,22 +46,9 @@ public class MovieServlet extends HttpServlet{
         	//without connection pooling part
             // Get a connection from dataSource
             //Connection dbcon = dataSource.getConnection();
-
-            
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-                out.println("envCtx is NULL");
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                out.println("ds is null.");
-                System.out.println("ds is null");
-            }
-            
-
+        	
+        	db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
             Connection dbcon = ds.getConnection();
             
          // Declare our statement

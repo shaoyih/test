@@ -62,20 +62,10 @@ public class _dashboarServlet extends HttpServlet {
 	private void insertMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
 		PrintWriter out=response.getWriter();
 		try {
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-                out.println("envCtx is NULL");
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                out.println("ds is null.");
-                System.out.println("ds is null");
-            }
+        	
             
-
+			db_source dbs=new db_source();
+        	DataSource ds=dbs.write_to();
             Connection conn = ds.getConnection();
 			
 			String query="{call add_movie(?,?,?,?,?,?,?)}";
@@ -134,21 +124,11 @@ public class _dashboarServlet extends HttpServlet {
 	private void insertStar(HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException {
 		PrintWriter out=response.getWriter();
 		try {
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-                out.println("envCtx is NULL");
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                out.println("ds is null.");
-                System.out.println("ds is null");
-            }
+			
             
-
-            Connection conn = ds.getConnection();
+			db_source dbs=new db_source();
+        	DataSource ds=dbs.write_to();
+        	Connection conn = ds.getConnection();
 			
 			
 			String query="{call add_star(?,?,?)}";
@@ -194,21 +174,10 @@ public class _dashboarServlet extends HttpServlet {
 		
 		
 		try {
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-                out.println("envCtx is NULL");
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                out.println("ds is null.");
-                System.out.println("ds is null");
-            }
-            
-
-            Connection conn = ds.getConnection();
+			db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
+        	Connection conn = ds.getConnection();
+        	
 			PreparedStatement statement=conn.prepareStatement(query);
 			statement.setString(1,name);
 			ResultSet rs=statement.executeQuery();
@@ -246,21 +215,10 @@ public class _dashboarServlet extends HttpServlet {
 		String query="SELECT TABLE_NAME as name FROM information_schema.TABLES WHERE `TABLE_SCHEMA`='moviedb';";
 		
 		try {
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-                out.println("envCtx is NULL");
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                out.println("ds is null.");
-                System.out.println("ds is null");
-            }
-            
-
+			db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
             Connection conn = ds.getConnection();
+            
 			Statement statement=conn.createStatement();
 			ResultSet rs=statement.executeQuery(query);
 			JsonArray jsonArray = new JsonArray();

@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,20 +84,8 @@ public class LoginServlet extends HttpServlet {
     	boolean success = false;
     	 
 		try {
-        	Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-                
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                
-                System.out.println("ds is null");
-            }
-            
-
+			db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
             Connection dbcon = ds.getConnection();
             
 			

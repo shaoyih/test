@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -70,20 +71,19 @@ public class employeeLoginServlet extends HttpServlet {
     private boolean loginSucceed(String username,String password) throws NamingException {
     	 Connection dbcon;
 		try {
+			Random random = new Random();
+        	int num = random.nextInt(100);
+            
         	Context initCtx = new InitialContext();
-
+        	
+        	//checking for env
             Context env = (Context) initCtx.lookup("java:comp/env");
             if (env == null) {
-                
             System.out.println("ds is null");
             }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                
-                System.out.println("ds is null");
-            }
             
-
+            db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
             dbcon = ds.getConnection();
 			
 			Statement statement = dbcon.createStatement();

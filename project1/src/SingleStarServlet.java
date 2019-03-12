@@ -40,20 +40,9 @@ public class SingleStarServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			// Get a connection from dataSource
-			Context initCtx = new InitialContext();
-
-            Context env = (Context) initCtx.lookup("java:comp/env");
-            if (env == null) {
-            System.out.println("ds is null");
-            }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                System.out.println("ds is null");
-            }
-            
-
-            Connection dbcon = ds.getConnection();
+			db_source dbs=new db_source();
+        	DataSource ds=dbs.read_from();
+        	Connection dbcon = ds.getConnection();
 
 			// Construct a query with parameter represented by "?"
 			String query = "SELECT * from stars as s, stars_in_movies as sim, movies as m where m.id = sim.movieId and sim.starId = s.id and s.id = ?";

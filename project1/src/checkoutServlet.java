@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,8 +32,7 @@ import java.sql.Statement;
 @WebServlet(name = "checkoutServlet", urlPatterns = "/project1/checkout")
 public class checkoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -41,19 +41,20 @@ public class checkoutServlet extends HttpServlet {
         System.out.println("here");
         Connection dbcon = null;
         try {
+        	
+            
         	Context initCtx = new InitialContext();
-
+        	
+        	//checking for env
             Context env = (Context) initCtx.lookup("java:comp/env");
             if (env == null) {
             System.out.println("ds is null");
             }
-            DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
-            if (ds == null) {
-                System.out.println("ds is null");
-            }
             
-
-             dbcon = ds.getConnection();
+            db_source dbs=new db_source();
+        	DataSource ds=dbs.write_to();
+        	dbcon = ds.getConnection();
+        	
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
