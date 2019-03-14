@@ -43,7 +43,7 @@ public class employeeLoginServlet extends HttpServlet {
         System.out.println(username);
       
         try {
-			if (this.loginSucceed(username,password)) {
+			if (this.loginSucceed(username,password,request)) {
 			    
 			    String sessionId = ((HttpServletRequest) request).getSession().getId();
 			    Long lastAccessTime = ((HttpServletRequest) request).getSession().getLastAccessedTime();
@@ -68,7 +68,7 @@ public class employeeLoginServlet extends HttpServlet {
 			e.printStackTrace();
 		}
     }
-    private boolean loginSucceed(String username,String password) throws NamingException {
+    private boolean loginSucceed(String username,String password,HttpServletRequest request) throws NamingException {
     	 Connection dbcon;
 		try {
 			Random random = new Random();
@@ -82,8 +82,8 @@ public class employeeLoginServlet extends HttpServlet {
             System.out.println("ds is null");
             }
             
-            db_source dbs=new db_source();
-        	DataSource ds=dbs.read_from();
+            db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
             dbcon = ds.getConnection();
 			
 			Statement statement = dbcon.createStatement();

@@ -21,46 +21,49 @@ import java.util.Random;
 public class db_source {
 	Random random;
 	Context env;
+	String url;
 	
-	public db_source() throws NamingException {
+	public db_source(String url1) throws NamingException {
 		random = new Random();
 		Context initCtx = new InitialContext();
-		
+		url=url1;
 		//checking for env
 	    env = (Context) initCtx.lookup("java:comp/env");
 	}
 	
 	
 	
-	public DataSource read_from() throws NamingException {
+	public DataSource multiple() throws NamingException {
 		int num = random.nextInt(100);
 		
-	    if (env == null) {
-	    System.out.println("env is null");
-	    }
+	   
 	    
-	    DataSource ds;
-	    //decide which ds to use
-	    if(num<50) {
-	    	System.out.println("ds is master");
-	    	 ds = (DataSource) env.lookup("jdbc/master_inst");
-	    }
-	    else {
-	    	System.out.println("ds is slave");
-	    	 ds = (DataSource) env.lookup("jdbc/slave_inst");
-	    }
+	   
+	    System.out.println("ds is loadbalancer one");
+	    DataSource ds = (DataSource) env.lookup("jdbc/master_inst");
+	    
+
 	    return ds;
 	}
 	
-	public DataSource write_to() throws NamingException {
+	public DataSource single() throws NamingException {
 
 		    //decide which ds to use
 		    
-		  System.out.println("ds is master");
-		  DataSource ds = (DataSource) env.lookup("jdbc/master_inst");
+		  System.out.println("ds is single one");
+		  DataSource ds = (DataSource) env.lookup("jdbc/moviedb");
 		  
 		  return ds;
 		
+	}
+	
+	public DataSource getSource() throws NamingException {
+		if(url.contains("172.31")) {
+			return multiple();
+		}
+		else {
+			return single();
+		}
 	}
 
 }

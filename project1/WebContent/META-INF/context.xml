@@ -24,33 +24,26 @@
               auth="Container"
               driverClassName="com.mysql.jdbc.Driver"
               type="javax.sql.DataSource"
-              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              maxTotal="1000" maxIdle="30" maxWaitMillis="10000"
               username="mytestuser"
               password="mypassword"
-              url="jdbc:mysql://172.31.45.222:3306/moviedb?
+              url="jdbc:mysql:replication://172.31.45.222:3306,172.31.39.120:3306/moviedb?
               useSSL=false&amp;
-              autoReconnect=true&amp;
-              allowMultiQueries=true&amp;
-              useUnicode=true&amp;
-              useJDBCCompliantTimezoneShift=true&amp;
-              useLegacyDatetimeCode=false&amp;
+              autoReconnect=true
+              &amp;
+              allowMultiQueries=true
+              &amp;
+              useUnicode=true
+              &amp;
+              useJDBCCompliantTimezoneShift=true
+              &amp;
+              useLegacyDatetimeCode=false
+              &amp;
               serverTimezone=UTC
-              &amp;cachePrepStmts=true"/>
+              &amp;
+              cachePrepStmts=true
+              &amp;
+              roundRobinLoadBalance=true"/>
               
-     <Resource name="jdbc/slave_inst"
-              auth="Container"
-              driverClassName="com.mysql.jdbc.Driver"
-              type="javax.sql.DataSource"
-              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
-              username="mytestuser"
-              password="mypassword"
-              url="jdbc:mysql://172.31.39.120:3306/moviedb?
-              useSSL=false&amp;
-              autoReconnect=true&amp;
-              allowMultiQueries=true&amp;
-              useUnicode=true&amp;
-              useJDBCCompliantTimezoneShift=true&amp;
-              useLegacyDatetimeCode=false&amp;
-              serverTimezone=UTC
-              &amp;cachePrepStmts=true"/>
+
 </Context>

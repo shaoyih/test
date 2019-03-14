@@ -8,10 +8,11 @@ function handleLoginResult(resultDataString) {
 
  
     if (resultDataJson["status"] === "success") {
+    	 console.log("u made it");
         window.location.replace("mainPage.html");
+       
     } else {
-        console.log("show error message");
-        console.log(resultDataJson["message"]);
+       
         $("#login_error_message").text(resultDataJson["message"]);
     }
 }

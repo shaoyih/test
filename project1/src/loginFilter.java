@@ -28,7 +28,9 @@ public class loginFilter implements Filter{
 			
 			HttpServletRequest httpRequest=(HttpServletRequest) request;
 			HttpServletResponse httpResponse=(HttpServletResponse) response;
+			System.out.println("---------------filter------------");
 			System.out.println(httpRequest.getRequestURI());
+			System.out.println("---------------filter------------");
 			if(this.isUrlAllowedWithoutLogin(httpRequest.getRequestURI())) {
 				chain.doFilter(request, response);
 				return;
@@ -52,6 +54,7 @@ public class loginFilter implements Filter{
 	    	}
 			if(httpRequest.getSession().getAttribute("user")!=null && httpRequest.getSession().getAttribute("employee")!=null){
 				chain.doFilter(request, response);
+				return;
 			}
 			
 			else if(httpRequest.getSession().getAttribute("employee")!=null && isDashBoard(httpRequest.getRequestURI())) {
@@ -60,10 +63,13 @@ public class loginFilter implements Filter{
 			}
 			
 			else if(httpRequest.getSession().getAttribute("user")!=null && !isDashBoard(httpRequest.getRequestURI())) {
+
+				
 				chain.doFilter(request, response);
 				return;
 			}
 			else {
+				System.out.println(httpRequest.getSession().getAttribute("user"));
 				String url = ((HttpServletRequest)request).getRequestURL().toString();
 				System.out.println("1");
 				System.out.println(url);

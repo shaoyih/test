@@ -64,8 +64,8 @@ public class _dashboarServlet extends HttpServlet {
 		try {
         	
             
-			db_source dbs=new db_source();
-        	DataSource ds=dbs.write_to();
+			db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
             Connection conn = ds.getConnection();
 			
 			String query="{call add_movie(?,?,?,?,?,?,?)}";
@@ -126,8 +126,8 @@ public class _dashboarServlet extends HttpServlet {
 		try {
 			
             
-			db_source dbs=new db_source();
-        	DataSource ds=dbs.write_to();
+			db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
         	Connection conn = ds.getConnection();
 			
 			
@@ -174,8 +174,8 @@ public class _dashboarServlet extends HttpServlet {
 		
 		
 		try {
-			db_source dbs=new db_source();
-        	DataSource ds=dbs.read_from();
+			db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
         	Connection conn = ds.getConnection();
         	
 			PreparedStatement statement=conn.prepareStatement(query);
@@ -215,8 +215,8 @@ public class _dashboarServlet extends HttpServlet {
 		String query="SELECT TABLE_NAME as name FROM information_schema.TABLES WHERE `TABLE_SCHEMA`='moviedb';";
 		
 		try {
-			db_source dbs=new db_source();
-        	DataSource ds=dbs.read_from();
+			db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
             Connection conn = ds.getConnection();
             
 			Statement statement=conn.createStatement();

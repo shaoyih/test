@@ -37,8 +37,8 @@ public class getGenres extends HttpServlet{
 
         try {
             // Get a connection from dataSource
-        	db_source dbs=new db_source();
-        	DataSource ds=dbs.read_from();
+        	db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
         	Connection dbcon = ds.getConnection();
 
             // Declare our statement

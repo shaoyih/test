@@ -31,9 +31,11 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
+    
   
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     	String userAgent = request.getHeader("User-Agent");
+    	/*
     	if (userAgent != null && !userAgent.contains("Android")) {
 	    	String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 	       
@@ -48,14 +50,16 @@ public class LoginServlet extends HttpServlet {
 	            response.getWriter().write(responseJsonObject.toString());
 	            return;
 	        }
-    	}
+    	}*/
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         System.out.println(username);
       
         try {
-			if (this.loginSucceed(username,password)) {
+        	
+        	
+			if (this.loginSucceed(username,password,request)) {
 			    
 			    String sessionId = ((HttpServletRequest) request).getSession().getId();
 			    Long lastAccessTime = ((HttpServletRequest) request).getSession().getLastAccessedTime();
@@ -66,6 +70,9 @@ public class LoginServlet extends HttpServlet {
 			    responseJsonObject.addProperty("message", "success");
 
 			    response.getWriter().write(responseJsonObject.toString());
+			
+				System.out.println("loginsucc:" +request.getSession().getAttribute("user"));
+			    System.out.println("success login ");
 			} else {
 			    // Login fails
 			    JsonObject responseJsonObject = new JsonObject();
@@ -74,22 +81,22 @@ public class LoginServlet extends HttpServlet {
 			    responseJsonObject.addProperty("message", "USERNAME or PASSWORD is not correct!");
 			    
 			    response.getWriter().write(responseJsonObject.toString());
+			    System.out.println("fail login ");
 			}
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     }
-    private boolean loginSucceed(String username,String password) throws NamingException {
+    private boolean loginSucceed(String username,String password,HttpServletRequest request) throws NamingException {
     	boolean success = false;
-    	 
+    	
 		try {
-			db_source dbs=new db_source();
-        	DataSource ds=dbs.read_from();
-            Connection dbcon = ds.getConnection();
-            
+			db_source dbs=new db_source(request.getRequestURL().toString());
 			
-
+        	DataSource ds=dbs.getSource();
+            Connection dbcon = ds.getConnection();
 			String query = ("select * from customers where email= ?;");
 			
 			PreparedStatement rs = dbcon.prepareStatement(query);
@@ -107,24 +114,7 @@ public class LoginServlet extends HttpServlet {
 
 		
 
-			String query1 = ("select * from customers where email= ?");
-			
-			PreparedStatement ps = dbcon.prepareStatement(query1);
-			ps.setString(1,username);
-			
-			ResultSet rs1=ps.executeQuery();
-			
-			boolean checkResult= false;
-			
-			if (rs1.next()) {
-			    //get password
-				String encryptedPassword = rs1.getString("password");
-				
-				// use the encryptor we use before to excute
-				checkResult = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
-				
-				return checkResult;
-			}
+
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

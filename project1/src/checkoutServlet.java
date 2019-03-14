@@ -51,8 +51,8 @@ public class checkoutServlet extends HttpServlet {
             System.out.println("ds is null");
             }
             
-            db_source dbs=new db_source();
-        	DataSource ds=dbs.write_to();
+            db_source dbs=new db_source(request.getRequestURL().toString());
+        	DataSource ds=dbs.getSource();
         	dbcon = ds.getConnection();
         	
         } catch (SQLException e) {
