@@ -68,6 +68,7 @@ public class _dashboarServlet extends HttpServlet {
         	DataSource ds=dbs.getSource();
             Connection conn = ds.getConnection();
             conn.setReadOnly(false);
+            conn.setAutoCommit(false);
 			
 			String query="{call add_movie(?,?,?,?,?,?,?)}";
 			CallableStatement cst=conn.prepareCall(query);
@@ -90,12 +91,15 @@ public class _dashboarServlet extends HttpServlet {
 			cst.registerOutParameter(6, Types.VARCHAR);
 			cst.registerOutParameter(7, Types.VARCHAR);
 			boolean result=cst.execute();
+			conn.commit();
 			//dealing the feedback
 			String output=cst.getString(6);
 			String status=cst.getString(7);
 			JsonObject jsonObject = new JsonObject();
 			
+			
 			conn.setReadOnly(true);
+			
 			
 			if(status.equals("success")) {
 				jsonObject.addProperty("status", status);
@@ -132,6 +136,7 @@ public class _dashboarServlet extends HttpServlet {
         	DataSource ds=dbs.getSource();
         	Connection conn = ds.getConnection();
         	conn.setReadOnly(false);
+        	conn.setAutoCommit(false);
 			
 			
 			String query="{call add_star(?,?,?)}";
@@ -153,6 +158,7 @@ public class _dashboarServlet extends HttpServlet {
 			
 			
 			boolean result=cst.execute();
+			conn.commit();
 			String output=cst.getString(3);
 			JsonObject jsonObject = new JsonObject();
 			
