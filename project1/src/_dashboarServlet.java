@@ -67,6 +67,7 @@ public class _dashboarServlet extends HttpServlet {
 			db_source dbs=new db_source(request.getRequestURL().toString());
         	DataSource ds=dbs.getSource();
             Connection conn = ds.getConnection();
+            conn.setReadOnly(false);
 			
 			String query="{call add_movie(?,?,?,?,?,?,?)}";
 			CallableStatement cst=conn.prepareCall(query);
@@ -94,6 +95,7 @@ public class _dashboarServlet extends HttpServlet {
 			String status=cst.getString(7);
 			JsonObject jsonObject = new JsonObject();
 			
+			conn.setReadOnly(true);
 			
 			if(status.equals("success")) {
 				jsonObject.addProperty("status", status);
@@ -129,6 +131,7 @@ public class _dashboarServlet extends HttpServlet {
 			db_source dbs=new db_source(request.getRequestURL().toString());
         	DataSource ds=dbs.getSource();
         	Connection conn = ds.getConnection();
+        	conn.setReadOnly(false);
 			
 			
 			String query="{call add_star(?,?,?)}";
@@ -152,6 +155,8 @@ public class _dashboarServlet extends HttpServlet {
 			boolean result=cst.execute();
 			String output=cst.getString(3);
 			JsonObject jsonObject = new JsonObject();
+			
+			conn.setReadOnly(true);
 			jsonObject.addProperty("message", "'"+SN+"' is successfully added!");
 			out.write(jsonObject.toString());
 			System.out.println(output);

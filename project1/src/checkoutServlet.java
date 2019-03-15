@@ -142,6 +142,7 @@ public class checkoutServlet extends HttpServlet {
             
             int value=previousItems.get(key);
             JsonArray innerArray = new JsonArray();
+            dbcon.setReadOnly(false);
             for (int i=0;i<value;i++) {
                 long saleId = -1L;
 
@@ -164,6 +165,7 @@ public class checkoutServlet extends HttpServlet {
 
                 innerArray.add(saleId);
             }
+            dbcon.setReadOnly(true);
             totalJson.add(key, innerArray);
             
         }

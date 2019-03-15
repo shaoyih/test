@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -31,12 +34,16 @@ public class MovieServlet extends HttpServlet{
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+        
+		long start_TS = System.nanoTime();
         response.setContentType("application/json"); // Response mime type
         String mode = request.getParameter("by");
         String result="";
         int total_page=0;
         //check mode and decide which function to call
+        
+
         
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -74,12 +81,12 @@ public class MovieServlet extends HttpServlet{
 
             // Perform the query
             
-            
+            long start_TJ = System.nanoTime();
             PreparedStatement prepare=dbcon.prepareStatement(result);
             updateParameter(request,prepare,browse,search,true);
            
             ResultSet rs = prepare.executeQuery();
-
+            long end_TJ =System.nanoTime();
             JsonArray jsonArray = new JsonArray();
             JsonObject page = new JsonObject();
             page.addProperty("totalPage", total_page);
@@ -117,8 +124,48 @@ public class MovieServlet extends HttpServlet{
             response.setStatus(200);
 
             rs.close();
-           
             dbcon.close();
+          
+            
+            
+            
+      
+            //time collection
+            long end_TS = System.nanoTime();
+            String TJ=String.valueOf(end_TJ-start_TJ);
+            String TS=String.valueOf(end_TS-start_TS);
+            String counter=TJ+"	"+TS;
+            //just leave log file at webapp/Project1 folder
+            
+          
+            
+            String contextPath = getServletContext().getRealPath("/");
+            
+            String log_path=contextPath+"/log.txt";
+    		File dir = new File(log_path);
+    		
+    		
+     		
+    		if(dir.exists()) {
+    			//append to it
+    			try(PrintWriter output = new PrintWriter(new FileWriter(log_path,true))) 
+    			{
+    			    output.printf("%s\r\n", counter);
+    			} 
+    			catch (Exception e) {
+    				System.out.println("Do nothing");
+    			}
+    			
+    		}	
+    		else {
+    			//create one
+    			File file = new File(contextPath, "log.txt"); // put the file inside the folder
+    			file.createNewFile();
+    			
+    			
+    			
+    		}
+
         } catch (Exception e) {
         	
 			// write error message JSON object to output
@@ -131,6 +178,10 @@ public class MovieServlet extends HttpServlet{
 
         }
         out.close();
+        
+        
+ 
+	
 
     }
 	public void updateParameter(HttpServletRequest request,PreparedStatement result,boolean browse,boolean search,boolean checkLimit) {

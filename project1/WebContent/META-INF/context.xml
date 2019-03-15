@@ -43,7 +43,9 @@
               &amp;
               cachePrepStmts=true
               &amp;
-              roundRobinLoadBalance=true"/>
+              roundRobinLoadBalance=true
+              &amp;
+              setReadOnly=true"/>
               
 
 </Context>
