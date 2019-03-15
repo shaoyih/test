@@ -16,15 +16,14 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Random;
 
 public class db_source {
-	Random random;
+
 	Context env;
 	String url;
 	
 	public db_source(String url1) throws NamingException {
-		random = new Random();
+	
 		Context initCtx = new InitialContext();
 		url=url1;
 		//checking for env
@@ -34,9 +33,7 @@ public class db_source {
 	
 	
 	public DataSource multiple() throws NamingException {
-		int num = random.nextInt(100);
 		
-	   
 	    
 	   
 	    System.out.println("ds is loadbalancer one");
