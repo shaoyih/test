@@ -76,7 +76,7 @@ public class loginFilter implements Filter{
 				
 				if(httpRequest.getSession().getAttribute("user")==null) {
 					
-					if(url.endsWith("Project1/")) {
+					if(url.contains("172.")) {
 					httpResponse.sendRedirect("Project1/login.html");
 					}
 					else {

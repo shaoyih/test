@@ -1,0 +1,126 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    background-color: linen;
+}
+
+td {
+    border-top-style: solid;
+}
+</style>
+</head>
+<body>
+
+<table style="width:100%">
+  <tr style="font-weight:bold; background-color: orange">
+    <td width="300px">Single-instance version cases</td>
+    <td>Graph Results Screenshot</td>
+    <td>Average Query Time(ms)</td>
+    <td>Average Search Servlet Time(ms)</td>
+    <td>Average JDBC Time(ms)</td>
+    <td>Analysis</td>
+  </tr>
+  <tr>
+    <td>Case 1: HTTP/1 thread</td>
+    <td><img src="pics/1.3.png" alt="Graph Results Screenshot Case 1" style="width:304px;height:228px;"></td>
+    <td>112</td>
+    <td>26.96</td>
+    <td>12.7</td>
+    <td> This is the first and basic stats that will be used to compare in the future.</td>
+  </tr>
+  <tr>
+    <td>Case 2: HTTP/10 threads</td>
+    <td><img src="pics//1.4.png" alt="Graph Results Screenshot Case 2" style="width:304px;height:228px;"></td>
+    <td>282</td>
+    <td>189.45</td>
+    <td>92.74</td>
+    <td>After adding up the threads, the time waiting on the server side will be much longer than before, 
+    since all of requests sent out are waiting for the response from server side. However, for single thread, 
+    requests are only sent one by one, so 10 thread will be slower than 1 thread.</td>
+  </tr>
+  <tr>
+    <td>Case 3: HTTPS/10 threads</td>
+    <td><img src="pics/1.5.png" alt="Graph Results Screenshot Case 3" style="width:304px;height:228px;"></td>
+    <td>285</td>
+    <td>188.62</td>
+    <td>98.01</td>
+    <td>From the stats that, the query time for HTTPS is bit slower than HTTP, but for its underneath struture has no any difference
+    so the time difference between HTTP and HTTPS is not too big. </td>
+  </tr>
+  <tr>
+    <td>Case 4: HTTP/10 threads/No prepared statements</td>
+    <td><img src="pics/1.1.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>274</td>
+    <td>182.54</td>
+    <td>90.35</td>
+    <td>This data is bit out of logic, because its even faster than with prepared statement, from our analysis 
+    we removed all of unnecessary tags from context.xml except connection pooling, since in our local we need to change UTC time setting
+    etc for running since the language of my system is different. I may remove some unnecessary tags that helps connection to be faster.</td>
+  </tr>
+  <tr>
+    <td>Case 5: HTTP/10 threads/No connection pooling</td>
+    <td><img src="pics/1.2.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>287</td>
+    <td>193.57</td>
+    <td>95.29</td>
+    <td>Without connection pooling, it is obviously slower than with connection pooling, since the connection pooling reduced the time of opening new connection
+    , but difference is not too big here. One reason probably we use bots way, JMeter to test the system. For real users their speed of sending request is not that fast, 
+    so the maximum number of connections in the pool usually can deal with similar numbers of users but in case here is different. </td>
+  </tr>
+
+</table> 
+
+
+<table style="width:100%">
+  <tr style="font-weight:bold; background-color: orange">
+    <td width="300px">Scaled version cases</td>
+    <td>Graph Results Screenshot</td>
+    <td>Average Query Time(ms)</td>
+    <td>Average Search Servlet Time(ms)</td>
+    <td>Average JDBC Time(ms)</td>
+    <td>Analysis</td>
+  </tr>
+  <tr>
+    <td>Case 1: HTTP/1 thread</td>
+    <td><img src="pics/2.3.png" alt="Graph Results Screenshot Case 1" style="width:304px;height:228px;"></td>
+    <td>115</td>
+    <td>28.05</td>
+    <td>12.54</td>
+    <td>For TJ time that using load balancer is faster, since it has two backend database to split the work up. However, because of sticky session
+     all of request will still send to 1 instance.</td>
+  </tr>
+  <tr>
+    <td>Case 2: HTTP/10 threads</td>
+    <td><img src="pics/2.4.png" alt="Graph Results Screenshot Case 2" style="width:304px;height:228px;"></td>
+    <td>296</td>
+    <td>199.18</td>
+    <td>101.78</td>
+    <td>There is no big difference between load balancer and single instance. An important reason is that when we check the log files from two instances
+    thier size is a little bit bias to one side. For load balancer to other cases we all have even size, so we think we didn't restart the apache2
+     we used before, so it didn't reach the expection we want.</td>
+  </tr>
+  <tr>
+    <td>Case 3: HTTP/10 threads/No prepared statements</td>
+    <td><img src="pics/2.1.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>280</td>
+    <td>185.81</td>
+    <td>92.11</td>
+    <td>This has similar situation as single instance case 4 above, we may remove some unnecessary setting for data source, so its speed even faster than
+    with prepared statement.</td>
+  </tr>
+  <tr>
+    <td>Case 4: HTTP/10 threads/No connection pooling</td>
+    <td><img src="pics/2.2.png" alt="Graph Results Screenshot Case 4" style="width:304px;height:228px;"></td>
+    <td>295</td>
+    <td>200.48</td>
+    <td>103.08</td>
+    <td>Without connection pooling, the case is always the slowest, since the servlet need to rebuild connections every time, even for the case using load balancer
+    and from all of above cases,  load balancer didn't increase its speed too much but its main function is increase the scale. Indeed, we think that is reasonable.</td>
+  </tr>
+
+</table> 
+
+</body>
+</html>

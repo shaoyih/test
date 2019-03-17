@@ -7,7 +7,6 @@
               auth="Container"
               driverClassName="com.mysql.jdbc.Driver"
               type="javax.sql.DataSource"
-              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
               username="mytestuser"
               password="mypassword"
               url="jdbc:mysql://localhost:3306/moviedb?
@@ -24,7 +23,6 @@
               auth="Container"
               driverClassName="com.mysql.jdbc.Driver"
               type="javax.sql.DataSource"
-              maxTotal="1000" maxIdle="30" maxWaitMillis="10000"
               username="mytestuser"
               password="mypassword"
               url="jdbc:mysql:replication://172.31.45.222:3306,172.31.39.120:3306/moviedb?

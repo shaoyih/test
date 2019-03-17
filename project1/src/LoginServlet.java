@@ -113,6 +113,7 @@ public class LoginServlet extends HttpServlet {
 			}
 
 		
+			dbcon.close();
 
 
 
