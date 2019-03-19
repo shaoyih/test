@@ -1,5 +1,7 @@
 # cs122b-winter19-team-92
 
+report is in cs122b-winter19-team-92/report.pdf
+
 ## Optimazations
 
 using batch insert and hash to optimaize speed
