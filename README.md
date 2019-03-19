@@ -34,3 +34,4 @@ Movie --    parse Main.xml and return a HashSet<Movie object>, hash on title,yea
     A actor can only appear once with the same name
     
 
+Script is written in python and it will go through the current directory of Script to check the file start from log and end with txt. We will parse a of data row by row, the first row is TJ and the second row is TS then we will written the result into a file called “data.txt” to current directory.
