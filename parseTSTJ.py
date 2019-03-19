@@ -1,7 +1,7 @@
 import glob
 
 f = open("data.txt", "w")
-for filename in glob.glob('log*.txt'):
+for filename in glob.glob('project1/logs/log*.txt'):
 
     file = open(filename,'r')
     total=0
@@ -17,5 +17,5 @@ for filename in glob.glob('log*.txt'):
     avg_ts=ts/total/1000000
     avg_tj=tj/total/1000000
 
-    f.write('{}      {:.2f}   {:.2f}\n'.format(filename, avg_ts,avg_tj))
+    f.write('{}      {:.2f}   {:.2f}\n'.format(filename, avg_tj,avg_ts))
 f.close()
