@@ -1,0 +1,9 @@
+project1/logs/log2.4.txt      101.78   199.18
+project1/logs/log2.2.txt      103.08   200.48
+project1/logs/log2.3.txt      12.54   28.05
+project1/logs/log2.1.txt      92.11   185.81
+project1/logs/log1.5.txt      98.01   188.62
+project1/logs/log1.4.txt      92.74   189.45
+project1/logs/log1.3.txt      12.70   26.96
+project1/logs/log1.2.txt      95.29   193.57
+project1/logs/log1.1.txt      90.35   182.54
